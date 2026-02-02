@@ -1,0 +1,324 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>報名完成 - 競賽咖</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/buttons.css">
+    <link rel="stylesheet" href="../css/cards.css">
+    <link rel="stylesheet" href="../css/forms.css">
+    <link rel="stylesheet" href="../css/utilities.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Inter, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+            background-color: var(--bg-input);
+            color: #333;
+        }
+
+        /* Container */
+        .container {
+            max-width: 700px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+
+        /* Success Card */
+        .success-card {
+            background: white;
+            border-radius: 15px;
+            padding: 60px 40px;
+            box-shadow: 0 5px 30px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .success-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 30px;
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: scaleIn 0.5s ease-out;
+        }
+
+        .success-icon i {
+            font-size: 50px;
+            color: white;
+        }
+
+        @keyframes scaleIn {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .success-title {
+            font-size: 32px;
+            color: #28a745;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .success-subtitle {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        /* Info Box */
+        .info-box {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: var(--text-secondary);
+            font-size: 15px;
+        }
+
+        .info-value {
+            color: var(--text);
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .order-number {
+            background: #fff3cd;
+            border: 2px dashed #ffc107;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .order-number p {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+
+        .order-code {
+            font-size: 24px;
+            font-weight: bold;
+            color: #856404;
+            letter-spacing: 2px;
+        }
+
+        /* Next Steps */
+        .next-steps {
+            background: #e7f3ff;
+            border-left: 4px solid var(--primary);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .next-steps h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .next-steps ol {
+            padding-left: 20px;
+            line-height: 2;
+            color: #555;
+        }
+
+        /* Buttons */
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 35px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--text);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 60px;
+        }
+
+        .divider {
+            height: 1px;
+            background: var(--border);
+            margin: 30px 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <img src="../images/logo.svg" alt="競賽咖" class="logo-img">
+            </a>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">首頁</a>
+                <a href="cups-list.html" class="nav-link">賽事列表</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Success Card -->
+        <div class="success-card">
+            <div class="success-icon">
+                <i class="fas fa-check"></i>
+            </div>
+
+            <h1 class="success-title">報名成功！</h1>
+            <p class="success-subtitle">
+                恭喜您已成功報名參加 <strong>2026 春季籃球聯賽</strong><br>
+                我們已將報名確認信寄送至您的電子信箱
+            </p>
+
+            <!-- Order Number -->
+            <div class="order-number">
+                <p><i class="fas fa-receipt"></i> 您的報名編號：</p>
+                <div class="order-code">BS-2026-001234</div>
+            </div>
+
+            <!-- Info Box -->
+            <div class="info-box">
+                <div class="info-row">
+                    <span class="info-label">賽事名稱</span>
+                    <span class="info-value">2026 春季籃球聯賽</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">參賽隊伍</span>
+                    <span class="info-value">雷霆籃球隊</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">報名日期</span>
+                    <span class="info-value">2026/01/26</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">繳費金額</span>
+                    <span class="info-value">NT$ 3,000</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">繳費狀態</span>
+                    <span class="info-value" style="color: #28a745;">
+                        <i class="fas fa-check-circle"></i> 已完成
+                    </span>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Button Group -->
+            <div class="button-group">
+                <a href="my-registrations.html" class="btn btn-primary">
+                    <i class="fas fa-clipboard-list"></i>
+                    查看我的報名
+                </a>
+                <a href="cup-home.html" class="btn btn-outline">
+                    <i class="fas fa-trophy"></i>
+                    查看賽事詳情
+                </a>
+                <a href="cups-list.html" class="btn btn-secondary">
+                    <i class="fas fa-list"></i>
+                    瀏覽更多賽事
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; 2026 競賽咖 Basaila. All rights reserved.</p>
+        <p style="margin-top: 10px; font-size: 14px;">
+            如有任何問題，請聯繫客服：<a href="mailto:support@basaila.com" style="color: #007bff;">support@basaila.com</a>
+        </p>
+    </div>
+
+    <script>
+        // Add confetti effect or celebration animation here if desired
+        console.log('報名完成！報名編號：BS-2026-001234');
+    </script>
+</body>
+</html>

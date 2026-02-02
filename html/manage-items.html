@@ -1,0 +1,1434 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>競賽項目管理 - 競賽咖</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/buttons.css">
+    <link rel="stylesheet" href="../css/cards.css">
+    <link rel="stylesheet" href="../css/forms.css">
+    <link rel="stylesheet" href="../css/sidebar.css">
+    <link rel="stylesheet" href="../css/tables.css">
+    <link rel="stylesheet" href="../css/utilities.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Inter, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        .dashboard-layout {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: calc(100vh - 140px);
+        }
+
+        .sidebar {
+            width: 250px;
+            background: white;
+            border-right: 1px solid #e0e0e0;
+            padding: 20px 0;
+        }
+
+        .sidebar-section {
+            margin-bottom: 30px;
+        }
+
+        .sidebar-title {
+            padding: 0 20px;
+            color: #999;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            color: #666;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .sidebar-menu li a:hover {
+            background: #f8f9fa;
+            color: var(--primary);
+        }
+
+        .sidebar-menu li a.active {
+            background: #e6f9f5;
+            color: var(--primary);
+            border-right: 3px solid var(--primary);
+            font-weight: 600;
+        }
+
+        .sidebar-menu li a i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 30px;
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+        }
+
+        .page-title {
+            color: #2c3e50;
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 13px;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f8f9fa;
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 14px;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+        }
+
+        tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        .actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            color: #2c3e50;
+            font-size: 22px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #999;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        /* 頁面特定樣式 */
+        .dashboard-layout {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: calc(100vh - 140px);
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 30px;
+        }
+
+        .items-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .item-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 20px;
+        }
+
+        .item-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .item-title h3 {
+            font-size: 20px;
+            color: #2c3e50;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .item-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .detail-item i {
+            color: #999;
+            width: 20px;
+        }
+
+        .groups-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .groups-section h4 {
+            color: #2c3e50;
+            font-size: 16px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .groups-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .group-item {
+            padding: 15px;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .group-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .group-name {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 15px;
+        }
+
+        .group-stats {
+            display: flex;
+            gap: 15px;
+            color: #666;
+            font-size: 13px;
+        }
+
+        .group-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-icon {
+            padding: 6px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 13px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s;
+        }
+
+        .btn-icon:hover {
+            opacity: 0.8;
+        }
+
+        /* 報名欄位設定相關樣式 */
+        .field-config-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .field-config-item {
+            padding: 12px;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .field-name {
+            font-weight: 500;
+            color: #2c3e50;
+        }
+
+        .field-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .checkbox-group label {
+            font-size: 13px;
+            color: #666;
+            margin: 0;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+        }
+
+        .dynamic-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .dynamic-item {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .dynamic-item input {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <img src="../images/logo.svg" alt="競賽咖" class="logo-img">
+            </a>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">首頁</a>
+                <a href="cups-list.html" class="nav-link">賽事列表</a>
+                <a href="organizer-dashboard.html" class="nav-link">主辦專區</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="dashboard-layout">
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">主控台</div>
+                <ul class="sidebar-menu">
+                    <li><a href="organizer-dashboard.html">
+                        <i class="fas fa-home"></i> 總覽
+                    </a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-title">盃賽管理</div>
+                <ul class="sidebar-menu">
+                    <li><a href="manage-items.html" class="active">
+                        <i class="fas fa-basketball-ball"></i> 競賽項目
+                    </a></li>
+                    <li><a href="manage-signups.html">
+                        <i class="fas fa-users"></i> 報名管理
+                    </a></li>
+                    <li><a href="manage-schedule.html">
+                        <i class="fas fa-calendar-alt"></i> 賽程管理
+                    </a></li>
+                    <li><a href="manage-scores.html">
+                        <i class="fas fa-chart-bar"></i> 成績管理
+                    </a></li>
+                    <li><a href="manage-rankings.html">
+                        <i class="fas fa-medal"></i> 排名榜
+                    </a></li>
+                    <li><a href="manage-cup-info.html">
+                        <i class="fas fa-info-circle"></i> 賽事資訊
+                    </a></li>
+                    <li><a href="manage-cup-details.html">
+                        <i class="fas fa-file-alt"></i> 賽事詳情
+                    </a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-title">設定</div>
+                <ul class="sidebar-menu">
+                    <li><a href="cup-settings.html">
+                        <i class="fas fa-cog"></i> 盃賽設定
+                    </a></li>
+                    <li><a href="notifications.html">
+                        <i class="fas fa-bell"></i> 通知中心
+                    </a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">競賽項目管理</h1>
+                    <p style="color: #666; margin-top: 5px;">2026 春季運動嘉年華</p>
+                </div>
+                <button class="btn btn-primary" onclick="openAddModal()">
+                    <i class="fas fa-plus"></i> 新增項目
+                </button>
+            </div>
+
+            <div class="items-grid">
+                <!-- 籃球 -->
+                <div class="item-card">
+                    <div class="item-header">
+                        <div class="item-title">
+                            <h3>籃球</h3>
+                            <span class="badge badge-team">團體</span>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn btn-sm btn-primary" onclick="editItem('basketball')">
+                                <i class="fas fa-edit"></i> 編輯
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteItem('basketball')">
+                                <i class="fas fa-trash"></i> 刪除
+                            </button>
+                        </div>
+                    </div>
+                    <div class="item-details">
+                        <div class="detail-item">
+                            <i class="fas fa-users"></i>
+                            <span>已報名：8 隊</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-dollar-sign"></i>
+                            <span>報名費：NT$ 2,000</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-user-friends"></i>
+                            <span>人數限制：5-12 人</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-calendar-check"></i>
+                            <span>報名：2026/01/15 - 2026/02/28</span>
+                        </div>
+                    </div>
+                    <div class="groups-section">
+                        <h4>
+                            組別管理
+                            <button class="btn btn-sm btn-success" onclick="addGroupToItem('basketball')">
+                                <i class="fas fa-plus"></i> 新增組別
+                            </button>
+                        </h4>
+                        <div class="groups-list">
+                            <div class="group-item">
+                                <div class="group-info">
+                                    <div class="group-name">男子組</div>
+                                    <div class="group-stats">
+                                        <span><i class="fas fa-users"></i> 5 隊</span>
+                                        <span><i class="fas fa-dollar-sign"></i> NT$ 2,000</span>
+                                    </div>
+                                </div>
+                                <div class="group-actions">
+                                    <button class="btn-icon btn-primary" onclick="configFields('basketball', 'male')" title="設定報名欄位">
+                                        <i class="fas fa-list-check"></i> 報名欄位
+                                    </button>
+                                    <button class="btn-icon btn-secondary" onclick="editGroup('basketball', 'male')" title="編輯組別">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn-icon btn-danger" onclick="deleteGroup('basketball', 'male')" title="刪除組別">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 排球 -->
+                <div class="item-card">
+                    <div class="item-header">
+                        <div class="item-title">
+                            <h3>排球</h3>
+                            <span class="badge badge-team">團體</span>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn btn-sm btn-primary" onclick="editItem('volleyball')">
+                                <i class="fas fa-edit"></i> 編輯
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteItem('volleyball')">
+                                <i class="fas fa-trash"></i> 刪除
+                            </button>
+                        </div>
+                    </div>
+                    <div class="item-details">
+                        <div class="detail-item">
+                            <i class="fas fa-users"></i>
+                            <span>已報名：12 隊</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-dollar-sign"></i>
+                            <span>報名費：NT$ 1,800</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-user-friends"></i>
+                            <span>人數限制：6-15 人</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-calendar-check"></i>
+                            <span>報名：2026/01/10 - 2026/02/28</span>
+                        </div>
+                    </div>
+                    <div class="groups-section">
+                        <h4>
+                            組別管理
+                            <button class="btn btn-sm btn-success" onclick="addGroupToItem('volleyball')">
+                                <i class="fas fa-plus"></i> 新增組別
+                            </button>
+                        </h4>
+                        <div class="groups-list">
+                            <div class="group-item">
+                                <div class="group-info">
+                                    <div class="group-name">男子組</div>
+                                    <div class="group-stats">
+                                        <span><i class="fas fa-users"></i> 4 隊</span>
+                                        <span><i class="fas fa-dollar-sign"></i> NT$ 1,800</span>
+                                    </div>
+                                </div>
+                                <div class="group-actions">
+                                    <button class="btn-icon btn-primary" onclick="configFields('volleyball', 'male')" title="設定報名欄位">
+                                        <i class="fas fa-list-check"></i> 報名欄位
+                                    </button>
+                                    <button class="btn-icon btn-secondary" onclick="editGroup('volleyball', 'male')" title="編輯組別">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn-icon btn-danger" onclick="deleteGroup('volleyball', 'male')" title="刪除組別">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="group-item">
+                                <div class="group-info">
+                                    <div class="group-name">女子組</div>
+                                    <div class="group-stats">
+                                        <span><i class="fas fa-users"></i> 5 隊</span>
+                                        <span><i class="fas fa-dollar-sign"></i> NT$ 1,800</span>
+                                    </div>
+                                </div>
+                                <div class="group-actions">
+                                    <button class="btn-icon btn-primary" onclick="configFields('volleyball', 'female')" title="設定報名欄位">
+                                        <i class="fas fa-list-check"></i> 報名欄位
+                                    </button>
+                                    <button class="btn-icon btn-secondary" onclick="editGroup('volleyball', 'female')" title="編輯組別">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn-icon btn-danger" onclick="deleteGroup('volleyball', 'female')" title="刪除組別">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="group-item">
+                                <div class="group-info">
+                                    <div class="group-name">混合組</div>
+                                    <div class="group-stats">
+                                        <span><i class="fas fa-users"></i> 3 隊</span>
+                                        <span><i class="fas fa-dollar-sign"></i> NT$ 1,800</span>
+                                    </div>
+                                </div>
+                                <div class="group-actions">
+                                    <button class="btn-icon btn-primary" onclick="configFields('volleyball', 'mixed')" title="設定報名欄位">
+                                        <i class="fas fa-list-check"></i> 報名欄位
+                                    </button>
+                                    <button class="btn-icon btn-secondary" onclick="editGroup('volleyball', 'mixed')" title="編輯組別">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn-icon btn-danger" onclick="deleteGroup('volleyball', 'mixed')" title="刪除組別">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 馬拉松 -->
+                <div class="item-card">
+                    <div class="item-header">
+                        <div class="item-title">
+                            <h3>馬拉松</h3>
+                            <span class="badge badge-individual">個人</span>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn btn-sm btn-primary" onclick="editItem('running')">
+                                <i class="fas fa-edit"></i> 編輯
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteItem('running')">
+                                <i class="fas fa-trash"></i> 刪除
+                            </button>
+                        </div>
+                    </div>
+                    <div class="item-details">
+                        <div class="detail-item">
+                            <i class="fas fa-users"></i>
+                            <span>已報名：156 人</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-dollar-sign"></i>
+                            <span>報名費：NT$ 800-1,500</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-trophy"></i>
+                            <span>計時賽制</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-calendar-check"></i>
+                            <span>報名：2026/01/20 - 2026/03/10</span>
+                        </div>
+                    </div>
+                    <div class="groups-section">
+                        <h4>
+                            組別管理
+                            <button class="btn btn-sm btn-success" onclick="addGroupToItem('running')">
+                                <i class="fas fa-plus"></i> 新增組別
+                            </button>
+                        </h4>
+                        <div class="groups-list">
+                            <div class="group-item">
+                                <div class="group-info">
+                                    <div class="group-name">5K</div>
+                                    <div class="group-stats">
+                                        <span><i class="fas fa-users"></i> 45 人</span>
+                                        <span><i class="fas fa-dollar-sign"></i> NT$ 800</span>
+                                    </div>
+                                </div>
+                                <div class="group-actions">
+                                    <button class="btn-icon btn-primary" onclick="configFields('running', '5k')" title="設定報名欄位">
+                                        <i class="fas fa-list-check"></i> 報名欄位
+                                    </button>
+                                    <button class="btn-icon btn-secondary" onclick="editGroup('running', '5k')" title="編輯組別">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn-icon btn-danger" onclick="deleteGroup('running', '5k')" title="刪除組別">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="group-item">
+                                <div class="group-info">
+                                    <div class="group-name">10K</div>
+                                    <div class="group-stats">
+                                        <span><i class="fas fa-users"></i> 58 人</span>
+                                        <span><i class="fas fa-dollar-sign"></i> NT$ 1,000</span>
+                                    </div>
+                                </div>
+                                <div class="group-actions">
+                                    <button class="btn-icon btn-primary" onclick="configFields('running', '10k')" title="設定報名欄位">
+                                        <i class="fas fa-list-check"></i> 報名欄位
+                                    </button>
+                                    <button class="btn-icon btn-secondary" onclick="editGroup('running', '10k')" title="編輯組別">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn-icon btn-danger" onclick="deleteGroup('running', '10k')" title="刪除組別">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="group-item">
+                                <div class="group-info">
+                                    <div class="group-name">半馬</div>
+                                    <div class="group-stats">
+                                        <span><i class="fas fa-users"></i> 38 人</span>
+                                        <span><i class="fas fa-dollar-sign"></i> NT$ 1,200</span>
+                                    </div>
+                                </div>
+                                <div class="group-actions">
+                                    <button class="btn-icon btn-primary" onclick="configFields('running', 'half')" title="設定報名欄位">
+                                        <i class="fas fa-list-check"></i> 報名欄位
+                                    </button>
+                                    <button class="btn-icon btn-secondary" onclick="editGroup('running', 'half')" title="編輯組別">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn-icon btn-danger" onclick="deleteGroup('running', 'half')" title="刪除組別">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="group-item">
+                                <div class="group-info">
+                                    <div class="group-name">全馬</div>
+                                    <div class="group-stats">
+                                        <span><i class="fas fa-users"></i> 15 人</span>
+                                        <span><i class="fas fa-dollar-sign"></i> NT$ 1,500</span>
+                                    </div>
+                                </div>
+                                <div class="group-actions">
+                                    <button class="btn-icon btn-primary" onclick="configFields('running', 'full')" title="設定報名欄位">
+                                        <i class="fas fa-list-check"></i> 報名欄位
+                                    </button>
+                                    <button class="btn-icon btn-secondary" onclick="editGroup('running', 'full')" title="編輯組別">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn-icon btn-danger" onclick="deleteGroup('running', 'full')" title="刪除組別">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add/Edit Modal -->
+    <div id="itemModal" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <h2>新增競賽項目</h2>
+                <button class="close-btn" onclick="closeModal('itemModal')">&times;</button>
+            </div>
+            <form id="itemForm">
+                <div class="form-group">
+                    <label>項目名稱 <span class="required">*</span></label>
+                    <select name="itemName" id="itemName" required onchange="updateItemType()">
+                        <option value="">請選擇</option>
+                        <option value="volleyball" data-type="team">排球（室內）- 團體</option>
+                        <option value="basketball" data-type="team">籃球 - 團體</option>
+                        <option value="running" data-type="individual">路跑 - 個人</option>
+                        <option value="marathon" data-type="individual">馬拉松 - 個人</option>
+                        <option value="trail" data-type="individual">越野跑（Trail Run）- 個人</option>
+                        <option value="triathlon" data-type="individual">鐵人三項 - 個人</option>
+                        <option value="badminton" data-type="individual">羽球 - 個人/團體</option>
+                        <option value="soccer" data-type="team">足球 - 團體</option>
+                    </select>
+                </div>
+
+                <input type="hidden" name="itemType" id="itemType">
+
+                <div class="form-group">
+                    <label>項目說明（選填）</label>
+                    <textarea name="description" placeholder="說明比賽規則、注意事項等..."></textarea>
+                </div>
+
+                <div style="background: #e7f3ff; padding: 12px; border-radius: 6px; margin-bottom: 15px;">
+                    <p style="margin: 0; font-size: 13px; color: #004085;">
+                        <i class="fas fa-info-circle"></i> 儲存後請於該項目中「新增組別」，並設定各組別的報名費、日期等詳細資訊
+                    </p>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('itemModal')">取消</button>
+                    <button type="submit" class="btn btn-primary">儲存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 新增/編輯組別 Modal -->
+    <div id="groupModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="groupModalTitle">新增組別</h2>
+                <button class="close-btn" onclick="closeModal('groupModal')">&times;</button>
+            </div>
+            <form id="groupForm">
+                <div class="form-group">
+                    <label>組別名稱 <span class="required">*</span></label>
+                    <input type="text" name="groupName" required placeholder="例：男子組">
+                </div>
+
+                <div class="form-group">
+                    <label>賽制 <span class="required">*</span></label>
+                    <select name="format" required>
+                        <option value="">請選擇</option>
+                        <option value="league">循環賽</option>
+                        <option value="knockout">淘汰賽</option>
+                        <option value="group-knockout">分組循環+淘汰賽</option>
+                        <option value="timing">計時排名賽</option>
+                        <option value="swiss">瑞士制</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>報名上限 <span class="required">*</span></label>
+                        <input type="number" name="maxParticipants" required placeholder="32" min="1">
+                        <small style="color: #666; font-size: 12px;">團體賽為隊伍數，個人賽為人數</small>
+                    </div>
+                    <div class="form-group" id="groupTeamSizeGroup" style="display: none;">
+                        <label>每隊人數上限 <span class="required">*</span></label>
+                        <input type="number" name="teamSize" id="groupTeamSize" placeholder="例：12" min="1">
+                        <small style="color: #666; font-size: 12px;">每支隊伍最多可報名的人數</small>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>報名費用 (NT$) <span class="required">*</span></label>
+                        <input type="number" name="fee" required placeholder="1000" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>報名開始日期 <span class="required">*</span></label>
+                        <input type="date" name="startDate" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>報名截止日期 <span class="required">*</span></label>
+                        <input type="date" name="deadline" required>
+                    </div>
+                    <div class="form-group">
+                        <label>比賽日期 <span class="required">*</span></label>
+                        <input type="date" name="eventDate" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>組別說明（選填）</label>
+                    <textarea name="groupDescription" placeholder="說明這個組別的特定規則或注意事項..."></textarea>
+                </div>
+
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 6px; margin-bottom: 15px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <strong style="color: #2c3e50;">報名欄位設定</strong>
+                            <p style="margin: 5px 0 0 0; font-size: 13px; color: #666;">儲存組別後可設定此組別的報名欄位</p>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-primary" id="configFieldsBtn" onclick="openFieldsFromGroup()" disabled>
+                            <i class="fas fa-list-check"></i> 設定欄位
+                        </button>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('groupModal')">取消</button>
+                    <button type="submit" class="btn btn-primary">儲存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 報名欄位設定 Modal -->
+    <div id="fieldsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>報名欄位設定 - <span id="currentGroupName"></span></h2>
+                <button class="close-btn" onclick="closeModal('fieldsModal')">&times;</button>
+            </div>
+            <div style="margin-bottom: 20px; padding: 12px; background: #e6f9f5; border-left: 4px solid #00C4A0; border-radius: 4px;">
+                <p style="margin: 0; font-size: 14px; color: #004085;">
+                    <i class="fas fa-info-circle"></i> 設定此組別報名時需要蒐集的欄位，所有變更會自動儲存
+                </p>
+            </div>
+            <div id="allFieldsList">
+                <!-- 所有欄位將由 JavaScript 動態生成 -->
+            </div>
+            <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #dee2e6;">
+                <button type="button" class="btn btn-success" onclick="showAddCustomField()" style="width: 100%;">
+                    <i class="fas fa-plus"></i> 新增欄位
+                </button>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('fieldsModal')">取消</button>
+                <button type="button" class="btn btn-primary" onclick="saveFieldConfig()">確認</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新增/編輯欄位模態框 -->
+    <div id="addCustomFieldModal" class="modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h2 id="fieldModalTitle">新增欄位</h2>
+                <button class="close-btn" onclick="closeModal('addCustomFieldModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="customFieldForm">
+                    <div class="form-group">
+                        <label>欄位名稱 *</label>
+                        <input type="text" id="customFieldName" required placeholder="例如：學生證號碼">
+                    </div>
+
+                    <div class="form-group">
+                        <label>欄位類型 *</label>
+                        <select id="customFieldType" required>
+                            <option value="text">文字輸入</option>
+                            <option value="email">電子郵件</option>
+                            <option value="tel">電話號碼</option>
+                            <option value="date">日期</option>
+                            <option value="number">數字</option>
+                            <option value="select">下拉選單</option>
+                            <option value="textarea">多行文字</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="customFieldOptionsGroup" style="display: none;">
+                        <label>選項（每行一個）</label>
+                        <textarea id="customFieldOptions" rows="4" placeholder="選項1\n選項2\n選項3"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>說明文字（選填）</label>
+                        <input type="text" id="customFieldHelp" placeholder="例如：請填寫10碼學生證號碼">
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="customFieldRequired">
+                        <label for="customFieldRequired" style="margin: 0;">設為必填欄位</label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('addCustomFieldModal')">取消</button>
+                <button type="button" class="btn btn-primary" onclick="addCustomField()">新增</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2026 競賽咖 Basaila. All rights reserved.</p>
+    </div>
+
+    <script src="../js/navigation.js"></script>
+    <script src="../js/modal.js"></script>
+    <script src="../js/utils.js"></script>
+    <script>
+        // 當前選中的項目和組別
+        let currentItem = '';
+        let currentGroup = '';
+        let editingFieldIndex = -1; // -1 表示新增，>=0 表示編輯
+        
+        // 儲存所有欄位（以 itemId-groupId 為 key）
+        const allFieldsData = {
+            // 預設欄位範本
+            '_default': [
+                { name: '姓名', type: 'text', required: true, show: true, isDefault: true },
+                { name: '電子郵件', type: 'email', required: true, show: true, isDefault: true },
+                { name: '聯絡電話', type: 'tel', required: true, show: true, isDefault: true },
+                { name: '身分證字號', type: 'text', required: false, show: false },
+                { name: '出生日期', type: 'date', required: false, show: true },
+                { name: '性別', type: 'select', required: false, show: true, options: ['男', '女', '其他'] },
+                { name: '地址', type: 'text', required: false, show: false },
+                { name: '緊急聯絡人', type: 'text', required: false, show: false },
+                { name: '緊急聯絡電話', type: 'tel', required: false, show: false },
+                { name: '衣服尺寸', type: 'select', required: false, show: false, options: ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL'] },
+                { name: '飲食限制', type: 'textarea', required: false, show: false }
+            ]
+        };
+
+        function updateItemType() {
+            const select = document.getElementById('itemName');
+            const selectedOption = select.options[select.selectedIndex];
+            const itemType = selectedOption.getAttribute('data-type');
+            document.getElementById('itemType').value = itemType || '';
+        }
+
+        function openAddModal() {
+            document.getElementById('itemForm').reset();
+            document.getElementById('itemType').value = '';
+            openModal('itemModal');
+        }
+
+        function editItem(id) {
+            alert('編輯項目：' + id);
+            openModal('itemModal');
+        }
+
+        function deleteItem(id) {
+            if (confirm('確定要刪除此項目嗎？')) {
+                showToast('已刪除項目', 'success');
+            }
+        }
+
+        // 新增組別到項目
+        function addGroupToItem(itemId) {
+            // 準備表單並根據項目類型顯示/隱藏隊伍人數欄位
+            document.getElementById('groupForm').reset();
+            document.getElementById('groupModalTitle').textContent = '新增組別';
+            
+            // TODO: 根據 itemId 取得項目類型，決定是否顯示隊伍人數欄位
+            // 暫時預設顯示
+            const teamSizeGroup = document.getElementById('groupTeamSizeGroup');
+            if (itemId === 'basketball' || itemId === 'volleyball') {
+                teamSizeGroup.style.display = 'block';
+                document.getElementById('groupTeamSize').required = true;
+            } else {
+                teamSizeGroup.style.display = 'none';
+                document.getElementById('groupTeamSize').required = false;
+            }
+            
+            openModal('groupModal');
+        }
+
+        // 編輯組別
+        function editGroup(itemId, groupId) {
+            document.getElementById('groupModalTitle').textContent = '編輯組別';
+            // TODO: 載入組別資料到表單
+            openModal('groupModal');
+        }
+
+        // 刪除組別
+        function deleteGroup(itemId, groupId) {
+            if (confirm('確定要刪除此組別嗎？已報名的隊伍/人員資料將會保留。')) {
+                showToast('組別已刪除', 'success');
+                // TODO: 實際刪除組別的邏輯
+            }
+        }
+
+        // 設定報名欄位
+        function configFields(itemId, groupId) {
+            currentItem = itemId;
+            currentGroup = groupId;
+            
+            // 設定組別名稱顯示
+            const groupNames = {
+                'male': '男子組',
+                'female': '女子組',
+                'mixed': '混合組',
+                '5k': '5K',
+                '10k': '10K',
+                'half': '半馬',
+                'full': '全馬'
+            };
+            document.getElementById('currentGroupName').textContent = groupNames[groupId] || groupId;
+            
+            loadFieldConfig(itemId, groupId);
+            openModal('fieldsModal');
+        }
+
+        // 載入欄位設定
+        function loadFieldConfig(itemId, groupId) {
+            const key = `${itemId}-${groupId}`;
+            
+            // 如果該組別還沒有欄位資料，從預設範本複製
+            if (!allFieldsData[key]) {
+                allFieldsData[key] = JSON.parse(JSON.stringify(allFieldsData['_default']));
+            }
+            
+            // TODO: 實際從後端 API 載入設定
+            renderAllFields();
+        }
+        
+        // 顯示所有欄位
+        function renderAllFields() {
+            const key = `${currentItem}-${currentGroup}`;
+            const fields = allFieldsData[key] || [];
+            const container = document.getElementById('allFieldsList');
+            
+            if (fields.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">尚未設定任何欄位</p>';
+                return;
+            }
+            
+            let html = '';
+            
+            fields.forEach((field, index) => {
+                const bgColor = field.isDefault ? '#f8f9fa' : '#f0f8ff';
+                html += `
+                    <div class="field-row" style="background: ${bgColor}; padding: 12px 15px; border-radius: 5px; margin-bottom: 10px; border: 1px solid #dee2e6;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600; color: #2c3e50; margin-bottom: 3px;">
+                                    ${field.name}
+                                    ${field.required ? '<span style="color: #dc3545;"> *</span>' : ''}
+                                    ${!field.show ? '<span style="color: #999; font-size: 12px;"> (已隱藏)</span>' : ''}
+                                </div>
+                                <div style="font-size: 12px; color: #666;">
+                                    類型：${getFieldTypeLabel(field.type)}
+                                    ${field.options ? ' | 選項：' + field.options.join(', ') : ''}
+                                    ${field.help ? ' | ' + field.help : ''}
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 8px; align-items: center;">
+                                <label style="display: flex; align-items: center; gap: 5px; cursor: pointer; font-size: 13px;">
+                                    <input type="checkbox" ${field.show ? 'checked' : ''} onchange="toggleFieldShow(${index})">
+                                    顯示
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 5px; cursor: pointer; font-size: 13px;">
+                                    <input type="checkbox" ${field.required ? 'checked' : ''} onchange="toggleFieldRequired(${index})">
+                                    必填
+                                </label>
+                                <button class="btn-icon btn-warning" onclick="editField(${index})" title="編輯欄位" style="padding: 4px 8px; font-size: 12px;">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn-icon btn-danger" onclick="deleteField(${index})" title="刪除欄位" style="padding: 4px 8px; font-size: 12px;">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+            autoSaveFields();
+        }
+        
+        function getFieldTypeLabel(type) {
+            const labels = {
+                'text': '文字輸入',
+                'email': '電子郵件',
+                'tel': '電話號碼',
+                'date': '日期',
+                'number': '數字',
+                'select': '下拉選單',
+                'textarea': '多行文字'
+            };
+            return labels[type] || type;
+        }
+        
+        // 顯示新增欄位表單
+        function showAddCustomField() {
+            editingFieldIndex = -1;
+            document.getElementById('fieldModalTitle').textContent = '新增欄位';
+            document.getElementById('customFieldForm').reset();
+            document.getElementById('customFieldOptionsGroup').style.display = 'none';
+            openModal('addCustomFieldModal');
+        }
+        
+        // 編輯欄位
+        function editField(index) {
+            editingFieldIndex = index;
+            const key = `${currentItem}-${currentGroup}`;
+            const field = allFieldsData[key][index];
+            
+            document.getElementById('fieldModalTitle').textContent = '編輯欄位';
+            document.getElementById('customFieldName').value = field.name;
+            document.getElementById('customFieldType').value = field.type;
+            document.getElementById('customFieldRequired').checked = field.required;
+            document.getElementById('customFieldHelp').value = field.help || '';
+            
+            if (field.type === 'select' && field.options) {
+                document.getElementById('customFieldOptionsGroup').style.display = 'block';
+                document.getElementById('customFieldOptions').value = field.options.join('\n');
+            } else {
+                document.getElementById('customFieldOptionsGroup').style.display = 'none';
+            }
+            
+            openModal('addCustomFieldModal');
+        }
+        
+        // 監聽欄位類型變化
+        document.addEventListener('DOMContentLoaded', function() {
+            const fieldTypeSelect = document.getElementById('customFieldType');
+            if (fieldTypeSelect) {
+                fieldTypeSelect.addEventListener('change', function() {
+                    const optionsGroup = document.getElementById('customFieldOptionsGroup');
+                    if (this.value === 'select') {
+                        optionsGroup.style.display = 'block';
+                    } else {
+                        optionsGroup.style.display = 'none';
+                    }
+                });
+            }
+        });
+        
+        // 新增或更新欄位
+        function addCustomField() {
+            const name = document.getElementById('customFieldName').value.trim();
+            const type = document.getElementById('customFieldType').value;
+            const required = document.getElementById('customFieldRequired').checked;
+            const help = document.getElementById('customFieldHelp').value.trim();
+            
+            if (!name) {
+                alert('請輸入欄位名稱');
+                return;
+            }
+            
+            const field = {
+                name: name,
+                type: type,
+                required: required,
+                show: true,
+                isDefault: false
+            };
+            
+            if (help) {
+                field.help = help;
+            }
+            
+            if (type === 'select') {
+                const optionsText = document.getElementById('customFieldOptions').value.trim();
+                if (optionsText) {
+                    field.options = optionsText.split('\n').map(opt => opt.trim()).filter(opt => opt);
+                } else {
+                    field.options = [];
+                }
+            }
+            
+            const key = `${currentItem}-${currentGroup}`;
+            if (!allFieldsData[key]) {
+                allFieldsData[key] = [];
+            }
+            
+            if (editingFieldIndex >= 0) {
+                // 編輯模式
+                allFieldsData[key][editingFieldIndex] = field;
+                showToast('欄位已更新並自動儲存', 'success');
+            } else {
+                // 新增模式
+                allFieldsData[key].push(field);
+                showToast('欄位已新增並自動儲存', 'success');
+            }
+            
+            renderAllFields();
+            closeModal('addCustomFieldModal');
+        }
+        
+        // 切換欄位顯示狀態
+        function toggleFieldShow(index) {
+            const key = `${currentItem}-${currentGroup}`;
+            const field = allFieldsData[key][index];
+            field.show = event.target.checked;
+            if (!field.show) {
+                field.required = false;
+            }
+            renderAllFields();
+        }
+        
+        // 切換欄位必填狀態
+        function toggleFieldRequired(index) {
+            const key = `${currentItem}-${currentGroup}`;
+            const field = allFieldsData[key][index];
+            field.required = event.target.checked;
+            if (field.required) {
+                field.show = true;
+            }
+            renderAllFields();
+        }
+        
+        // 刪除欄位
+        function deleteField(index) {
+            if (confirm('確定要刪除此欄位嗎？')) {
+                const key = `${currentItem}-${currentGroup}`;
+                allFieldsData[key].splice(index, 1);
+                renderAllFields();
+                showToast('欄位已刪除並自動儲存', 'success');
+            }
+        }
+        
+        // 自動儲存欄位設定
+        function autoSaveFields() {
+            const key = `${currentItem}-${currentGroup}`;
+            const fields = allFieldsData[key];
+            
+            // TODO: 實際發送到後端 API 儲存
+            console.log('自動儲存欄位設定：', {
+                item: currentItem,
+                group: currentGroup,
+                fields: fields
+            });
+            
+            // 在實際應用中，這裡應該發送 AJAX 請求到後端
+            // 例如：
+            // fetch('/api/save-fields', {
+            //     method: 'POST',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify({ item: currentItem, group: currentGroup, fields: fields })
+            // });
+        }
+
+        // 關閉欄位設定（所有變更都已自動儲存）
+        function saveFieldConfig() {
+            showToast('所有變更已自動儲存', 'success');
+            closeModal('fieldsModal');
+        }
+
+
+
+        document.getElementById('itemForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            showToast('項目已儲存！請於該項目中新增組別', 'success');
+            closeModal('itemModal');
+        });
+
+        document.getElementById('groupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // TODO: 在這裡儲存組別資料，並取得組別ID
+            const groupId = 'temp-group-' + Date.now(); // 模擬產生的組別ID
+            
+            // 啟用報名欄位設定按鈕
+            const configFieldsBtn = document.getElementById('configFieldsBtn');
+            configFieldsBtn.disabled = false;
+            configFieldsBtn.setAttribute('data-group-id', groupId);
+            
+            showToast('組別已儲存！現在可以設定報名欄位了', 'success');
+            // closeModal('groupModal'); // 不關閉modal，讓使用者可以繼續設定欄位
+        });
+
+        // 從組別modal開啟報名欄位設定
+        let currentGroupData = { itemId: '', groupId: '' };
+        
+        function openFieldsFromGroup() {
+            const configFieldsBtn = document.getElementById('configFieldsBtn');
+            const groupId = configFieldsBtn.getAttribute('data-group-id');
+            
+            if (!groupId) {
+                alert('請先儲存組別');
+                return;
+            }
+            
+            // TODO: 從目前表單取得項目ID
+            const itemId = 'basketball'; // 暫時硬編碼，實際應從表單取得
+            
+            currentGroupData = { itemId, groupId };
+            configFields(itemId, groupId);
+        }
+    </script>
+</body>
+</html>

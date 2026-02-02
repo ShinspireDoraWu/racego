@@ -1,0 +1,1062 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>排名榜管理 - 競賽咖</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/buttons.css">
+    <link rel="stylesheet" href="../css/cards.css">
+    <link rel="stylesheet" href="../css/forms.css">
+    <link rel="stylesheet" href="../css/sidebar.css">
+    <link rel="stylesheet" href="../css/tables.css">
+    <link rel="stylesheet" href="../css/utilities.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Inter, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        .dashboard-layout {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: calc(100vh - 140px);
+        }
+
+        .sidebar {
+            width: 250px;
+            background: white;
+            border-right: 1px solid #e0e0e0;
+            padding: 20px 0;
+        }
+
+        .sidebar-section {
+            margin-bottom: 30px;
+        }
+
+        .sidebar-title {
+            padding: 0 20px;
+            color: #999;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            color: #666;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .sidebar-menu li a:hover {
+            background: #f8f9fa;
+            color: var(--primary);
+        }
+
+        .sidebar-menu li a.active {
+            background: #e6f9f5;
+            color: var(--primary);
+            border-right: 3px solid var(--primary);
+            font-weight: 600;
+        }
+
+        .sidebar-menu li a i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 30px;
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+        }
+
+        .page-title {
+            color: #2c3e50;
+            font-size: 28px;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            color: #666;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .ranking-section {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .section-title {
+            font-size: 18px;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 13px;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f8f9fa;
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 14px;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        th.center {
+            text-align: center;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+        }
+
+        td.center {
+            text-align: center;
+        }
+
+        tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        .rank {
+            font-weight: 700;
+            font-size: 18px;
+            color: var(--primary);
+        }
+
+        .rank-1 { color: #ffd700; }
+        .rank-2 { color: #c0c0c0; }
+        .rank-3 { color: #cd7f32; }
+
+        .medal {
+            font-size: 20px;
+        }
+
+        .team-name {
+            font-weight: 500;
+            color: #2c3e50;
+        }
+
+        .stats {
+            color: #666;
+            font-size: 13px;
+        }
+
+        .footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            color: #2c3e50;
+            font-size: 22px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #999;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <img src="../images/logo.svg" alt="競賽咖" class="logo-img">
+            </a>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">首頁</a>
+                <a href="cups-list.html" class="nav-link">賽事列表</a>
+                <a href="organizer-dashboard.html" class="nav-link">主辦專區</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="dashboard-layout">
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">主控台</div>
+                <ul class="sidebar-menu">
+                    <li><a href="organizer-dashboard.html">
+                        <i class="fas fa-home"></i> 總覽
+                    </a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-title">盃賽管理</div>
+                <ul class="sidebar-menu">
+                    <li><a href="manage-items.html">
+                        <i class="fas fa-basketball-ball"></i> 競賽項目
+                    </a></li>
+                    <li><a href="manage-signups.html">
+                        <i class="fas fa-users"></i> 報名管理
+                    </a></li>
+                    <li><a href="manage-schedule.html">
+                        <i class="fas fa-calendar-alt"></i> 賽程管理
+                    </a></li>
+                    <li><a href="manage-scores.html">
+                        <i class="fas fa-chart-bar"></i> 成績管理
+                    </a></li>
+                    <li><a href="manage-rankings.html" class="active">
+                        <i class="fas fa-medal"></i> 排名榜
+                    </a></li>
+                    <li><a href="manage-cup-info.html">
+                        <i class="fas fa-info-circle"></i> 賽事資訊
+                    </a></li>
+                    <li><a href="manage-cup-details.html">
+                        <i class="fas fa-file-alt"></i> 賽事詳情
+                    </a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-title">設定</div>
+                <ul class="sidebar-menu">
+                    <li><a href="cup-settings.html">
+                        <i class="fas fa-cog"></i> 盃賽設定
+                    </a></li>
+                    <li><a href="notifications.html">
+                        <i class="fas fa-bell"></i> 通知中心
+                    </a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="page-header">
+                <h1 class="page-title">排名榜</h1>
+                <p style="color: #666; margin-top: 5px;">2026 春季運動嘉年華</p>
+            </div>
+
+            <!-- 檔案上傳區 -->
+            <div style="background: #fff3e0; border: 2px dashed #ff9800; border-radius: 10px; padding: 25px; margin-bottom: 25px;">
+                <div style="display: flex; align-items: start; gap: 20px;">
+                    <div style="width: 50px; height: 50px; background: #ff9800; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                        <i class="fas fa-upload" style="color: white; font-size: 22px;"></i>
+                    </div>
+                    <div style="flex: 1;">
+                        <h3 style="color: #2c3e50; margin-bottom: 8px; font-size: 18px;">上傳成績榜/晉級圖表檔案</h3>
+                        <p style="color: #666; margin-bottom: 15px; font-size: 14px;">
+                            您可以上傳 PDF 檔案或圖片（PNG/JPG）作為成績榜或晉級圖表，參賽者可在賽事頁面下載查看。支持檔案大小最大 10MB。
+                        </p>
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <input type="file" id="rankingFile" accept=".pdf,.png,.jpg,.jpeg" style="display: none;" onchange="handleFileUpload(this, 'ranking')">
+                            <button class="btn btn-primary btn-sm" onclick="document.getElementById('rankingFile').click()">
+                                <i class="fas fa-file-upload"></i> 選擇檔案
+                            </button>
+                            <span id="rankingFileName" style="color: #666; font-size: 14px;">未選擇檔案</span>
+                        </div>
+                        <!-- 已上傳檔案列表 -->
+                        <div id="uploadedRankingFiles" style="margin-top: 15px; display: none;">
+                            <div style="font-weight: 600; color: #2c3e50; margin-bottom: 10px; font-size: 14px;">
+                                <i class="fas fa-check-circle" style="color: #28a745;"></i> 已上傳的檔案：
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 8px;">
+                                <div style="display: flex; align-items: center; gap: 10px; background: white; padding: 10px 15px; border-radius: 5px;">
+                                    <i class="fas fa-file-pdf" style="color: #dc3545; font-size: 18px;"></i>
+                                    <span style="flex: 1; color: #2c3e50; font-size: 14px;">籃球成績榜_2026.pdf</span>
+                                    <span style="color: #999; font-size: 12px;">1.8 MB</span>
+                                    <button class="btn btn-sm btn-secondary" style="padding: 4px 10px;">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-danger" style="padding: 4px 10px;">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filter-tabs">
+                <button class="tab active">全部項目</button>
+                <button class="tab">籃球 - 男子組</button>
+                <button class="tab">排球 - 男子組</button>
+                <button class="tab">排球 - 女子組</button>
+                <button class="tab">排球 - 混合組</button>
+                <button class="tab">馬拉松</button>
+            </div>
+
+            <!-- 籃球排名 -->
+            <div class="ranking-section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <i class="fas fa-basketball-ball"></i> 籃球 - 男子組
+                    </h2>
+                    <button class="btn btn-sm btn-success" onclick="publishRanking('basketball')">
+                        <i class="fas fa-share"></i> 發布排名
+                    </button>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="center" style="width: 80px;">排名</th>
+                            <th>隊伍名稱</th>
+                            <th class="center" style="width: 100px;">勝場</th>
+                            <th class="center" style="width: 100px;">敗場</th>
+                            <th class="center" style="width: 100px;">勝率</th>
+                            <th class="center" style="width: 120px;">總得分</th>
+                            <th class="center" style="width: 150px;">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="center">
+                                <span class="medal">🥇</span>
+                                <span class="rank rank-1">1</span>
+                            </td>
+                            <td class="team-name">雄鷹隊</td>
+                            <td class="center">5</td>
+                            <td class="center">0</td>
+                            <td class="center">100%</td>
+                            <td class="center">412</td>
+                            <td class="center">
+                                <button class="btn btn-sm btn-primary" onclick="editRanking('basketball', 1)" style="padding: 6px 10px;">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm" style="background: #e0e0e0; color: #666; padding: 6px 10px;" onclick="moveUp(this)" disabled>
+                                    <i class="fas fa-arrow-up"></i>
+                                </button>
+                                <button class="btn btn-sm" style="background: #e0e0e0; color: #666; padding: 6px 10px;" onclick="moveDown(this)">
+                                    <i class="fas fa-arrow-down"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="center">
+                                <span class="medal">🥈</span>
+                                <span class="rank rank-2">2</span>
+                            </td>
+                            <td class="team-name">飛龍隊</td>
+                            <td class="center">4</td>
+                            <td class="center">1</td>
+                            <td class="center">80%</td>
+                            <td class="center">385</td>
+                            <td class="center">
+                                <button class="btn btn-sm btn-primary" onclick="editRanking('basketball', 2)" style="padding: 6px 10px;">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm" style="background: #e0e0e0; color: #666; padding: 6px 10px;" onclick="moveUp(this)">
+                                    <i class="fas fa-arrow-up"></i>
+                                </button>
+                                <button class="btn btn-sm" style="background: #e0e0e0; color: #666; padding: 6px 10px;" onclick="moveDown(this)">
+                                    <i class="fas fa-arrow-down"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="center">
+                                <span class="medal">🥉</span>
+                                <span class="rank rank-3">3</span>
+                            </td>
+                            <td class="team-name">猛虎隊</td>
+                            <td class="center">3</td>
+                            <td class="center">2</td>
+                            <td class="center">60%</td>
+                            <td class="center">356</td>
+                            <td class="center">
+                                <button class="btn btn-sm btn-primary" onclick="editRanking('basketball', 3)" style="padding: 6px 10px;">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm" style="background: #e0e0e0; color: #666; padding: 6px 10px;" onclick="moveUp(this)">
+                                    <i class="fas fa-arrow-up"></i>
+                                </button>
+                                <button class="btn btn-sm" style="background: #e0e0e0; color: #666; padding: 6px 10px;" onclick="moveDown(this)">
+                                    <i class="fas fa-arrow-down"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="center">
+                                <span class="rank">4</span>
+                            </td>
+                            <td class="team-name">戰狼隊</td>
+                            <td class="center">2</td>
+                            <td class="center">3</td>
+                            <td class="center">40%</td>
+                            <td class="center">328</td>
+                            <td class="center">
+                                <button class="btn btn-sm btn-primary" onclick="editRanking('basketball', 4)" style="padding: 6px 10px;">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm" style="background: #e0e0e0; color: #666; padding: 6px 10px;" onclick="moveUp(this)">
+                                    <i class="fas fa-arrow-up"></i>
+                                </button>
+                                <button class="btn btn-sm" style="background: #e0e0e0; color: #666; padding: 6px 10px;" onclick="moveDown(this)">
+                                    <i class="fas fa-arrow-down"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="center">
+                                <span class="rank">5</span>
+                            </td>
+                            <td class="team-name">閃電隊</td>
+                            <td class="center">1</td>
+                            <td class="center">4</td>
+                            <td class="center">20%</td>
+                            <td class="center">295</td>
+                            <td class="center">
+                                <button class="btn btn-sm btn-primary" onclick="editRanking('basketball', 5)" style="padding: 6px 10px;">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm" style="background: #e0e0e0; color: #666; padding: 6px 10px;" onclick="moveUp(this)">
+                                    <i class="fas fa-arrow-up"></i>
+                                </button>
+                                <button class="btn btn-sm" style="background: #e0e0e0; color: #666; padding: 6px 10px;" onclick="moveDown(this)" disabled>
+                                    <i class="fas fa-arrow-down"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 排球排名 -->
+            <div class="ranking-section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <i class="fas fa-volleyball-ball"></i> 排球 - 混合組
+                    </h2>
+                    <button class="btn btn-sm btn-success" onclick="publishRanking('volleyball')">
+                        <i class="fas fa-share"></i> 發布排名
+                    </button>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="center" style="width: 80px;">排名</th>
+                            <th>隊伍名稱</th>
+                            <th class="center" style="width: 100px;">勝場</th>
+                            <th class="center" style="width: 100px;">敗場</th>
+                            <th class="center" style="width: 100px;">勝率</th>
+                            <th class="center" style="width: 120px;">局數比</th>
+                            <th class="center" style="width: 160px;">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="center">
+                                <span class="medal">🥇</span>
+                                <span class="rank rank-1">1</span>
+                            </td>
+                            <td class="team-name">閃電隊</td>
+                            <td class="center">4</td>
+                            <td class="center">0</td>
+                            <td class="center">100%</td>
+                            <td class="center">12:2</td>
+                            <td class="center">
+                                <button class="btn btn-sm btn-primary" onclick="editRanking('volleyball', 1)" style="padding: 6px 10px;">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm" style="background: #e0e0e0; color: #666; padding: 6px 10px;" onclick="moveUp(this)" disabled>
+                                    <i class="fas fa-arrow-up"></i>
+                                </button>
+                                <button class="btn btn-sm" style="background: #e0e0e0; color: #666; padding: 6px 10px;" onclick="moveDown(this)">
+                                    <i class="fas fa-arrow-down"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="center">
+                                <span class="medal">🥈</span>
+                                <span class="rank rank-2">2</span>
+                            </td>
+                            <td class="team-name">颶風隊</td>
+                            <td class="center">3</td>
+                            <td class="center">1</td>
+                            <td class="center">75%</td>
+                            <td class="center">10:5</td>
+                            <td class="center">
+                                <button class="btn btn-sm btn-primary" onclick="editRanking('volleyball', 2)" style="padding: 6px 10px;">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm" style="background: #e0e0e0; color: #666; padding: 6px 10px;" onclick="moveUp(this)">
+                                    <i class="fas fa-arrow-up"></i>
+                                </button>
+                                <button class="btn btn-sm" style="background: #e0e0e0; color: #666; padding: 6px 10px;" onclick="moveDown(this)">
+                                    <i class="fas fa-arrow-down"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="center">
+                                <span class="medal">🥉</span>
+                                <span class="rank rank-3">3</span>
+                            </td>
+                            <td class="team-name">旋風隊</td>
+                            <td class="center">2</td>
+                            <td class="center">2</td>
+                            <td class="center">50%</td>
+                            <td class="center">8:8</td>
+                            <td class="center">
+                                <button class="btn btn-sm btn-primary" onclick="editRanking('volleyball', 3)" style="padding: 6px 10px;">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm" style="background: #e0e0e0; color: #666; padding: 6px 10px;" onclick="moveUp(this)">
+                                    <i class="fas fa-arrow-up"></i>
+                                </button>
+                                <button class="btn btn-sm" style="background: #e0e0e0; color: #666; padding: 6px 10px;" onclick="moveDown(this)" disabled>
+                                    <i class="fas fa-arrow-down"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 馬拉松排名 -->
+            <div class="ranking-section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <i class="fas fa-running"></i> 馬拉松 - 半馬
+                    </h2>
+                    <button class="btn btn-sm btn-success" onclick="publishRanking('marathon')">
+                        <i class="fas fa-share"></i> 發布排名
+                    </button>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="center" style="width: 80px;">排名</th>
+                            <th>姓名</th>
+                            <th class="center" style="width: 100px;">號碼</th>
+                            <th class="center" style="width: 150px;">完賽時間</th>
+                            <th class="center" style="width: 100px;">組別</th>
+                            <th class="center" style="width: 160px;">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="center">
+                                <span class="medal">🥇</span>
+                                <span class="rank rank-1">1</span>
+                            </td>
+                            <td class="team-name">李大明</td>
+                            <td class="center">H001</td>
+                            <td class="center">1:25:36</td>
+                            <td class="center">男子組</td>
+                            <td class="center">
+                                <button class="btn btn-sm btn-primary" onclick="editRanking('marathon', 1)" style="padding: 6px 10px;">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm" style="background: #e0e0e0; color: #666; padding: 6px 10px;" onclick="moveUp(this)" disabled>
+                                    <i class="fas fa-arrow-up"></i>
+                                </button>
+                                <button class="btn btn-sm" style="background: #e0e0e0; color: #666; padding: 6px 10px;" onclick="moveDown(this)">
+                                    <i class="fas fa-arrow-down"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="center">
+                                <span class="medal">🥈</span>
+                                <span class="rank rank-2">2</span>
+                            </td>
+                            <td class="team-name">王志豪</td>
+                            <td class="center">H015</td>
+                            <td class="center">1:28:42</td>
+                            <td class="center">男子組</td>
+                            <td class="center">
+                                <button class="btn btn-sm btn-primary" onclick="editRanking('marathon', 2)" style="padding: 6px 10px;">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm" style="background: #e0e0e0; color: #666; padding: 6px 10px;" onclick="moveUp(this)">
+                                    <i class="fas fa-arrow-up"></i>
+                                </button>
+                                <button class="btn btn-sm" style="background: #e0e0e0; color: #666; padding: 6px 10px;" onclick="moveDown(this)">
+                                    <i class="fas fa-arrow-down"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="center">
+                                <span class="medal">🥉</span>
+                                <span class="rank rank-3">3</span>
+                            </td>
+                            <td class="team-name">陳小華</td>
+                            <td class="center">H032</td>
+                            <td class="center">1:32:15</td>
+                            <td class="center">女子組</td>
+                            <td class="center">
+                                <button class="btn btn-sm btn-primary" onclick="editRanking('marathon', 3)" style="padding: 6px 10px;">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm" style="background: #e0e0e0; color: #666; padding: 6px 10px;" onclick="moveUp(this)">
+                                    <i class="fas fa-arrow-up"></i>
+                                </button>
+                                <button class="btn btn-sm" style="background: #e0e0e0; color: #666; padding: 6px 10px;" onclick="moveDown(this)">
+                                    <i class="fas fa-arrow-down"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="center">
+                                <span class="rank">4</span>
+                            </td>
+                            <td class="team-name">林建國</td>
+                            <td class="center">H008</td>
+                            <td class="center">1:35:22</td>
+                            <td class="center">男子組</td>
+                            <td class="center">
+                                <button class="btn btn-sm btn-primary" onclick="editRanking('marathon', 4)" style="padding: 6px 10px;">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm" style="background: #e0e0e0; color: #666; padding: 6px 10px;" onclick="moveUp(this)">
+                                    <i class="fas fa-arrow-up"></i>
+                                </button>
+                                <button class="btn btn-sm" style="background: #e0e0e0; color: #666; padding: 6px 10px;" onclick="moveDown(this)">
+                                    <i class="fas fa-arrow-down"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="center">
+                                <span class="rank">5</span>
+                            </td>
+                            <td class="team-name">張美玲</td>
+                            <td class="center">H045</td>
+                            <td class="center">1:38:55</td>
+                            <td class="center">女子組</td>
+                            <td class="center">
+                                <button class="btn btn-sm btn-primary" onclick="editRanking('marathon', 5)" style="padding: 6px 10px;">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm" style="background: #e0e0e0; color: #666; padding: 6px 10px;" onclick="moveUp(this)">
+                                    <i class="fas fa-arrow-up"></i>
+                                </button>
+                                <button class="btn btn-sm" style="background: #e0e0e0; color: #666; padding: 6px 10px;" onclick="moveDown(this)" disabled>
+                                    <i class="fas fa-arrow-down"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2026 競賽咖 Basaila. All rights reserved.</p>
+    </div>
+
+    <!-- Edit Ranking Modal -->
+    <div id="rankingModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>編輯排名資料</h2>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <form id="rankingForm">
+                <div class="form-group">
+                    <label>隊伍名稱</label>
+                    <input type="text" name="teamName" id="editTeamName" readonly style="background: #f8f9fa;">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>勝場</label>
+                        <input type="number" name="wins" id="editWins" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>敗場</label>
+                        <input type="number" name="losses" id="editLosses" min="0">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>總得分</label>
+                    <input type="number" name="totalScore" id="editTotalScore" min="0">
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">取消</button>
+                    <button type="submit" class="btn btn-primary">儲存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // 已上傳的檔案陣列
+        let uploadedFiles = {
+            ranking: [
+                { name: '籃球成績榜_2026.pdf', size: '1.8 MB', type: 'pdf' }
+            ]
+        };
+
+        function publishRanking(type) {
+            if (confirm('確定要發布此排名榜嗎？\n\n發布後將公開顯示在賽事頁面上。')) {
+                alert('排名榜已發布！');
+            }
+        }
+
+        function editRanking(type, rank) {
+            const modal = document.getElementById('rankingModal');
+            
+            // Find the row data
+            const tables = document.querySelectorAll('.ranking-section table');
+            let targetRow = null;
+            
+            tables.forEach(table => {
+                const rows = table.querySelectorAll('tbody tr');
+                rows.forEach(row => {
+                    const rankCell = row.querySelector('.rank');
+                    if (rankCell && parseInt(rankCell.textContent) === rank) {
+                        targetRow = row;
+                    }
+                });
+            });
+
+            if (targetRow) {
+                const teamName = targetRow.querySelector('.team-name').textContent;
+                const cells = targetRow.querySelectorAll('td');
+                
+                document.getElementById('editTeamName').value = teamName;
+                document.getElementById('editWins').value = cells[2].textContent;
+                document.getElementById('editLosses').value = cells[3].textContent;
+                document.getElementById('editTotalScore').value = cells[5].textContent;
+            }
+            
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('rankingModal').classList.remove('active');
+        }
+
+        function moveUp(btn) {
+            const row = btn.closest('tr');
+            const prevRow = row.previousElementSibling;
+            if (prevRow && prevRow.tagName === 'TR') {
+                row.parentNode.insertBefore(row, prevRow);
+                updateRankNumbers();
+            }
+        }
+
+        function moveDown(btn) {
+            const row = btn.closest('tr');
+            const nextRow = row.nextElementSibling;
+            if (nextRow && nextRow.tagName === 'TR') {
+                row.parentNode.insertBefore(nextRow, row);
+                updateRankNumbers();
+            }
+        }
+
+        function updateRankNumbers() {
+            const tables = document.querySelectorAll('.ranking-section table');
+            tables.forEach(table => {
+                const rows = table.querySelectorAll('tbody tr');
+                rows.forEach((row, index) => {
+                    const rankCell = row.querySelector('td:first-child');
+                    if (rankCell) {
+                        // Clear existing content
+                        rankCell.innerHTML = '';
+                        
+                        // Add medal and rank
+                        const rank = index + 1;
+                        if (rank === 1) {
+                            rankCell.innerHTML = `<span class="medal">🥇</span><span class="rank rank-1">${rank}</span>`;
+                        } else if (rank === 2) {
+                            rankCell.innerHTML = `<span class="medal">🥈</span><span class="rank rank-2">${rank}</span>`;
+                        } else if (rank === 3) {
+                            rankCell.innerHTML = `<span class="medal">🥉</span><span class="rank rank-3">${rank}</span>`;
+                        } else {
+                            rankCell.innerHTML = `<span class="rank">${rank}</span>`;
+                        }
+                    }
+                    
+                    // Update button states
+                    const upBtn = row.querySelector('button[onclick*="moveUp"]');
+                    const downBtn = row.querySelector('button[onclick*="moveDown"]');
+                    
+                    if (upBtn) {
+                        upBtn.disabled = (index === 0);
+                    }
+                    if (downBtn) {
+                        downBtn.disabled = (index === rows.length - 1);
+                    }
+                });
+            });
+        }
+
+        document.getElementById('rankingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('排名資料已更新！');
+            closeModal();
+        });
+
+        // 檔案上傳處理
+        function handleFileUpload(input, type) {
+            const file = input.files[0];
+            if (!file) return;
+
+            // 檔案大小檢查（10MB = 10 * 1024 * 1024 bytes）
+            if (file.size > 10 * 1024 * 1024) {
+                alert('檔案大小超過 10MB 限制！');
+                input.value = '';
+                return;
+            }
+
+            // 檔案類型檢查
+            const validTypes = ['application/pdf', 'image/png', 'image/jpeg', 'image/jpg'];
+            if (!validTypes.includes(file.type)) {
+                alert('僅支援 PDF、PNG、JPG 格式！');
+                input.value = '';
+                return;
+            }
+
+            // 更新檔案名稱顯示
+            const fileNameSpan = document.getElementById(type + 'FileName');
+            fileNameSpan.textContent = file.name;
+            fileNameSpan.style.color = '#28a745';
+            fileNameSpan.style.fontWeight = '600';
+
+            // 轉換檔案大小為可讀格式
+            const fileSize = (file.size / 1024 / 1024).toFixed(2) + ' MB';
+            const fileType = file.type.includes('pdf') ? 'pdf' : 'image';
+
+            // 添加到已上傳檔案列表
+            uploadedFiles[type].push({
+                name: file.name,
+                size: fileSize,
+                type: fileType
+            });
+
+            // 更新檔案列表顯示
+            updateFileList(type);
+
+            // 重置檔案名稱顯示
+            setTimeout(() => {
+                fileNameSpan.textContent = '未選擇檔案';
+                fileNameSpan.style.color = '#666';
+                fileNameSpan.style.fontWeight = 'normal';
+                input.value = '';
+            }, 2000);
+
+            // 顯示成功訊息
+            alert('檔案上傳成功！');
+        }
+
+        // 更新檔案列表顯示
+        function updateFileList(type) {
+            const listContainer = document.getElementById('uploaded' + type.charAt(0).toUpperCase() + type.slice(1) + 'Files');
+            const files = uploadedFiles[type];
+
+            if (files.length === 0) {
+                listContainer.style.display = 'none';
+                return;
+            }
+
+            listContainer.style.display = 'block';
+            const filesHTML = files.map((file, index) => `
+                <div style="display: flex; align-items: center; gap: 10px; background: white; padding: 10px 15px; border-radius: 5px;">
+                    <i class="fas fa-file-${file.type === 'pdf' ? 'pdf' : 'image'}" style="color: ${file.type === 'pdf' ? '#dc3545' : '#17a2b8'}; font-size: 18px;"></i>
+                    <span style="flex: 1; color: #2c3e50; font-size: 14px;">${file.name}</span>
+                    <span style="color: #999; font-size: 12px;">${file.size}</span>
+                    <button class="btn btn-sm btn-secondary" style="padding: 4px 10px;" onclick="previewFile('${type}', ${index})">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="btn btn-sm btn-danger" style="padding: 4px 10px;" onclick="deleteFile('${type}', ${index})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `).join('');
+
+            listContainer.querySelector('div:last-child').innerHTML = filesHTML;
+        }
+
+        // 預覽檔案
+        function previewFile(type, index) {
+            const file = uploadedFiles[type][index];
+            alert('預覽功能：' + file.name);
+            // 實際應用中會打開檔案預覽視窗
+        }
+
+        // 刪除檔案
+        function deleteFile(type, index) {
+            if (confirm('確定要刪除此檔案嗎？')) {
+                uploadedFiles[type].splice(index, 1);
+                updateFileList(type);
+                alert('檔案已刪除！');
+            }
+        }
+
+        // 初始化檔案列表
+        updateFileList('ranking');
+    </script>
+</body>
+</html>

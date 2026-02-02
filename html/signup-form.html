@@ -1,0 +1,771 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>填寫報名資料 - 競賽咖</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/buttons.css">
+    <link rel="stylesheet" href="../css/forms.css">
+    <link rel="stylesheet" href="../css/footer.css">
+    <link rel="stylesheet" href="../css/utilities.css">
+    <style>
+        /* 頁面特定樣式 */
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* Progress Steps */
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .progress-steps::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #ddd;
+            z-index: 0;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+            flex: 1;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #ddd;
+            color: #666;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .step.active .step-number {
+            background: #007bff;
+            color: white;
+        }
+
+        .step-label {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .step.active .step-label {
+            color: #007bff;
+            font-weight: 600;
+        }
+
+        /* Main Card */
+        .main-card {
+            background: white;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 28px;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .card-subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        /* Info Sections */
+        .info-section {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 20px;
+            background: #f8f9fa;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: #007bff;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .info-label {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .info-value {
+            font-size: 16px;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 0;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .form-label .required {
+            color: #dc3545;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+
+        .btn-import {
+            padding: 10px 20px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-import:hover {
+            background: #218838;
+        }
+
+        /* Member Detail Card */
+        .member-detail-card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .member-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #2c3e50;
+            font-size: 16px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+            margin-bottom: 15px;
+        }
+
+        .member-number {
+            background: #007bff;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        /* Import Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .btn-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #999;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-close:hover {
+            color: #333;
+        }
+
+        .team-select-item {
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .team-select-item:hover {
+            border-color: #007bff;
+            background: #f8f9ff;
+        }
+
+        .team-select-item.selected {
+            border-color: #007bff;
+            background: #e7f3ff;
+        }
+
+        .team-select-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .team-select-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .team-select-info {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        /* Buttons */
+        .button-group {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .btn-back {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-back:hover {
+            background: #5a6268;
+        }
+
+        .btn-submit {
+            background: #007bff;
+            color: white;
+        }
+
+        .btn-submit:hover {
+            background: #0056b3;
+        }
+
+        /* Footer */
+        .footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 60px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-trophy"></i> 競賽咖
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Progress Steps -->
+        <div class="progress-steps">
+            <div class="step active">
+                <div class="step-number">1</div>
+                <div class="step-label">填寫資料</div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-label">確認繳費</div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-label">完成報名</div>
+            </div>
+        </div>
+
+        <!-- Main Card -->
+        <div class="main-card">
+            <h1 class="card-title">報名：2026 春季籃球聯賽</h1>
+            <p class="card-subtitle">步驟 1 / 3：請填寫報名資料</p>
+
+            <!-- Competition Info -->
+            <div class="info-section">
+                <div class="section-header">
+                    <h3 class="section-title">
+                        <i class="fas fa-trophy"></i>
+                        賽事資訊
+                    </h3>
+                </div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">賽事名稱</span>
+                        <span class="info-value">2026 春季籃球聯賽</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">比賽日期</span>
+                        <span class="info-value">2026/03/15 - 2026/05/30</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">比賽地點</span>
+                        <span class="info-value">台北市立體育館</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">報名截止</span>
+                        <span class="info-value">2026/03/10</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Team Basic Info -->
+            <div class="info-section">
+                <div class="section-header">
+                    <h3 class="section-title">
+                        <i class="fas fa-users"></i>
+                        隊伍基本資料
+                    </h3>
+                    <button class="btn-import" onclick="openImportModal()">
+                        <i class="fas fa-download"></i> 匯入隊伍資料
+                    </button>
+                </div>
+                <div class="info-grid">
+                    <div class="form-group">
+                        <label class="form-label">隊伍名稱</label>
+                        <input type="text" class="form-input" id="teamName" placeholder="請輸入隊伍名稱">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">隊長姓名</label>
+                        <input type="text" class="form-input" id="captainName" placeholder="請輸入隊長姓名">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">聯絡信箱</label>
+                        <input type="email" class="form-input" id="teamEmail" placeholder="請輸入聯絡信箱">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">聯絡電話</label>
+                        <input type="tel" class="form-input" id="teamPhone" placeholder="請輸入聯絡電話">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Team Members Info -->
+            <div class="info-section">
+                <div class="section-header">
+                    <h3 class="section-title">
+                        <i class="fas fa-users-cog"></i>
+                        隊員資料 (至少 5 人)
+                    </h3>
+                </div>
+                <div style="display: grid; gap: 15px;" id="membersList">
+                    <!-- Member 1 -->
+                    <div class="member-detail-card">
+                        <div class="member-header">
+                            <span class="member-number">1</span>
+                            <strong>隊員 1</strong>
+                        </div>
+                        <div class="info-grid">
+                            <div class="form-group">
+                                <label class="form-label">姓名</label>
+                                <input type="text" class="form-input member-name" placeholder="請輸入姓名">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">信箱</label>
+                                <input type="email" class="form-input member-email" placeholder="請輸入信箱">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">電話</label>
+                                <input type="tel" class="form-input member-phone" placeholder="請輸入電話">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">身份證字號</label>
+                                <input type="text" class="form-input member-id" placeholder="請輸入身份證字號">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Member 2 -->
+                    <div class="member-detail-card">
+                        <div class="member-header">
+                            <span class="member-number">2</span>
+                            <strong>隊員 2</strong>
+                        </div>
+                        <div class="info-grid">
+                            <div class="form-group">
+                                <label class="form-label">姓名</label>
+                                <input type="text" class="form-input member-name" placeholder="請輸入姓名">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">信箱</label>
+                                <input type="email" class="form-input member-email" placeholder="請輸入信箱">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">電話</label>
+                                <input type="tel" class="form-input member-phone" placeholder="請輸入電話">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">身份證字號</label>
+                                <input type="text" class="form-input member-id" placeholder="請輸入身份證字號">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Member 3 -->
+                    <div class="member-detail-card">
+                        <div class="member-header">
+                            <span class="member-number">3</span>
+                            <strong>隊員 3</strong>
+                        </div>
+                        <div class="info-grid">
+                            <div class="form-group">
+                                <label class="form-label">姓名</label>
+                                <input type="text" class="form-input member-name" placeholder="請輸入姓名">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">信箱</label>
+                                <input type="email" class="form-input member-email" placeholder="請輸入信箱">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">電話</label>
+                                <input type="tel" class="form-input member-phone" placeholder="請輸入電話">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">身份證字號</label>
+                                <input type="text" class="form-input member-id" placeholder="請輸入身份證字號">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Member 4 -->
+                    <div class="member-detail-card">
+                        <div class="member-header">
+                            <span class="member-number">4</span>
+                            <strong>隊員 4</strong>
+                        </div>
+                        <div class="info-grid">
+                            <div class="form-group">
+                                <label class="form-label">姓名</label>
+                                <input type="text" class="form-input member-name" placeholder="請輸入姓名">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">信箱</label>
+                                <input type="email" class="form-input member-email" placeholder="請輸入信箱">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">電話</label>
+                                <input type="tel" class="form-input member-phone" placeholder="請輸入電話">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">身份證字號</label>
+                                <input type="text" class="form-input member-id" placeholder="請輸入身份證字號">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Member 5 -->
+                    <div class="member-detail-card">
+                        <div class="member-header">
+                            <span class="member-number">5</span>
+                            <strong>隊員 5</strong>
+                        </div>
+                        <div class="info-grid">
+                            <div class="form-group">
+                                <label class="form-label">姓名</label>
+                                <input type="text" class="form-input member-name" placeholder="請輸入姓名">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">信箱</label>
+                                <input type="email" class="form-input member-email" placeholder="請輸入信箱">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">電話</label>
+                                <input type="tel" class="form-input member-phone" placeholder="請輸入電話">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">身份證字號</label>
+                                <input type="text" class="form-input member-id" placeholder="請輸入身份證字號">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Button Group -->
+            <div class="button-group">
+                <button class="btn btn-back" onclick="window.location.href='cup-home.html'">
+                    <i class="fas fa-arrow-left"></i> 返回賽事頁面
+                </button>
+                <button class="btn btn-submit" onclick="submitForm()">
+                    下一步：確認繳費 <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Import Team Modal -->
+    <div class="modal" id="importModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">選擇要匯入的隊伍</h3>
+                <button class="btn-close" onclick="closeImportModal()">&times;</button>
+            </div>
+            <div id="teamsList">
+                <!-- Team 1 -->
+                <div class="team-select-item" onclick="selectTeam(this, 'team1')">
+                    <div class="team-select-header">
+                        <span class="team-select-name">雷霆籃球隊</span>
+                    </div>
+                    <div class="team-select-info">
+                        <i class="fas fa-user"></i> 隊長：張小明
+                    </div>
+                    <div class="team-select-info">
+                        <i class="fas fa-users"></i> 隊員數：5 人
+                    </div>
+                </div>
+
+                <!-- Team 2 -->
+                <div class="team-select-item" onclick="selectTeam(this, 'team2')">
+                    <div class="team-select-header">
+                        <span class="team-select-name">火箭籃球隊</span>
+                    </div>
+                    <div class="team-select-info">
+                        <i class="fas fa-user"></i> 隊長：李小華
+                    </div>
+                    <div class="team-select-info">
+                        <i class="fas fa-users"></i> 隊員數：6 人
+                    </div>
+                </div>
+            </div>
+            <div style="margin-top: 20px; display: flex; gap: 10px;">
+                <button class="btn btn-back" onclick="closeImportModal()" style="flex: 0 0 auto;">
+                    取消
+                </button>
+                <button class="btn btn-submit" onclick="importTeamData()" id="btnImport" disabled>
+                    確認匯入
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; 2026 競賽咖 Basaila. All rights reserved.</p>
+    </div>
+
+    <script>
+        // Team data
+        const teamsData = {
+            team1: {
+                name: '雷霆籃球隊',
+                captain: '張小明',
+                email: 'team1@example.com',
+                phone: '0912-345-678',
+                members: [
+                    { name: '張小明', email: 'captain1@example.com', phone: '0912-345-678', id: 'A123456789' },
+                    { name: '王大明', email: 'member1@example.com', phone: '0922-111-222', id: 'B234567890' },
+                    { name: '陳小美', email: 'member2@example.com', phone: '0933-222-333', id: 'C345678901' },
+                    { name: '林志強', email: 'member3@example.com', phone: '0944-333-444', id: 'D456789012' },
+                    { name: '黃建國', email: 'member4@example.com', phone: '0955-444-555', id: 'E567890123' }
+                ]
+            },
+            team2: {
+                name: '火箭籃球隊',
+                captain: '李小華',
+                email: 'team2@example.com',
+                phone: '0913-456-789',
+                members: [
+                    { name: '李小華', email: 'captain2@example.com', phone: '0913-456-789', id: 'F678901234' },
+                    { name: '趙文傑', email: 'player1@example.com', phone: '0923-111-222', id: 'G789012345' },
+                    { name: '孫雅婷', email: 'player2@example.com', phone: '0934-222-333', id: 'H890123456' },
+                    { name: '周建宏', email: 'player3@example.com', phone: '0945-333-444', id: 'I901234567' },
+                    { name: '吳美玲', email: 'player4@example.com', phone: '0956-444-555', id: 'J012345678' },
+                    { name: '鄭宇翔', email: 'player5@example.com', phone: '0967-555-666', id: 'K123456789' }
+                ]
+            }
+        };
+
+        let selectedTeamId = null;
+
+        // Open import modal
+        function openImportModal() {
+            document.getElementById('importModal').classList.add('show');
+        }
+
+        // Close import modal
+        function closeImportModal() {
+            document.getElementById('importModal').classList.remove('show');
+            selectedTeamId = null;
+            document.querySelectorAll('.team-select-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            document.getElementById('btnImport').disabled = true;
+        }
+
+        // Select team
+        function selectTeam(element, teamId) {
+            document.querySelectorAll('.team-select-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            selectedTeamId = teamId;
+            document.getElementById('btnImport').disabled = false;
+        }
+
+        // Import team data
+        function importTeamData() {
+            if (!selectedTeamId) return;
+
+            const team = teamsData[selectedTeamId];
+            
+            // Fill team basic info
+            document.getElementById('teamName').value = team.name;
+            document.getElementById('captainName').value = team.captain;
+            document.getElementById('teamEmail').value = team.email;
+            document.getElementById('teamPhone').value = team.phone;
+
+            // Fill members info
+            const memberCards = document.querySelectorAll('.member-detail-card');
+            team.members.forEach((member, index) => {
+                if (index < memberCards.length) {
+                    const card = memberCards[index];
+                    card.querySelector('.member-name').value = member.name;
+                    card.querySelector('.member-email').value = member.email;
+                    card.querySelector('.member-phone').value = member.phone;
+                    card.querySelector('.member-id').value = member.id;
+                }
+            });
+
+            closeImportModal();
+            alert('隊伍資料已成功匯入！您可以繼續修改資料。');
+        }
+
+        // Submit form
+        function submitForm() {
+            // Validate form (simplified)
+            const teamName = document.getElementById('teamName').value;
+            if (!teamName) {
+                alert('請填寫隊伍名稱');
+                return;
+            }
+
+            // Navigate to payment page
+            window.location.href = 'signup-step2.html';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,535 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>個人報名 - 競賽咖</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/buttons.css">
+    <link rel="stylesheet" href="../css/cards.css">
+    <link rel="stylesheet" href="../css/forms.css">
+    <link rel="stylesheet" href="../css/utilities.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Inter, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+            background-color: var(--bg-input);
+            color: #333;
+        }
+
+        /* Container */
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* Progress Steps */
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .progress-steps::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--border);
+            z-index: 0;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+            flex: 1;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--border);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .step.active .step-number {
+            background: var(--primary);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .step.active .step-label {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* Main Card */
+        .main-card {
+            background: white;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+        }
+
+        .card-title {
+            font-size: 28px;
+            color: var(--text);
+            margin-bottom: 10px;
+        }
+
+        .card-subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+        }
+
+        .alert {
+            padding: 15px;
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .alert i {
+            color: #0c5460;
+            margin-top: 2px;
+        }
+
+        /* Form Sections */
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            color: var(--text);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--primary);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .form-group label .required {
+            color: #dc3545;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            font-size: 15px;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form-help {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 5px;
+        }
+
+        /* Buttons */
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .btn-back {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-back:hover {
+            background: #5a6268;
+        }
+
+        .btn-next {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-next:hover {
+            background: var(--primary-hover);
+        }
+
+        /* Registration Type Cards */
+        .registration-type-card {
+            cursor: pointer;
+            display: block;
+        }
+
+        .type-card-content {
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.3s;
+            height: 100%;
+        }
+
+        .type-card-content:hover {
+            border-color: var(--primary);
+            box-shadow: 0 2px 8px rgba(0, 196, 160, 0.2);
+        }
+
+        .type-card-content.active {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, rgba(0, 196, 160, 0.05) 0%, rgba(0, 160, 128, 0.05) 100%);
+            box-shadow: 0 2px 12px rgba(0, 196, 160, 0.3);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--text);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 60px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <img src="../images/logo.svg" alt="競賽咖" class="logo-img">
+            </a>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">首頁</a>
+                <a href="cups-list.html" class="nav-link">賽事列表</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Progress Steps -->
+        <div class="progress-steps">
+            <div class="step active">
+                <div class="step-number">1</div>
+                <div class="step-label">填寫資料</div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-label">確認繳費</div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-label">報名完成</div>
+            </div>
+        </div>
+
+        <!-- Main Card -->
+        <div class="main-card">
+            <h1 class="card-title">報名：城市馬拉松 2026</h1>
+            <p class="card-subtitle">步驟 1 / 3：選擇報名方式</p>
+
+            <!-- Registration Type Selection -->
+            <div class="form-section" style="background: #f8f9fa; border: 2px solid #e9ecef; padding: 25px; border-radius: 12px; margin-bottom: 25px;">
+                <h3 class="section-title">
+                    <i class="fas fa-users"></i>
+                    報名方式
+                </h3>
+                <p style="color: #666; margin-bottom: 20px; font-size: 14px;">請選擇您的報名方式：</p>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <label class="registration-type-card" onclick="selectRegistrationType('individual')">
+                        <input type="radio" name="registrationType" value="individual" checked style="display: none;">
+                        <div class="type-card-content active" id="individualCard">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                                <i class="fas fa-user" style="font-size: 24px; color: #00C4A0;"></i>
+                                <h4 style="margin: 0; font-size: 18px;">個人報名</h4>
+                            </div>
+                            <p style="color: #666; margin: 0; font-size: 14px;">僅為自己報名參賽</p>
+                        </div>
+                    </label>
+                    
+                    <label class="registration-type-card" onclick="selectRegistrationType('group')">
+                        <input type="radio" name="registrationType" value="group" style="display: none;">
+                        <div class="type-card-content" id="groupCard">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                                <i class="fas fa-users" style="font-size: 24px; color: #00A080;"></i>
+                                <h4 style="margin: 0; font-size: 18px;">團體報名</h4>
+                            </div>
+                            <p style="color: #666; margin: 0; font-size: 14px;">為多人一起報名參賽</p>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="alert" id="individualAlert">
+                <i class="fas fa-info-circle"></i>
+                <div>
+                    <strong>個人賽事報名</strong><br>
+                    請填寫您的個人資料以完成報名。所有標註 <span style="color: #dc3545;">*</span> 的欄位為必填。
+                </div>
+            </div>
+
+            <div class="alert" id="groupAlert" style="display: none; background: #f3e5f5; border-color: #ce93d8;">
+                <i class="fas fa-users"></i>
+                <div>
+                    <strong>團體報名</strong><br>
+                    您可以一次為多位參賽者報名。請填寫代表人資料及所有參賽者資訊。
+                </div>
+            </div>
+
+            <form id="individualForm">
+                <!-- Personal Info Section -->
+                <div class="form-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-user"></i>
+                        個人資料
+                    </h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>姓名 <span class="required">*</span></label>
+                            <input type="text" name="name" placeholder="請輸入真實姓名" required>
+                        </div>
+                        <div class="form-group">
+                            <label>性別 <span class="required">*</span></label>
+                            <select name="gender" required>
+                                <option value="">請選擇</option>
+                                <option value="male">男</option>
+                                <option value="female">女</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>出生年月日 <span class="required">*</span></label>
+                            <input type="date" name="birthday" required>
+                            <span class="form-help">用於確認參賽資格</span>
+                        </div>
+                        <div class="form-group">
+                            <label>身分證字號 <span class="required">*</span></label>
+                            <input type="text" name="idNumber" placeholder="A123456789" required>
+                            <span class="form-help">用於保險及證件核對</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Info Section -->
+                <div class="form-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-address-book"></i>
+                        聯絡資訊
+                    </h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>聯絡電話 <span class="required">*</span></label>
+                            <input type="tel" name="phone" placeholder="0912-345-678" required>
+                        </div>
+                        <div class="form-group">
+                            <label>電子信箱 <span class="required">*</span></label>
+                            <input type="email" name="email" placeholder="example@email.com" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>聯絡地址 <span class="required">*</span></label>
+                        <input type="text" name="address" placeholder="請輸入完整地址" required>
+                        <span class="form-help">用於寄送參賽資料與完賽證書</span>
+                    </div>
+                </div>
+
+                <!-- Race Info Section -->
+                <div class="form-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-running"></i>
+                        參賽資訊
+                    </h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>報名組別 <span class="required">*</span></label>
+                            <select name="category" required>
+                                <option value="">請選擇</option>
+                                <option value="full">全程馬拉松 (42.195km)</option>
+                                <option value="half">半程馬拉松 (21km)</option>
+                                <option value="10k">10公里組</option>
+                                <option value="5k">5公里組</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>衣服尺寸 <span class="required">*</span></label>
+                            <select name="shirtSize" required>
+                                <option value="">請選擇</option>
+                                <option value="xs">XS</option>
+                                <option value="s">S</option>
+                                <option value="m">M</option>
+                                <option value="l">L</option>
+                                <option value="xl">XL</option>
+                                <option value="xxl">XXL</option>
+                            </select>
+                            <span class="form-help">參賽紀念衫尺寸</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Emergency Contact Section -->
+                <div class="form-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-phone-alt"></i>
+                        緊急聯絡人
+                    </h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>緊急聯絡人姓名 <span class="required">*</span></label>
+                            <input type="text" name="emergencyName" placeholder="請輸入姓名" required>
+                        </div>
+                        <div class="form-group">
+                            <label>關係 <span class="required">*</span></label>
+                            <select name="emergencyRelation" required>
+                                <option value="">請選擇</option>
+                                <option value="parent">父母</option>
+                                <option value="spouse">配偶</option>
+                                <option value="sibling">兄弟姐妹</option>
+                                <option value="friend">朋友</option>
+                                <option value="other">其他</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>緊急聯絡人電話 <span class="required">*</span></label>
+                        <input type="tel" name="emergencyPhone" placeholder="0912-345-678" required>
+                    </div>
+                </div>
+
+                <!-- Button Group -->
+                <div class="button-group">
+                    <button type="button" class="btn btn-back" onclick="window.location.href='cup-home.html'">
+                        <i class="fas fa-arrow-left"></i> 返回賽事頁面
+                    </button>
+                    <button type="submit" class="btn btn-next">
+                        下一步 <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; 2026 競賽咖 Basaila. All rights reserved.</p>
+    </div>
+
+    <script>
+        // Registration type selection
+        function selectRegistrationType(type) {
+            const individualCard = document.getElementById('individualCard');
+            const groupCard = document.getElementById('groupCard');
+            const individualAlert = document.getElementById('individualAlert');
+            const groupAlert = document.getElementById('groupAlert');
+            
+            if (type === 'individual') {
+                individualCard.classList.add('active');
+                groupCard.classList.remove('active');
+                individualAlert.style.display = 'flex';
+                groupAlert.style.display = 'none';
+            } else {
+                individualCard.classList.remove('active');
+                groupCard.classList.add('active');
+                individualAlert.style.display = 'none';
+                groupAlert.style.display = 'flex';
+                
+                // Redirect to group registration page
+                setTimeout(() => {
+                    window.location.href = 'signup-group-individual.html';
+                }, 500);
+            }
+        }
+
+        document.getElementById('individualForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validate all required fields are filled
+            const formData = new FormData(this);
+            let isValid = true;
+            
+            for (let [key, value] of formData.entries()) {
+                if (!value) {
+                    isValid = false;
+                    break;
+                }
+            }
+            
+            if (isValid) {
+                // Redirect to payment step
+                window.location.href = 'signup-step2-individual.html';
+            } else {
+                alert('請填寫所有必填欄位');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,618 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>確認資料與繳費 - 個人報名 - 競賽咖</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/buttons.css">
+    <link rel="stylesheet" href="../css/cards.css">
+    <link rel="stylesheet" href="../css/forms.css">
+    <link rel="stylesheet" href="../css/utilities.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Inter, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+            background-color: var(--bg-input);
+            color: #333;
+        }
+
+        /* Container */
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* Progress Steps */
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .progress-steps::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--success);
+            z-index: 0;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+            flex: 1;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--success);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .step:last-child .step-number {
+            background: var(--border);
+            color: var(--text-secondary);
+        }
+
+        .step.active .step-number {
+            background: var(--primary);
+        }
+
+        .step-label {
+            font-size: 14px;
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .step:last-child .step-label {
+            color: var(--text-secondary);
+        }
+
+        .step.active .step-label {
+            color: var(--primary);
+        }
+
+        /* Main Card */
+        .main-card {
+            background: white;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 28px;
+            color: var(--text);
+            margin-bottom: 10px;
+        }
+
+        .card-subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+        }
+
+        /* Info Sections */
+        .info-section {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 20px;
+            background: var(--bg-input);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--primary);
+        }
+
+        .btn-edit {
+            padding: 8px 20px;
+            background: #fff;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .btn-edit:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .info-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .info-value {
+            font-size: 16px;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        /* Payment Section */
+        .payment-card {
+            background: white;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+        }
+
+        .payment-summary {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+            padding-top: 15px;
+            margin-top: 10px;
+            border-top: 2px solid var(--primary);
+        }
+
+        .summary-label {
+            font-size: 16px;
+            color: #555;
+        }
+
+        .summary-value {
+            font-size: 16px;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .summary-row:last-child .summary-label {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--text);
+        }
+
+        .summary-row:last-child .summary-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        /* Payment Methods */
+        .payment-methods {
+            margin-bottom: 30px;
+        }
+
+        .method-title {
+            font-size: 18px;
+            color: var(--text);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .payment-options {
+            display: grid;
+            gap: 15px;
+        }
+
+        .payment-option {
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .payment-option:hover {
+            border-color: var(--primary);
+            background: #f8f9ff;
+        }
+
+        .payment-option.selected {
+            border-color: var(--primary);
+            background: #e7f3ff;
+        }
+
+        .payment-option input[type="radio"] {
+            width: 20px;
+            height: 20px;
+        }
+
+        .payment-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .payment-info h4 {
+            color: var(--text);
+            margin-bottom: 5px;
+        }
+
+        .payment-info p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* Terms */
+        .terms-section {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .terms-section label {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .terms-section input[type="checkbox"] {
+            margin-top: 3px;
+            width: 18px;
+            height: 18px;
+        }
+
+        .terms-text {
+            color: #856404;
+            line-height: 1.6;
+        }
+
+        .terms-text a {
+            color: #007bff;
+            text-decoration: underline;
+        }
+
+        /* Buttons */
+        .button-group {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .btn-back {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-back:hover {
+            background: #5a6268;
+        }
+
+        .btn-submit {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-submit:hover {
+            background: #218838;
+        }
+
+        .btn-submit:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--text);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 60px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <img src="../images/logo.svg" alt="競賽咖" class="logo-img">
+            </a>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">首頁</a>
+                <a href="cups-list.html" class="nav-link">賽事列表</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Progress Steps -->
+        <div class="progress-steps">
+            <div class="step">
+                <div class="step-number"><i class="fas fa-check"></i></div>
+                <div class="step-label">填寫資料</div>
+            </div>
+            <div class="step active">
+                <div class="step-number">2</div>
+                <div class="step-label">確認繳費</div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-label">報名完成</div>
+            </div>
+        </div>
+
+        <!-- Main Card - Competition Info -->
+        <div class="main-card">
+            <h1 class="card-title">確認報名資料</h1>
+            <p class="card-subtitle">步驟 2 / 3：請確認以下資訊並選擇付款方式</p>
+
+            <!-- Competition Info -->
+            <div class="info-section">
+                <div class="section-header">
+                    <h3 class="section-title">
+                        <i class="fas fa-trophy"></i>
+                        賽事資訊
+                    </h3>
+                </div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">賽事名稱</span>
+                        <span class="info-value">城市馬拉松 2026</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">比賽日期</span>
+                        <span class="info-value">2026/06/15</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">比賽地點</span>
+                        <span class="info-value">高雄市</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">報名截止</span>
+                        <span class="info-value">2026/05/31</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Personal Info -->
+            <div class="info-section">
+                <div class="section-header">
+                    <h3 class="section-title">
+                        <i class="fas fa-user"></i>
+                        參賽者資訊
+                    </h3>
+                    <button class="btn-edit" onclick="window.history.back()">
+                        <i class="fas fa-edit"></i> 修改
+                    </button>
+                </div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">姓名</span>
+                        <span class="info-value">張小明</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">性別</span>
+                        <span class="info-value">男</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">聯絡電話</span>
+                        <span class="info-value">0912-345-678</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">電子信箱</span>
+                        <span class="info-value">runner@example.com</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">參賽組別</span>
+                        <span class="info-value">半程馬拉松 (21km)</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">衣服尺寸</span>
+                        <span class="info-value">L</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Emergency Contact -->
+            <div class="info-section">
+                <div class="section-header">
+                    <h3 class="section-title">
+                        <i class="fas fa-phone-alt"></i>
+                        緊急聯絡人
+                    </h3>
+                </div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">姓名</span>
+                        <span class="info-value">李小華</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">關係</span>
+                        <span class="info-value">配偶</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">聯絡電話</span>
+                        <span class="info-value">0923-456-789</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Card -->
+        <div class="payment-card">
+            <h2 class="card-title">繳費資訊</h2>
+            
+            <!-- Payment Summary -->
+            <div class="payment-summary">
+                <div class="summary-row">
+                    <span class="summary-label">報名費用 (半程馬拉松)</span>
+                    <span class="summary-value">NT$ 800</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">服務費</span>
+                    <span class="summary-value">NT$ 0</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">應付總額</span>
+                    <span class="summary-value">NT$ 800</span>
+                </div>
+            </div>
+
+            <!-- Payment Methods -->
+            <div class="payment-methods">
+                <h3 class="method-title">選擇付款方式</h3>
+                <div class="payment-options">
+                    <label class="payment-option selected">
+                        <input type="radio" name="payment" value="bank" checked>
+                        <div class="payment-icon">
+                            <i class="fas fa-university"></i>
+                        </div>
+                        <div class="payment-info">
+                            <h4>銀行轉帳 / ATM</h4>
+                            <p>轉帳後請上傳繳費證明</p>
+                        </div>
+                    </label>
+
+                    <label class="payment-option">
+                        <input type="radio" name="payment" value="credit">
+                        <div class="payment-icon" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                            <i class="fas fa-credit-card"></i>
+                        </div>
+                        <div class="payment-info">
+                            <h4>信用卡</h4>
+                            <p>即時付款，快速完成報名</p>
+                        </div>
+                    </label>
+
+                    <label class="payment-option">
+                        <input type="radio" name="payment" value="cash">
+                        <div class="payment-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                        <div class="payment-info">
+                            <h4>現場繳費</h4>
+                            <p>比賽當日至報到處繳費</p>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Terms and Conditions -->
+            <div class="terms-section">
+                <label>
+                    <input type="checkbox" id="agreeTerms">
+                    <div class="terms-text">
+                        我已閱讀並同意 <a href="#" target="_blank">報名條款與規則</a>，
+                        確認所填資料真實無誤，了解參賽風險並同意自負責任，報名費用一經繳納恕不退費。
+                    </div>
+                </label>
+            </div>
+
+            <!-- Button Group -->
+            <div class="button-group">
+                <button class="btn btn-back" onclick="window.history.back()">
+                    <i class="fas fa-arrow-left"></i> 返回上一步
+                </button>
+                <button class="btn btn-submit" id="btnSubmit">
+                    確認送出 <i class="fas fa-check"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; 2026 競賽咖 Basaila. All rights reserved.</p>
+    </div>
+
+    <script>
+        // Handle payment method selection
+        const paymentOptions = document.querySelectorAll('.payment-option');
+        paymentOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                paymentOptions.forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
+
+        // Handle submit button
+        const btnSubmit = document.getElementById('btnSubmit');
+        btnSubmit.addEventListener('click', function() {
+            window.location.href = 'signup-complete-individual.html';
+        });
+    </script>
+</body>
+</html>

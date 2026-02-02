@@ -1,0 +1,881 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>盃賽設定 - 競賽咖</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/buttons.css">
+    <link rel="stylesheet" href="../css/cards.css">
+    <link rel="stylesheet" href="../css/forms.css">
+    <link rel="stylesheet" href="../css/sidebar.css">
+    <link rel="stylesheet" href="../css/utilities.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Inter, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        .dashboard-layout {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: calc(100vh - 140px);
+        }
+
+        .sidebar {
+            width: 250px;
+            background: white;
+            border-right: 1px solid #e0e0e0;
+            padding: 20px 0;
+        }
+
+        .sidebar-section {
+            margin-bottom: 30px;
+        }
+
+        .sidebar-title {
+            padding: 0 20px;
+            color: #999;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            color: #666;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .sidebar-menu li a:hover {
+            background: #f8f9fa;
+            color: #00C4A0;
+        }
+
+        .sidebar-menu li a.active {
+            background: #e7f3ff;
+            color: #00C4A0;
+            border-right: 3px solid #00C4A0;
+            font-weight: 600;
+        }
+
+        .sidebar-menu li a i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 30px;
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+        }
+
+        .page-title {
+            color: #2c3e50;
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #00C4A0;
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 13px;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* 頁面特定樣式 */
+        .dashboard-layout {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: calc(100vh - 140px);
+        }
+
+        .sidebar-menu li a.active {
+            background: #e7f3ff;
+            color: #00C4A0;
+            border-right: 3px solid #00C4A0;
+            font-weight: 600;
+        }
+
+        .sidebar-menu li a i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 30px;
+        }
+
+        .page-title {
+            color: #2c3e50;
+            font-size: 28px;
+            margin-bottom: 30px;
+        }
+
+        .settings-section {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .hint {
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #00C4A0;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #00A080;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 30px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #00C4A0;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .toggle-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .toggle-item:last-child {
+            border-bottom: none;
+        }
+
+        .toggle-label {
+            flex: 1;
+        }
+
+        .toggle-label h4 {
+            color: #2c3e50;
+            font-size: 15px;
+            margin-bottom: 3px;
+        }
+
+        .toggle-label p {
+            color: #999;
+            font-size: 13px;
+        }
+
+        .footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .danger-zone {
+            border: 2px solid #dc3545;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .danger-zone h3 {
+            color: #dc3545;
+            margin-bottom: 10px;
+        }
+
+        .danger-zone p {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .bank-display {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .bank-details {
+            flex: 1;
+        }
+
+        .bank-item {
+            display: flex;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .bank-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .bank-label {
+            font-weight: 600;
+            color: #495057;
+            min-width: 100px;
+        }
+
+        .bank-value {
+            color: #212529;
+            font-family: 'Courier New', monospace;
+        }
+
+        .required {
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <img src="../images/logo.svg" alt="競賽咖" class="logo-img">
+            </a>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">首頁</a>
+                <a href="cups-list.html" class="nav-link">賽事列表</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="dashboard-layout">
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">主控台</div>
+                <ul class="sidebar-menu">
+                    <li><a href="organizer-dashboard.html">
+                        <i class="fas fa-home"></i> 總覽
+                    </a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-title">盃賽管理</div>
+                <ul class="sidebar-menu">
+                    <li><a href="manage-items.html">
+                        <i class="fas fa-basketball-ball"></i> 競賽項目
+                    </a></li>
+                    <li><a href="manage-signups.html">
+                        <i class="fas fa-users"></i> 報名管理
+                    </a></li>
+                    <li><a href="manage-schedule.html">
+                        <i class="fas fa-calendar-alt"></i> 賽程管理
+                    </a></li>
+                    <li><a href="manage-scores.html">
+                        <i class="fas fa-chart-bar"></i> 成績管理
+                    </a></li>
+                    <li><a href="manage-rankings.html">
+                        <i class="fas fa-medal"></i> 排名榜
+                    </a></li>
+                    <li><a href="manage-cup-info.html">
+                        <i class="fas fa-info-circle"></i> 賽事資訊
+                    </a></li>
+                    <li><a href="manage-cup-details.html">
+                        <i class="fas fa-file-alt"></i> 賽事詳情
+                    </a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-title">設定</div>
+                <ul class="sidebar-menu">
+                    <li><a href="cup-settings.html" class="active">
+                        <i class="fas fa-cog"></i> 盃賽設定
+                    </a></li>
+                    <li><a href="notifications.html">
+                        <i class="fas fa-bell"></i> 通知中心
+                    </a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <h1 class="page-title">盃賽設定</h1>
+
+            <!-- 基本資訊 -->
+            <div class="settings-section">
+                <h2 class="section-title">
+                    <i class="fas fa-info-circle"></i> 基本資訊
+                </h2>
+                <form>
+                    <div class="form-group">
+                        <label>盃賽名稱</label>
+                        <input type="text" value="2026 春季運動嘉年華">
+                    </div>
+
+                    <div class="form-group">
+                        <label>盃賽簡介</label>
+                        <textarea>為促進全民運動風氣，特別舉辦此次運動嘉年華，包含籃球、排球、馬拉松等多項競賽項目。</textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>賽事開始日期</label>
+                            <input type="date" value="2026-03-15">
+                        </div>
+                        <div class="form-group">
+                            <label>賽事結束日期</label>
+                            <input type="date" value="2026-03-20">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>主辦單位</label>
+                        <input type="text" value="台北市體育局">
+                    </div>
+
+                    <div class="form-group">
+                        <label>賽事封面圖片</label>
+                        <input type="file" accept="image/*" style="padding: 10px;">
+                        <span class="hint">建議尺寸：800x600 px，用於賽事列表顯示</span>
+                        <div style="margin-top: 10px;">
+                            <img src="https://via.placeholder.com/800x600/667eea/ffffff?text=2026+春季運動嘉年華" style="max-width: 300px; border-radius: 8px; border: 1px solid #ddd;">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>賽事橫幅圖片</label>
+                        <input type="file" accept="image/*" style="padding: 10px;">
+                        <span class="hint">建議尺寸：1920x400 px，用於賽事頁面頂部橫幅</span>
+                        <div style="margin-top: 10px;">
+                            <img src="https://via.placeholder.com/1920x400/764ba2/ffffff?text=賽事橫幅" style="max-width: 100%; border-radius: 8px; border: 1px solid #ddd;">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>賽事相關圖片</label>
+                        <input type="file" accept="image/*" multiple style="padding: 10px;">
+                        <span class="hint">可上傳多張圖片，用於賽事介紹內容</span>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="button" class="btn btn-secondary">取消</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> 儲存變更
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- 報名設定 -->
+            <div class="settings-section">
+                <h2 class="section-title">
+                    <i class="fas fa-users"></i> 報名設定
+                </h2>
+
+                <div class="toggle-item">
+                    <div class="toggle-label">
+                        <h4>開放報名</h4>
+                        <p>允許新的隊伍或個人報名參賽</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="toggle-item">
+                    <div class="toggle-label">
+                        <h4>需要審核</h4>
+                        <p>報名後需經主辦方審核通過才能參賽</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="toggle-item">
+                    <div class="toggle-label">
+                        <h4>開放修改報名資料</h4>
+                        <p>允許參賽者在報名後修改隊伍或個人資料</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- 匯款帳戶設定 -->
+            <div class="settings-section">
+                <h2 class="section-title">
+                    <i class="fas fa-university"></i> 匯款帳戶設定
+                </h2>
+                
+                <div style="background: #e7f3ff; border-left: 4px solid #00C4A0; padding: 12px 15px; border-radius: 4px; margin-bottom: 20px;">
+                    <p style="margin: 0; font-size: 14px; color: #004085;">
+                        <i class="fas fa-info-circle"></i> 設定主辦單位的銀行帳戶資訊，報名者在選擇匯款付費時會顯示此資訊
+                    </p>
+                </div>
+
+                <div id="bankAccountDisplay" style="display: none;">
+                    <div class="bank-display">
+                        <div class="bank-details">
+                            <div class="bank-item">
+                                <span class="bank-label">銀行名稱：</span>
+                                <span class="bank-value" id="displayBankName">-</span>
+                            </div>
+                            <div class="bank-item">
+                                <span class="bank-label">分行名稱：</span>
+                                <span class="bank-value" id="displayBranchName">-</span>
+                            </div>
+                            <div class="bank-item">
+                                <span class="bank-label">戶名：</span>
+                                <span class="bank-value" id="displayAccountName">-</span>
+                            </div>
+                            <div class="bank-item">
+                                <span class="bank-label">帳號：</span>
+                                <span class="bank-value" id="displayAccountNumber">-</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-sm btn-primary" onclick="editBankAccount()">
+                            <i class="fas fa-edit"></i> 編輯
+                        </button>
+                    </div>
+                </div>
+
+                <div id="bankAccountForm">
+                    <div class="form-group">
+                        <label>銀行名稱 <span class="required">*</span></label>
+                        <input type="text" id="bankName" placeholder="例：台灣銀行" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>分行名稱</label>
+                        <input type="text" id="branchName" placeholder="例：台北分行">
+                    </div>
+
+                    <div class="form-group">
+                        <label>帳戶名稱（戶名） <span class="required">*</span></label>
+                        <input type="text" id="accountName" placeholder="例：台北市政府體育局" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>銀行帳號 <span class="required">*</span></label>
+                        <input type="text" id="accountNumber" placeholder="例：123-456-7890123" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>備註說明</label>
+                        <textarea id="bankNote" placeholder="匯款注意事項或其他說明..." style="min-height: 80px;"></textarea>
+                    </div>
+
+                    <button class="btn btn-success" onclick="saveBankAccount()">
+                        <i class="fas fa-save"></i> 儲存帳戶資訊
+                    </button>
+                </div>
+            </div>
+
+            <!-- 顯示設定 -->
+            <div class="settings-section">
+                <h2 class="section-title">
+                    <i class="fas fa-eye"></i> 顯示設定
+                </h2>
+
+                <div class="toggle-item">
+                    <div class="toggle-label">
+                        <h4>公開賽事資訊</h4>
+                        <p>在平台上公開顯示此盃賽資訊</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="toggle-item">
+                    <div class="toggle-label">
+                        <h4>顯示排名榜</h4>
+                        <p>向公眾顯示即時排名榜</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="toggle-item">
+                    <div class="toggle-label">
+                        <h4>顯示賽程表</h4>
+                        <p>向公眾顯示完整賽程表</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="toggle-item">
+                    <div class="toggle-label">
+                        <h4>顯示比賽成績</h4>
+                        <p>公開各場比賽的詳細成績</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- 通知設定 -->
+            <div class="settings-section">
+                <h2 class="section-title">
+                    <i class="fas fa-bell"></i> 通知設定
+                </h2>
+
+                <div class="toggle-item">
+                    <div class="toggle-label">
+                        <h4>新報名通知</h4>
+                        <p>有新報名時發送 Email 通知</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="toggle-item">
+                    <div class="toggle-label">
+                        <h4>付款確認通知</h4>
+                        <p>收到報名費時發送 Email 通知</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="toggle-item">
+                    <div class="toggle-label">
+                        <h4>賽程提醒</h4>
+                        <p>比賽開始前自動發送提醒給參賽者</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- 危險區域 -->
+            <div class="settings-section">
+                <h2 class="section-title">
+                    <i class="fas fa-exclamation-triangle"></i> 危險區域
+                </h2>
+                <div class="danger-zone">
+                    <h3>刪除盃賽</h3>
+                    <p>刪除後將無法恢復，所有相關的報名、賽程、成績等資料都將被永久刪除。</p>
+                    <button class="btn btn-danger" onclick="confirmDelete()">
+                        <i class="fas fa-trash"></i> 刪除盃賽
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2026 競賽咖 Basaila. All rights reserved.</p>
+    </div>
+
+    <script src="../js/navigation.js"></script>
+    <script src="../js/utils.js"></script>
+    <script>
+        // 匯款帳戶設定管理
+        let bankAccountData = {
+            bankName: '',
+            branchName: '',
+            accountName: '',
+            accountNumber: '',
+            bankNote: ''
+        };
+
+        // 頁面載入時檢查是否有已儲存的帳戶資料
+        document.addEventListener('DOMContentLoaded', function() {
+            loadBankAccount();
+        });
+
+        function loadBankAccount() {
+            // 模擬從後端載入資料
+            const savedData = localStorage.getItem('bankAccount');
+            if (savedData) {
+                bankAccountData = JSON.parse(savedData);
+                showBankAccountDisplay();
+            } else {
+                showBankAccountForm();
+            }
+        }
+
+        function showBankAccountDisplay() {
+            document.getElementById('displayBankName').textContent = bankAccountData.bankName || '-';
+            document.getElementById('displayBranchName').textContent = bankAccountData.branchName || '-';
+            document.getElementById('displayAccountName').textContent = bankAccountData.accountName || '-';
+            document.getElementById('displayAccountNumber').textContent = bankAccountData.accountNumber || '-';
+            
+            document.getElementById('bankAccountDisplay').style.display = 'block';
+            document.getElementById('bankAccountForm').style.display = 'none';
+        }
+
+        function showBankAccountForm() {
+            document.getElementById('bankName').value = bankAccountData.bankName || '';
+            document.getElementById('branchName').value = bankAccountData.branchName || '';
+            document.getElementById('accountName').value = bankAccountData.accountName || '';
+            document.getElementById('accountNumber').value = bankAccountData.accountNumber || '';
+            document.getElementById('bankNote').value = bankAccountData.bankNote || '';
+            
+            document.getElementById('bankAccountDisplay').style.display = 'none';
+            document.getElementById('bankAccountForm').style.display = 'block';
+        }
+
+        function editBankAccount() {
+            showBankAccountForm();
+        }
+
+        function saveBankAccount() {
+            const bankName = document.getElementById('bankName').value.trim();
+            const accountName = document.getElementById('accountName').value.trim();
+            const accountNumber = document.getElementById('accountNumber').value.trim();
+
+            if (!bankName || !accountName || !accountNumber) {
+                showToast('請填寫必填欄位', 'warning');
+                return;
+            }
+
+            bankAccountData = {
+                bankName: bankName,
+                branchName: document.getElementById('branchName').value.trim(),
+                accountName: accountName,
+                accountNumber: accountNumber,
+                bankNote: document.getElementById('bankNote').value.trim()
+            };
+
+            // 儲存到 localStorage（實際應用時會儲存到後端）
+            localStorage.setItem('bankAccount', JSON.stringify(bankAccountData));
+            
+            showToast('匯款帳戶資訊已儲存', 'success');
+            showBankAccountDisplay();
+        }
+
+        function confirmDelete() {
+            if (confirm('確定要刪除此盃賽嗎？\n\n此操作無法復原，所有相關資料都將被刪除。')) {
+                if (confirm('請再次確認：真的要刪除嗎？')) {
+                    showToast('盃賽已刪除', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'organizer-dashboard.html';
+                    }, 1500);
+                }
+            }
+        }
+    </script>
+</body>
+</html>

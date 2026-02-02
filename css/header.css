@@ -1,0 +1,138 @@
+/* Header 樣式 - 導覽列 */
+/* 適用於所有頁面的頂部導覽列 */
+
+.header {
+    background: #fff;
+    box-shadow: 0 1px 12px rgba(0, 0, 0, 0.08);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.header-content,
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 0;
+    gap: 20px;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Logo 區域 */
+.logo,
+.logo-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    transition: transform 0.3s;
+    color: inherit;
+}
+
+.logo:hover,
+.logo-link:hover {
+    transform: scale(1.05);
+}
+
+.logo-icon {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #00C4A0 0%, #00A080 100%);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.logo-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.logo-title {
+    font-size: 20px;
+    font-weight: bold;
+    background: linear-gradient(135deg, #00C4A0 0%, #00A080 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.logo-subtitle {
+    font-size: 12px;
+    color: #666;
+}
+
+/* 導覽連結 */
+.nav,
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    list-style: none;
+}
+
+.nav a,
+.nav-links a {
+    text-decoration: none;
+    color: #202124;
+    font-weight: 500;
+    transition: color 0.3s;padding: 8px 4px;
+}
+
+.nav a:hover,
+.nav-links a:hover {
+    color: #00C4A0;
+}
+
+/* 用戶選單 */
+.user-menu,
+.user-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-menu a,
+.user-actions a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.user-menu a:hover,
+.user-actions a:hover {
+    color: #00C4A0;
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+    .header-content,
+    .header-container {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 12px 20px;
+    }
+
+    .nav,
+    .nav-links {
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+    }
+
+    .nav a,
+    .nav-links a {
+        padding: 8px 0;
+        border-bottom: 1px solid #eee;
+        width: 100%;
+    }
+}

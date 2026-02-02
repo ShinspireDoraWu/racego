@@ -1,0 +1,200 @@
+/* 按鈕樣式 */
+/* 統一的按鈕樣式設計 */
+
+.btn {
+    display: inline-block;
+    padding: 12px 28px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* 主要按鈕 - Primary */
+.btn-primary {
+    background: linear-gradient(135deg, #00C4A0 0%, #00A080 100%);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #5568d3 0%, #6a3f8f 100%);
+}
+
+/* 次要按鈕 - Secondary */
+.btn-secondary {
+    background: white;
+    color: #00C4A0;
+    border: 2px solid #00C4A0;
+}
+
+.btn-secondary:hover {
+    background: #f0f2ff;
+}
+
+/* 成功按鈕 - Success */
+.btn-success {
+    background: #28a745;
+    color: white;
+}
+
+.btn-success:hover {
+    background: #218838;
+}
+
+/* 危險按鈕 - Danger */
+.btn-danger {
+    background: #dc3545;
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #c82333;
+}
+
+/* 警告按鈕 - Warning */
+.btn-warning {
+    background: #ffc107;
+    color: #333;
+}
+
+.btn-warning:hover {
+    background: #e0a800;
+}
+
+/* 資訊按鈕 - Info */
+.btn-info {
+    background: #17a2b8;
+    color: white;
+}
+
+.btn-info:hover {
+    background: #138496;
+}
+
+/* 小尺寸按鈕 */
+.btn-sm {
+    padding: 8px 16px;
+    font-size: 13px;
+}
+
+/* 大尺寸按鈕 */
+.btn-lg {
+    padding: 16px 36px;
+    font-size: 17px;
+}
+
+/* 編輯按鈕 */
+.btn-edit {
+    padding: 6px 12px;
+    font-size: 13px;
+    background: transparent;
+    border: 1px solid #00C4A0;
+    color: #00C4A0;
+    border-radius: 6px;
+}
+
+.btn-edit:hover {
+    background: #00C4A0;
+    color: white;
+}
+
+/* 移除按鈕 */
+.btn-remove {
+    padding: 8px 12px;
+    background: transparent;
+    border: none;
+    color: #dc3545;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-remove:hover {
+    background: #dc3545;
+    color: white;
+    border-radius: 4px;
+}
+
+/* 搜尋按鈕 */
+.btn-search {
+    padding: 10px 24px;
+    background: linear-gradient(135deg, #00C4A0 0%, #00A080 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-search:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+/* 建立按鈕 */
+.btn-create {
+    background: #28a745;
+    color: white;
+}
+
+/* 分享按鈕 */
+.btn-share {
+    background: #17a2b8;
+    color: white;
+}
+
+/* 團隊按鈕 */
+.btn-team {
+    background: #6c757d;
+    color: white;
+}
+
+/* 按鈕群組 */
+.button-group {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+    .btn {
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+
+    .button-group {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .button-group .btn {
+        width: 100%;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .action-buttons .btn {
+        width: 100%;
+    }
+}

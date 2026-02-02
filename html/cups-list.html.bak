@@ -1,0 +1,438 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>賽事列表 - 競賽咖</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/buttons.css">
+    <link rel="stylesheet" href="../css/cards.css">
+    <link rel="stylesheet" href="../css/forms.css">
+    <link rel="stylesheet" href="../css/footer.css">
+    <link rel="stylesheet" href="../css/utilities.css">
+    <style>
+        /* 頁面特定樣式 */
+
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+        }
+
+        .page-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #1f2937;
+        }
+
+        .page-subtitle {
+            color: #6b7280;
+            font-size: 16px;
+            margin-bottom: 0;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #374151;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn-search {
+            padding: 10px 30px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        .btn-search:hover {
+            background: #0056b3;
+        }
+
+        /* Cup Cards */
+        .cups-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
+        .cup-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .cup-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
+
+        .cup-card:active {
+            transform: translateY(-2px);
+        }
+
+        .cup-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 48px;
+        }
+
+        .cup-content {
+            padding: 24px;
+        }
+
+        .cup-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #1f2937;
+        }
+
+        .cup-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .info-item i {
+            width: 20px;
+            color: #007bff;
+        }
+
+        .cup-status {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status-open {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-coming {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-closed {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .btn-detail {
+            display: inline-block;
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-top: 16px;
+            transition: all 0.3s;
+            position: relative;
+            z-index: 2;
+            font-weight: 600;
+        }
+
+        .btn-detail:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-detail:active {
+            transform: translateY(0);
+        }
+
+        /* Footer */
+        .footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 60px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-trophy"></i> 競賽咖
+            </a>
+            <nav class="nav">
+                <a href="index.html">首頁</a>
+                <a href="cups-list.html">賽事列表</a>
+                <a href="member-zone.html">個人專區</a>
+                <a href="#">登入</a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1 class="page-title">賽事列表</h1>
+        <p class="page-subtitle">瀏覽並報名參加各類運動賽事</p>
+
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label>賽事類別</label>
+                    <select>
+                        <option value="">全部類別</option>
+                        <option value="basketball">籃球</option>
+                        <option value="football">足球</option>
+                        <option value="volleyball">排球</option>
+                        <option value="badminton">羽毛球</option>
+                        <option value="running">路跑/馬拉松</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>賽事狀態</label>
+                    <select>
+                        <option value="">全部狀態</option>
+                        <option value="open">報名中</option>
+                        <option value="coming">即將開始</option>
+                        <option value="closed">已結束</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>地區</label>
+                    <select>
+                        <option value="">全部地區</option>
+                        <option value="north">北部</option>
+                        <option value="central">中部</option>
+                        <option value="south">南部</option>
+                        <option value="east">東部</option>
+                    </select>
+                </div>
+            </div>
+            <button class="btn-search">
+                <i class="fas fa-search"></i> 搜尋
+            </button>
+        </div>
+
+        <!-- Cups Grid -->
+        <div class="cups-grid">
+            <!-- Cup Card 1 -->
+            <div class="cup-card" onclick="location.href='cup-home.html'">
+                <div class="cup-image">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <div class="cup-content">
+                    <h3 class="cup-title">2026 春季運動嘉年華</h3>
+                    <div class="cup-info">
+                        <div class="info-item">
+                            <i class="fas fa-calendar"></i>
+                            <span>2026/03/15 - 2026/05/30</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>台北市體育館</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-list"></i>
+                            <span>競賽項目: 籃球、排球、路跑</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-users"></i>
+                            <span>已報名: 128 人/隊</span>
+                        </div>
+                    </div>
+                    <span class="cup-status status-open">報名中</span>
+                    <a href="cup-home.html" class="btn-detail">查看詳情</a>
+                </div>
+            </div>
+
+            <!-- Cup Card 2 -->
+            <div class="cup-card" onclick="location.href='cup-home.html'">
+                <div class="cup-image" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                    <i class="fas fa-volleyball-ball"></i>
+                </div>
+                <div class="cup-content">
+                    <h3 class="cup-title">全國排球錦標賽</h3>
+                    <div class="cup-info">
+                        <div class="info-item">
+                            <i class="fas fa-calendar"></i>
+                            <span>2026/04/01 - 2026/04/30</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>台中市立體育場</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-users"></i>
+                            <span>已報名: 16 / 24 隊</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-dollar-sign"></i>
+                            <span>報名費: NT$ 2,500</span>
+                        </div>
+                    </div>
+                    <span class="cup-status status-open">報名中</span>
+                    <a href="cup-home.html" class="btn-detail">查看詳情</a>
+                </div>
+            </div>
+
+            <!-- Cup Card 3 -->
+            <div class="cup-card" onclick="location.href='cup-home-individual.html'">
+                <div class="cup-image" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                    <i class="fas fa-running"></i>
+                </div>
+                <div class="cup-content">
+                    <h3 class="cup-title">城市馬拉松 2026</h3>
+                    <div class="cup-info">
+                        <div class="info-item">
+                            <i class="fas fa-calendar"></i>
+                            <span>2026/06/15</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>高雄市</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-users"></i>
+                            <span>已報名: 458 / 1000 人</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-dollar-sign"></i>
+                            <span>報名費: NT$ 800</span>
+                        </div>
+                    </div>
+                    <span class="cup-status status-coming">即將開始</span>
+                    <a href="cup-home-individual.html" class="btn-detail">查看詳情</a>
+                </div>
+            </div>
+
+            <!-- Cup Card 4 -->
+            <div class="cup-card" onclick="location.href='cup-home.html'">
+                <div class="cup-image" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                    <i class="fas fa-futbol"></i>
+                </div>
+                <div class="cup-content">
+                    <h3 class="cup-title">青年五人制足球賽</h3>
+                    <div class="cup-info">
+                        <div class="info-item">
+                            <i class="fas fa-calendar"></i>
+                            <span>2026/05/10 - 2026/06/20</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>新北市運動中心</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-users"></i>
+                            <span>已報名: 12 / 20 隊</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-dollar-sign"></i>
+                            <span>報名費: NT$ 2,000</span>
+                        </div>
+                    </div>
+                    <span class="cup-status status-open">報名中</span>
+                    <a href="cup-home.html" class="btn-detail">查看詳情</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; 2026 競賽咖 Basaila. All rights reserved.</p>
+    </div>
+
+    <script>
+        // 防止按鈕點擊時觸發卡片點擊
+        document.querySelectorAll('.btn-detail').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+        });
+
+        // 為所有卡片添加點擊事件
+        document.querySelectorAll('.cup-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const link = this.querySelector('.btn-detail');
+                if (link) {
+                    window.location.href = link.href;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

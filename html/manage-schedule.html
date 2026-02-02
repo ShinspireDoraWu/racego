@@ -1,0 +1,724 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>賽程管理 - 競賽咖</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/buttons.css">
+    <link rel="stylesheet" href="../css/cards.css">
+    <link rel="stylesheet" href="../css/forms.css">
+    <link rel="stylesheet" href="../css/sidebar.css">
+    <link rel="stylesheet" href="../css/tables.css">
+    <link rel="stylesheet" href="../css/utilities.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Inter, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        .dashboard-layout {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: calc(100vh - 140px);
+        }
+
+        .sidebar {
+            width: 250px;
+            background: white;
+            border-right: 1px solid #e0e0e0;
+            padding: 20px 0;
+        }
+
+        .sidebar-section {
+            margin-bottom: 30px;
+        }
+
+        .sidebar-title {
+            padding: 0 20px;
+            color: #999;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            color: #666;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .sidebar-menu li a:hover {
+            background: #f8f9fa;
+            color: var(--primary);
+        }
+
+        .sidebar-menu li a.active {
+            background: #e6f9f5;
+            color: var(--primary);
+            border-right: 3px solid var(--primary);
+            font-weight: 600;
+        }
+
+        .sidebar-menu li a i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 30px;
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+        }
+
+        .page-title {
+            color: #2c3e50;
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 13px;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f8f9fa;
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 14px;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+        }
+
+        tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        .actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            color: #2c3e50;
+            font-size: 22px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #999;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        /* 頁面特定樣式 */
+        .dashboard-layout {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: calc(100vh - 140px);
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 30px;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            color: #666;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .schedule-section {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .section-title {
+            font-size: 18px;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .match-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .match-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+
+        .match-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 2px 8px rgba(0, 196, 160, 0.2);
+        }
+
+        .match-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .match-info {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .match-time {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .match-venue {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .match-teams {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 20px;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .team {
+            font-size: 16px;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        .team-left {
+            text-align: right;
+        }
+
+        .vs {
+            color: #999;
+            font-weight: 600;
+        }
+
+        .match-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .status-scheduled {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .status-completed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-ongoing {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        /* 上傳區域樣式 */
+        .upload-area {
+            background: #e6f9f5;
+            border: 2px dashed var(--primary);
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .upload-content {
+            display: flex;
+            align-items: start;
+            gap: 20px;
+        }
+
+        .upload-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-bottom: 8px;
+        }
+
+        .file-item i {
+            font-size: 18px;
+        }
+
+        .file-name {
+            flex: 1;
+            color: #2c3e50;
+            font-size: 14px;
+        }
+
+        .file-size {
+            color: #999;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <img src="../images/logo.svg" alt="競賽咖" class="logo-img">
+            </a>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">首頁</a>
+                <a href="cups-list.html" class="nav-link">賽事列表</a>
+                <a href="organizer-dashboard.html" class="nav-link">主辦專區</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="dashboard-layout">
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">主控台</div>
+                <ul class="sidebar-menu">
+                    <li><a href="organizer-dashboard.html">
+                        <i class="fas fa-home"></i> 總覽
+                    </a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-title">盃賽管理</div>
+                <ul class="sidebar-menu">
+                    <li><a href="manage-items.html">
+                        <i class="fas fa-basketball-ball"></i> 競賽項目
+                    </a></li>
+                    <li><a href="manage-signups.html">
+                        <i class="fas fa-users"></i> 報名管理
+                    </a></li>
+                    <li><a href="manage-schedule.html" class="active">
+                        <i class="fas fa-calendar-alt"></i> 賽程管理
+                    </a></li>
+                    <li><a href="manage-scores.html">
+                        <i class="fas fa-chart-bar"></i> 成績管理
+                    </a></li>
+                    <li><a href="manage-rankings.html">
+                        <i class="fas fa-medal"></i> 排名榜
+                    </a></li>
+                    <li><a href="manage-cup-info.html">
+                        <i class="fas fa-info-circle"></i> 賽事資訊
+                    </a></li>
+                    <li><a href="manage-cup-details.html">
+                        <i class="fas fa-file-alt"></i> 賽事詳情
+                    </a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-title">設定</div>
+                <ul class="sidebar-menu">
+                    <li><a href="cup-settings.html">
+                        <i class="fas fa-cog"></i> 盃賽設定
+                    </a></li>
+                    <li><a href="notifications.html">
+                        <i class="fas fa-bell"></i> 通知中心
+                    </a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">賽程管理</h1>
+                    <p style="color: #666; margin-top: 5px;">2026 春季運動嘉年華</p>
+                </div>
+            </div>
+
+            <!-- 檔案上傳區 -->
+            <div class="upload-area">
+                <div class="upload-content">
+                    <div class="upload-icon">
+                        <i class="fas fa-upload" style="color: white; font-size: 22px;"></i>
+                    </div>
+                    <div style="flex: 1;">
+                        <h3 style="color: #2c3e50; margin-bottom: 8px; font-size: 18px;">上傳賽程表檔案</h3>
+                        <p style="color: #666; margin-bottom: 15px; font-size: 14px;">
+                            您可以上傳 PDF 檔案或圖片（PNG/JPG）作為賽程表，參賽者可在賽事頁面下載查看。支持檔案大小最大 10MB。
+                        </p>
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <input type="file" id="scheduleFile" accept=".pdf,.png,.jpg,.jpeg" style="display: none;" onchange="handleFileUpload(this, 'schedule')">
+                            <button class="btn btn-primary btn-sm" onclick="document.getElementById('scheduleFile').click()">
+                                <i class="fas fa-file-upload"></i> 選擇檔案
+                            </button>
+                            <span id="scheduleFileName" style="color: #666; font-size: 14px;">未選擇檔案</span>
+                        </div>
+                        <!-- 已上傳檔案列表 -->
+                        <div id="uploadedScheduleFiles" style="margin-top: 15px;">
+                            <div style="font-weight: 600; color: #2c3e50; margin-bottom: 10px; font-size: 14px;">
+                                <i class="fas fa-check-circle" style="color: #28a745;"></i> 已上傳的檔案：
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 8px;">
+                                <div class="file-item">
+                                    <i class="fas fa-file-pdf" style="color: #dc3545;"></i>
+                                    <span class="file-name">籃球賽程表_2026.pdf</span>
+                                    <span class="file-size">2.5 MB</span>
+                                    <button class="btn btn-sm btn-secondary" style="padding: 4px 10px;">
+                                        <i class="fas fa-download"></i> 下載
+                                    </button>
+                                    <button class="btn btn-sm btn-danger" style="padding: 4px 10px;">
+                                        <i class="fas fa-trash"></i> 刪除
+                                    </button>
+                                </div>
+                                <div class="file-item">
+                                    <i class="fas fa-file-pdf" style="color: #dc3545;"></i>
+                                    <span class="file-name">排球賽程表_2026.pdf</span>
+                                    <span class="file-size">1.8 MB</span>
+                                    <button class="btn btn-sm btn-secondary" style="padding: 4px 10px;">
+                                        <i class="fas fa-download"></i> 下載
+                                    </button>
+                                    <button class="btn btn-sm btn-danger" style="padding: 4px 10px;">
+                                        <i class="fas fa-trash"></i> 刪除
+                                    </button>
+                                </div>
+                                <div class="file-item">
+                                    <i class="fas fa-file-image" style="color: #17a2b8;"></i>
+                                    <span class="file-name">馬拉松路線圖.png</span>
+                                    <span class="file-size">3.2 MB</span>
+                                    <button class="btn btn-sm btn-secondary" style="padding: 4px 10px;">
+                                        <i class="fas fa-download"></i> 下載
+                                    </button>
+                                    <button class="btn btn-sm btn-danger" style="padding: 4px 10px;">
+                                        <i class="fas fa-trash"></i> 刪除
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: #e7f3ff; padding: 15px; border-radius: 8px; margin-top: 20px;">
+                <p style="margin: 0; font-size: 14px; color: #004085;">
+                    <i class="fas fa-info-circle"></i> <strong>提示：</strong>參賽者可在賽事頁面查看和下載已上傳的賽程表檔案。建議上傳清晰的PDF檔案，以確保最佳的閱讀體驗。
+                </p>
+            </div>
+        </main>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2026 競賽咖 Basaila. All rights reserved.</p>
+    </div>
+
+    <script>
+        // 已上傳的檔案列表（模擬）
+        const uploadedFiles = {
+            schedule: [
+                { name: '籃球賽程表_2026.pdf', size: '2.5 MB', type: 'pdf' },
+                { name: '排球賽程表_2026.pdf', size: '1.8 MB', type: 'pdf' },
+                { name: '馬拉松路線圖.png', size: '3.2 MB', type: 'image' }
+            ]
+        };
+
+        // 檔案上傳處理
+        function handleFileUpload(input, type) {
+            const file = input.files[0];
+            if (!file) return;
+
+            // 檔案大小檢查（10MB = 10 * 1024 * 1024 bytes）
+            if (file.size > 10 * 1024 * 1024) {
+                alert('檔案大小超過 10MB 限制！');
+                input.value = '';
+                return;
+            }
+
+            // 檔案類型檢查
+            const validTypes = ['application/pdf', 'image/png', 'image/jpeg', 'image/jpg'];
+            if (!validTypes.includes(file.type)) {
+                alert('僅支援 PDF、PNG、JPG 格式！');
+                input.value = '';
+                return;
+            }
+
+            // 更新檔案名稱顯示
+            const fileNameSpan = document.getElementById(type + 'FileName');
+            fileNameSpan.textContent = file.name;
+            fileNameSpan.style.color = '#28a745';
+            fileNameSpan.style.fontWeight = '600';
+
+            // 轉換檔案大小為可讀格式
+            const fileSize = (file.size / 1024 / 1024).toFixed(2) + ' MB';
+            const fileType = file.type.includes('pdf') ? 'pdf' : 'image';
+
+            // 添加到已上傳檔案列表
+            uploadedFiles[type].push({
+                name: file.name,
+                size: fileSize,
+                type: fileType
+            });
+
+            // 更新檔案列表顯示
+            updateFileList(type);
+
+            // 重置檔案名稱顯示
+            setTimeout(() => {
+                fileNameSpan.textContent = '未選擇檔案';
+                fileNameSpan.style.color = '#666';
+                fileNameSpan.style.fontWeight = 'normal';
+                input.value = '';
+            }, 2000);
+
+            // 顯示成功訊息
+            alert('檔案上傳成功！');
+        }
+
+        // 更新檔案列表顯示
+        function updateFileList(type) {
+            const listContainer = document.getElementById('uploaded' + type.charAt(0).toUpperCase() + type.slice(1) + 'Files');
+            const files = uploadedFiles[type];
+
+            if (files.length === 0) {
+                listContainer.style.display = 'none';
+                return;
+            }
+
+            listContainer.style.display = 'block';
+            const filesHTML = files.map((file, index) => `
+                <div class="file-item">
+                    <i class="fas fa-file-${file.type === 'pdf' ? 'pdf' : 'image'}" style="color: ${file.type === 'pdf' ? '#dc3545' : '#17a2b8'};"></i>
+                    <span class="file-name">${file.name}</span>
+                    <span class="file-size">${file.size}</span>
+                    <button class="btn btn-sm btn-secondary" style="padding: 4px 10px;" onclick="window.open('#', '_blank')">
+                        <i class="fas fa-download"></i> 下載
+                    </button>
+                    <button class="btn btn-sm btn-danger" style="padding: 4px 10px;" onclick="deleteFile('${type}', ${index})">
+                        <i class="fas fa-trash"></i> 刪除
+                    </button>
+                </div>
+            `).join('');
+
+            listContainer.querySelector('div:last-child').innerHTML = filesHTML;
+        }
+
+        // 刪除檔案
+        function deleteFile(type, index) {
+            if (confirm('確定要刪除此檔案嗎？參賽者將無法下載此檔案。')) {
+                uploadedFiles[type].splice(index, 1);
+                updateFileList(type);
+                alert('檔案已刪除！');
+            }
+        }
+
+        // 初始化檔案列表
+        updateFileList('schedule');
+    </script>
+    <script src="../js/navigation.js"></script>
+    <script src="../js/utils.js"></script>
+</body>
+</html>
+    <script src="../js/navigation.js"></script>
+    <script src="../js/utils.js"></script>
+</body>
+</html>

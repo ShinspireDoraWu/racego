@@ -1,0 +1,572 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>主辦方主頁 - 台灣運動聯盟</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/buttons.css">
+    <link rel="stylesheet" href="../css/cards.css">
+    <link rel="stylesheet" href="../css/forms.css">
+    <link rel="stylesheet" href="../css/sidebar.css">
+    <link rel="stylesheet" href="../css/utilities.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Inter, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+            background: #f5f7fa;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #00C4A0 0%, #00A080 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        /* Profile Banner */
+        .profile-banner {
+            background: linear-gradient(135deg, #00C4A0 0%, #00A080 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .profile-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .profile-avatar i {
+            font-size: 60px;
+            color: #00C4A0;
+        }
+
+        .profile-name {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .profile-description {
+            font-size: 16px;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+
+        .profile-stats {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin-top: 30px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
+            margin: -30px auto 40px;
+            padding: 0 20px;
+        }
+
+        .content-tabs {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .tab-nav {
+            display: flex;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 20px;
+            background: none;
+            border: none;
+            font-size: 16px;
+            font-weight: 600;
+            color: #666;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            color: #00C4A0;
+            border-bottom-color: #00C4A0;
+            background: #f8f9fa;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 30px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* About Section */
+        .about-section {
+            margin-bottom: 30px;
+        }
+
+        .about-section h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .about-section p {
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: start;
+            gap: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .info-item i {
+            color: #00C4A0;
+            font-size: 20px;
+            margin-top: 3px;
+        }
+
+        .info-item-content h4 {
+            font-size: 14px;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .info-item-content p {
+            font-size: 14px;
+            color: #666;
+            margin: 0;
+        }
+
+        /* Events Grid */
+        .events-grid {
+            display: grid;
+            gap: 25px;
+        }
+
+        .event-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .event-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+
+        .event-card-header {
+            background: linear-gradient(135deg, #00C4A0 0%, #00A080 100%);
+            padding: 25px;
+            color: white;
+        }
+
+        .event-status {
+            display: inline-block;
+            padding: 5px 12px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+
+        .event-status.recruiting {
+            background: #28a745;
+        }
+
+        .event-status.ongoing {
+            background: #00C4A0;
+        }
+
+        .event-status.completed {
+            background: #6c757d;
+        }
+
+        .event-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .event-date {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .event-card-body {
+            padding: 25px;
+        }
+
+        .event-info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .event-info-item {
+            text-align: center;
+        }
+
+        .event-info-label {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 5px;
+        }
+
+        .event-info-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .event-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .event-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #00C4A0;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #00A080;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #00C4A0;
+            border: 2px solid #00C4A0;
+        }
+
+        .btn-secondary:hover {
+            background: #f8f9fa;
+        }
+
+        /* Footer */
+        .footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <img src="../images/logo.svg" alt="競賽咖" class="logo-img">
+            </a>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">首頁</a>
+                <a href="cups-list.html" class="nav-link">賽事列表</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Profile Banner -->
+    <div class="profile-banner">
+        <div class="profile-container">
+            <div class="profile-avatar">
+                <i class="fas fa-users"></i>
+            </div>
+            <h1 class="profile-name">台灣運動聯盟</h1>
+            <p class="profile-description">
+                致力於推廣台灣基層運動發展，提供專業的賽事組織與管理服務。我們相信運動能凝聚社區、培養團隊精神，並為所有參與者創造難忘的回憶。
+            </p>
+            <div class="profile-stats">
+                <div class="stat-item">
+                    <div class="stat-number">5</div>
+                    <div class="stat-label">舉辦賽事</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">320+</div>
+                    <div class="stat-label">參賽隊伍/選手</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">運動項目</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="content-tabs">
+            <div class="tab-nav">
+                <button class="tab-btn active" onclick="switchTab('about')">
+                    <i class="fas fa-info-circle"></i> 關於我們
+                </button>
+                <button class="tab-btn" onclick="switchTab('events')">
+                    <i class="fas fa-calendar"></i> 賽事列表
+                </button>
+            </div>
+
+            <!-- About Tab -->
+            <div class="tab-content active" id="about-tab">
+                <div class="about-section">
+                    <h3>組織簡介</h3>
+                    <p>
+                        台灣運動聯盟成立於2020年，是一個致力於推廣基層運動發展的非營利組織。我們的使命是透過舉辦高品質的運動賽事，
+                        促進社區參與、培養運動人才，並建立健康積極的生活方式。
+                    </p>
+                    <p>
+                        多年來，我們成功舉辦了各類型的運動賽事，包括籃球、排球、路跑及馬拉松等項目，累積服務超過300支隊伍和數千名選手。
+                        我們重視賽事的專業性與公平性，並持續改進賽事管理系統，為參賽者提供最佳體驗。
+                    </p>
+                </div>
+
+                <div class="info-grid">
+                    <div class="info-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div class="info-item-content">
+                            <h4>聯絡地址</h4>
+                            <p>台北市信義區基隆路一段178號</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-phone"></i>
+                        <div class="info-item-content">
+                            <h4>聯絡電話</h4>
+                            <p>(02) 2345-6789</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-envelope"></i>
+                        <div class="info-item-content">
+                            <h4>電子信箱</h4>
+                            <p>contact@twsports.org.tw</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-globe"></i>
+                        <div class="info-item-content">
+                            <h4>官方網站</h4>
+                            <p>www.twsports.org.tw</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Events Tab -->
+            <div class="tab-content" id="events-tab">
+                <div class="events-grid">
+                    <!-- Event 2 -->
+                    <div class="event-card">
+                        <div class="event-card-header" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                            <span class="event-status ongoing">進行中</span>
+                            <h2 class="event-title">台北市社區籃球聯賽</h2>
+                            <div class="event-date">
+                                <i class="fas fa-calendar-alt"></i> 2026年2月1日 - 4月30日
+                            </div>
+                        </div>
+                        <div class="event-card-body">
+                            <div class="event-info-grid">
+                                <div class="event-info-item">
+                                    <div class="event-info-label">競賽項目</div>
+                                    <div class="event-info-value">1</div>
+                                </div>
+                                <div class="event-info-item">
+                                    <div class="event-info-label">報名隊伍</div>
+                                    <div class="event-info-value">32</div>
+                                </div>
+                                <div class="event-info-item">
+                                    <div class="event-info-label">狀態</div>
+                                    <div class="event-info-value" style="color: #00C4A0;">比賽中</div>
+                                </div>
+                            </div>
+                            <p class="event-description">
+                                台北市12個行政區社區籃球隊的年度盛事，採分組循環加淘汰賽制，獎金總額10萬元。
+                            </p>
+                            <div class="event-actions">
+                                <a href="#" class="btn btn-primary">
+                                    <i class="fas fa-arrow-right"></i> 查看賽事
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Event 3 -->
+                    <div class="event-card">
+                        <div class="event-card-header" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                            <span class="event-status completed">已結束</span>
+                            <h2 class="event-title">2025 新年路跑嘉年華</h2>
+                            <div class="event-date">
+                                <i class="fas fa-calendar-alt"></i> 2025年12月31日
+                            </div>
+                        </div>
+                        <div class="event-card-body">
+                            <div class="event-info-grid">
+                                <div class="event-info-item">
+                                    <div class="event-info-label">競賽項目</div>
+                                    <div class="event-info-value">4</div>
+                                </div>
+                                <div class="event-info-item">
+                                    <div class="event-info-label">參賽人數</div>
+                                    <div class="event-info-value">800</div>
+                                </div>
+                                <div class="event-info-item">
+                                    <div class="event-info-label">狀態</div>
+                                    <div class="event-info-value" style="color: #6c757d;">已完賽</div>
+                                </div>
+                            </div>
+                            <p class="event-description">
+                                跨年路跑活動，包含5K、10K、半馬及全馬四個組別，吸引全台各地跑者參與，圓滿落幕。
+                            </p>
+                            <div class="event-actions">
+                                <a href="#" class="btn btn-secondary">
+                                    <i class="fas fa-medal"></i> 查看成績
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; 2026 競賽咖 Basaila. All rights reserved.</p>
+    </div>
+
+    <script>
+        function switchTab(tabName) {
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Add active class to clicked tab
+            event.target.closest('.tab-btn').classList.add('active');
+            document.getElementById(tabName + '-tab').classList.add('active');
+        }
+    </script>
+</body>
+</html>

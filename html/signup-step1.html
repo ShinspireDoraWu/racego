@@ -1,0 +1,1393 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>線上報名 - 步驟1：填寫資料 - 競賽咖</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/buttons.css">
+    <link rel="stylesheet" href="../css/cards.css">
+    <link rel="stylesheet" href="../css/forms.css">
+    <link rel="stylesheet" href="../css/utilities.css">
+    <style>
+        /* ============================================
+           #UIUXPro Max - 專業運動賽事報名系統
+           Brand Colors:
+           - Primary: #00C4A0 (青綠)
+           - Secondary: #ff8d27 (活力橘)
+           - Text: #202124 (深黑)
+           - Border: #e8eaed (淡灰)
+           - Background: #f2f2f2 (淺灰)
+           ============================================ */
+
+        :root {
+            --signup-primary: #00C4A0;
+            --signup-primary-hover: #00A080;
+            --signup-secondary: #ff8d27;
+            --signup-secondary-hover: #e67d1f;
+            --signup-text: #202124;
+            --signup-text-muted: #5f6368;
+            --signup-border: #e8eaed;
+            --signup-bg: #f2f2f2;
+            --signup-white: #ffffff;
+            --signup-radius: 12px;
+            --signup-radius-sm: 8px;
+            --signup-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            --signup-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Page Background - Subtle Gradient */
+        body {
+            background: linear-gradient(180deg, #ffffff 0%, #f2f2f2 100%);
+            min-height: 100vh;
+        }
+
+        /* Container - Wide Layout */
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        /* ============================================
+           Progress Steps - Modern Style
+           ============================================ */
+        .progress-steps {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0;
+            margin-bottom: 40px;
+            padding: 0 60px;
+            position: relative;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+            flex: 0 0 auto;
+        }
+
+        .step-connector {
+            flex: 1;
+            height: 2px;
+            background: var(--signup-border);
+            margin: 0 -10px;
+            margin-top: -24px;
+            position: relative;
+            z-index: 0;
+        }
+
+        .step-connector.completed {
+            background: var(--signup-primary);
+        }
+
+        .step-number {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--signup-white);
+            border: 2px solid var(--signup-border);
+            color: var(--signup-text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .step.active .step-number {
+            background: var(--signup-primary);
+            border-color: var(--signup-primary);
+            color: var(--signup-white);
+            box-shadow: 0 4px 12px rgba(0, 196, 160, 0.3);
+        }
+
+        .step.completed .step-number {
+            background: var(--signup-primary);
+            border-color: var(--signup-primary);
+            color: var(--signup-white);
+        }
+
+        .step-label {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--signup-text-muted);
+            white-space: nowrap;
+        }
+
+        .step.active .step-label {
+            color: var(--signup-primary);
+            font-weight: 600;
+        }
+
+        .step.completed .step-label {
+            color: var(--signup-primary);
+        }
+
+        /* ============================================
+           Main Card - Wide with Subtle Shadow
+           ============================================ */
+        .main-card {
+            padding:24px;
+        }
+
+        .card-header {
+            text-align: center;
+            padding-bottom: 32px;
+        }
+
+        .card-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--signup-text);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .card-title i {
+            color: var(--signup-primary);
+            font-size: 24px;
+        }
+
+        .card-subtitle {
+            font-size: 15px;
+            color: var(--signup-text-muted);
+            margin: 0;
+        }
+
+        /* ============================================
+           Info Section - Team & Member Cards
+           ============================================ */
+        .info-section {
+            margin-bottom: 40px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--signup-text);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0;
+            position: relative;
+            padding-left: 16px;
+        }
+
+        .section-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 24px;
+            background: linear-gradient(180deg, var(--signup-primary) 0%, #202124 100%);
+            border-radius: 2px;
+        }
+
+        .section-title i {
+            color: var(--signup-primary);
+            font-size: 16px;
+        }
+
+        /* Import Button */
+        .btn-import {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: 500;
+            color:#00C4A0;
+            background: transparent;
+            border: 1px solid #00C4A0;
+            border-radius: var(--signup-radius-sm);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-import:hover {
+            background: rgba(0, 196, 160, 0.08);
+            border-color: var(--signup-primary-hover);
+            color: var(--signup-primary-hover);
+        }
+
+        /* ============================================
+           Team Info Card - White Card Inside Section
+           ============================================ */
+        .team-info-card {
+            padding:0px;
+        }
+
+        /* Info Grid - 2 columns */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        @media (max-width: 640px) {
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ============================================
+           Form Inputs - Thin Border, Teal Focus
+           ============================================ */
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap:4px;
+        }
+
+        .form-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--signup-text);
+        }
+
+        .form-label .required {
+            color: #dc3545;
+            margin-left: 2px;
+        }
+
+        .form-input {
+            width: 100%;
+            height: 48px;
+            padding: 0 16px;
+            font-size: 15px;
+            color: var(--signup-text);
+            background: var(--signup-white);
+            border: 1px solid var(--signup-border);
+            border-radius: var(--signup-radius-sm);
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        .form-input::placeholder {
+            color: #9aa0a6;
+        }
+
+        .form-input:hover {
+            border-color: #dadce0;
+        }
+
+        .form-input:focus {
+            border-color: var(--signup-primary);
+            box-shadow: 0 0 0 3px rgba(0, 196, 160, 0.12);
+        }
+
+        /* ============================================
+           Member Detail Cards - Nested Card Style
+           ============================================ */
+        .members-container {
+            display: flex;
+            flex-direction: column;
+            gap:0px;
+        }
+
+        .member-detail-card {
+            background: #fafbfc;
+            border: 1px solid var(--signup-border);
+            border-radius: var(--signup-radius);
+            padding: 24px;
+            transition: all 0.2s ease;
+        }
+
+
+        .member-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--signup-border);
+        }
+
+        .member-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--signup-primary) 0%, var(--signup-primary-hover) 100%);
+            color: var(--signup-white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .member-header strong {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--signup-text);
+        }
+
+        /* ============================================
+           Button Group - Fixed Bottom Actions
+           ============================================ */
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-top: 40px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            height: 48px;
+            padding: 0 28px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: var(--signup-radius-sm);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            text-decoration: none;
+        }
+
+        .btn-back {
+            background: var(--signup-white);
+            color: var(--signup-text-muted);
+            border: 1px solid var(--signup-border);
+        }
+
+        .btn-back:hover {
+            background: #f8f9fa;
+            border-color: #dadce0;
+            color: var(--signup-text);
+        }
+
+        /* Next Button - Orange (Secondary) for Energy */
+        .btn-next {
+            background: linear-gradient(135deg, var(--signup-secondary) 0%, var(--signup-secondary-hover) 100%);
+            color: var(--signup-white);
+            padding: 0 36px;
+            box-shadow: 0 4px 12px rgba(255, 141, 39, 0.3);
+        }
+
+        .btn-next:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(255, 141, 39, 0.4);
+        }
+
+        .btn-next:active {
+            transform: translateY(0);
+        }
+
+        /* ============================================
+           No use - keeping for compatibility
+           ============================================ */
+        .team-options {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .team-option {
+            border: 2px solid var(--signup-border);
+            border-radius: var(--signup-radius);
+            padding: 30px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .team-option:hover {
+            border-color: var(--signup-primary);
+            background: rgba(0, 196, 160, 0.04);
+        }
+
+        .team-option.selected {
+            border-color: var(--signup-primary);
+            background: rgba(0, 196, 160, 0.04);
+        }
+
+        .team-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .option-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .option-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: var(--signup-radius-sm);
+            background: linear-gradient(135deg, var(--signup-primary) 0%, var(--signup-primary-hover) 100%);
+            color: var(--signup-white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .option-content h3 {
+            font-size: 1.25rem;
+            color: var(--text);
+            margin-bottom: 5px;
+        }
+
+        .option-content p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .radio-check {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .team-option.selected .radio-check {
+            border-color: var(--primary);
+            background: var(--primary);
+        }
+
+        .radio-check::after {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            color: white;
+            font-size: 12px;
+            opacity: 0;
+        }
+
+        .team-option.selected .radio-check::after {
+            opacity: 1;
+        }
+
+        /* My Teams Section */
+        .my-teams-section {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: var(--bg-input);
+            border-radius: var(--radius-sm);
+        }
+
+        .my-teams-section.show {
+            display: block;
+        }
+
+        .team-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .team-item-wrapper {
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            background: var(--white);
+            overflow: hidden;
+            transition: all 0.2s;
+        }
+
+        .team-item-wrapper:hover {
+            border-color: var(--primary);
+        }
+
+        .team-item {
+            border: none;
+            border-radius: 0;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: var(--white);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .team-item:hover {
+            background: var(--bg-input);
+        }
+
+        .team-item.selected {
+            background: var(--primary-light);
+        }
+
+        .team-item-wrapper.selected {
+            border-color: var(--primary);
+        }
+
+        .team-info h4 {
+            color: var(--text);
+            margin-bottom: 5px;
+        }
+
+        .team-info p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .team-badge {
+            padding: 5px 15px;
+            background: var(--primary);
+            color: var(--white);
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        /* Team Members Detail */
+        .team-members-detail {
+            background: var(--bg-input);
+            padding: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .members-header {
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 15px;
+            font-size: 15px;
+        }
+
+        .members-header i {
+            color: var(--primary);
+            margin-right: 8px;
+        }
+
+        .member-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            background: var(--white);
+            border-radius: var(--radius-sm);
+            margin-bottom: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .member-list-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .member-name {
+            font-weight: 500;
+            color: var(--text);
+            font-size: 14px;
+        }
+
+        .member-email {
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        /* Buttons */
+        .button-group {
+            display: flex;
+            gap: 16px;
+            margin-top: 32px;
+        }
+
+        .btn {
+            flex: 1;
+            padding:20px 20px;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;border-radius:8px;min-height:56px;
+        }
+
+        .btn-back {
+            background:#5f6368;
+            color:#fff;
+        }
+
+        .btn-back:hover {
+            background: var(--text);
+        }
+
+        .btn-next {
+            background:#00C4A0;
+            color:#fff;
+        }
+
+        .btn-next:hover {
+            background: var(--primary-hover);
+        }
+
+        .btn-next:disabled {
+            background: var(--border);
+            cursor: not-allowed;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--text);
+            color: var(--white);
+            text-align: center;
+            padding: 20px;
+            margin-top: 60px;
+        }
+
+        .alert {
+            padding: 15px;
+            background: #fff3cd;
+            border: 1px solid var(--secondary);
+            border-radius: var(--radius-sm);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert i {
+            color: #856404;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 0;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom:8px;
+            font-size: 16px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            transition: all 0.2s;
+            background: var(--bg-input);
+            height: 48px;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 196, 160, 0.1);
+            background: var(--white);
+        }
+
+        .btn-import {
+            padding: 10px 20px;
+            background:#00C4A0;
+            color:#fff;
+            border: none;
+            border-radius:6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;border:1px solid #00C4A0;
+        }
+
+        .btn-import:hover {
+            filter: brightness(0.9);
+        }
+
+        /* Info Sections */
+        .info-section {
+            border: 1px solid #e8eaed;
+            border-radius:12px;
+            margin-bottom: 20px;
+            background:#fff;padding:20px;
+            box-shadow:0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom:16px;
+            flex-wrap: wrap;
+            gap:12px;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--primary);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap:12px;
+        }
+
+        /* Member Detail Card */
+        .member-detail-card {
+            background: var(--white);
+            border:none;
+            border-top:1px solid #e8eaed;
+            border-radius:0;
+            padding:16px 0;
+        }
+
+        .member-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text);
+            font-size: 16px;
+            padding-bottom:0px;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 15px;
+        }
+
+        .member-number {
+            background: var(--signup-primary);
+            color: var(--signup-white);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        /* Import Modal - Modern Design */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--signup-white);
+            border-radius: var(--signup-radius);
+            padding: 32px;
+            max-width: 520px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: var(--signup-shadow-lg);
+            animation: modalSlideIn 0.25s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--signup-border);
+        }
+
+        .modal-title {
+            font-size: 18px;
+            color: var(--signup-text);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+
+        .btn-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--signup-text-muted);
+            cursor: pointer;
+            padding: 0;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+
+        .btn-close:hover {
+            color: var(--signup-text);
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .team-select-item {
+            border: 2px solid var(--signup-border);
+            border-radius: var(--signup-radius);
+            padding: 20px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: var(--signup-white);
+        }
+
+        .team-select-item:hover {
+            border-color: var(--signup-primary);
+            background: rgba(0, 196, 160, 0.04);
+        }
+
+        .team-select-item.selected {
+            border-color: var(--signup-primary);
+            background: rgba(0, 196, 160, 0.08);
+        }
+
+        .team-select-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .team-select-name {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--signup-text);
+        }
+
+        .team-select-info {
+            font-size: 14px;
+            color: var(--signup-text-muted);
+            margin-bottom: 4px;
+        }
+
+        .team-select-info i {
+            color: var(--signup-primary);
+            width: 16px;
+            margin-right: 6px;
+        }
+
+        /* Modal Actions */
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid var(--signup-border);
+        }
+
+        .modal-actions .btn {
+            flex: 0 0 auto;
+        }
+
+        .modal-actions .btn-next {
+            min-width: 140px;
+        }
+
+        /* Signup Footer */
+        .signup-footer {
+            text-align: center;
+            padding: 32px 20px;
+            margin-top: 60px;
+            color: var(--signup-text-muted);
+            font-size: 14px;
+        }
+
+        .signup-footer p {
+            margin: 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 24px 16px;
+            }
+            
+            .main-card {
+                padding: 24px;
+            }
+            
+            .card-title {
+                font-size: 22px;
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            
+            .button-group {
+                flex-direction: column-reverse;
+            }
+            
+            .button-group .btn {
+                width: 100%;
+            }
+
+            .progress-steps {
+                padding: 0 20px;
+            }
+
+            .step-label {
+                font-size: 12px;
+            }
+
+            .step-number {
+                width: 40px;
+                height: 40px;
+                font-size: 14px;
+            }
+
+            .team-info-card {
+                padding: 20px;
+            }
+
+            .member-detail-card {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <img src="../images/logo.svg" alt="競賽咖" class="logo-img" style="height: 32px; width: auto;">
+            </a>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">首頁</a>
+                <a href="cups-list.html" class="nav-link">賽事列表</a>
+                <a href="member-zone.html" class="nav-link">個人專區</a>
+                <a href="#" class="nav-link">登入</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Progress Steps - Modern Style -->
+        <div class="progress-steps">
+            <div class="step active">
+                <div class="step-number">1</div>
+                <div class="step-label">填寫資料</div>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-label">確認繳費</div>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-label">完成報名</div>
+            </div>
+        </div>
+            <!-- Card Header -->
+            <div class="card-header">
+                <h1 class="card-title">
+                    <i class="fas fa-basketball-ball"></i>
+                    2026 春季籃球聯賽報名
+                </h1>
+                <p class="card-subtitle">步驟 1 / 3：請填寫隊伍與隊員報名資料</p>
+            </div>
+
+        <!-- Main Card -->
+        <div class="">
+
+            <!-- Team Basic Info Section -->
+            <div class="info-section">
+                <div class="section-header">
+                    <h3 class="section-title">
+                        <i class="fas fa-users"></i>
+                        隊伍基本資料
+                    </h3>
+                    <button class="btn-import" onclick="openImportModal()">
+                        <i class="fas fa-download"></i> 匯入隊伍資料
+                    </button>
+                </div>
+                <div class="team-info-card">
+                    <div class="info-grid">
+                        <div class="form-group">
+                            <label class="form-label">隊伍名稱 <span class="required">*</span></label>
+                            <input type="text" class="form-input" id="teamName" placeholder="請輸入隊伍名稱">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">隊長姓名 <span class="required">*</span></label>
+                            <input type="text" class="form-input" id="captainName" placeholder="請輸入隊長姓名">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">聯絡信箱 <span class="required">*</span></label>
+                            <input type="email" class="form-input" id="teamEmail" placeholder="請輸入聯絡信箱">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">聯絡電話 <span class="required">*</span></label>
+                            <input type="tel" class="form-input" id="teamPhone" placeholder="請輸入聯絡電話">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Team Members Info Section -->
+            <div class="info-section">
+                <div class="section-header">
+                    <h3 class="section-title">
+                        <i class="fas fa-user-friends"></i>
+                        隊員資料 (至少 5 人)
+                    </h3>
+                </div>
+                <div class="members-container" id="membersList">
+                    <!-- Member 1 -->
+                    <div class="member-detail-card">
+                        <div class="member-header">
+                            <span class="member-number">1</span>
+                            <strong>隊員 1 (隊長)</strong>
+                        </div>
+                        <div class="info-grid">
+                            <div class="form-group">
+                                <label class="form-label">姓名 <span class="required">*</span></label>
+                                <input type="text" class="form-input member-name" placeholder="請輸入姓名">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">信箱</label>
+                                <input type="email" class="form-input member-email" placeholder="請輸入信箱">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">電話 <span class="required">*</span></label>
+                                <input type="tel" class="form-input member-phone" placeholder="請輸入電話">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">身份證字號 <span class="required">*</span></label>
+                                <input type="text" class="form-input member-id" placeholder="請輸入身份證字號">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Member 2 -->
+                    <div class="member-detail-card">
+                        <div class="member-header">
+                            <span class="member-number">2</span>
+                            <strong>隊員 2</strong>
+                        </div>
+                        <div class="info-grid">
+                            <div class="form-group">
+                                <label class="form-label">姓名 <span class="required">*</span></label>
+                                <input type="text" class="form-input member-name" placeholder="請輸入姓名">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">信箱</label>
+                                <input type="email" class="form-input member-email" placeholder="請輸入信箱">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">電話 <span class="required">*</span></label>
+                                <input type="tel" class="form-input member-phone" placeholder="請輸入電話">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">身份證字號 <span class="required">*</span></label>
+                                <input type="text" class="form-input member-id" placeholder="請輸入身份證字號">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Member 3 -->
+                    <div class="member-detail-card">
+                        <div class="member-header">
+                            <span class="member-number">3</span>
+                            <strong>隊員 3</strong>
+                        </div>
+                        <div class="info-grid">
+                            <div class="form-group">
+                                <label class="form-label">姓名 <span class="required">*</span></label>
+                                <input type="text" class="form-input member-name" placeholder="請輸入姓名">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">信箱</label>
+                                <input type="email" class="form-input member-email" placeholder="請輸入信箱">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">電話 <span class="required">*</span></label>
+                                <input type="tel" class="form-input member-phone" placeholder="請輸入電話">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">身份證字號 <span class="required">*</span></label>
+                                <input type="text" class="form-input member-id" placeholder="請輸入身份證字號">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Member 4 -->
+                    <div class="member-detail-card">
+                        <div class="member-header">
+                            <span class="member-number">4</span>
+                            <strong>隊員 4</strong>
+                        </div>
+                        <div class="info-grid">
+                            <div class="form-group">
+                                <label class="form-label">姓名 <span class="required">*</span></label>
+                                <input type="text" class="form-input member-name" placeholder="請輸入姓名">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">信箱</label>
+                                <input type="email" class="form-input member-email" placeholder="請輸入信箱">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">電話 <span class="required">*</span></label>
+                                <input type="tel" class="form-input member-phone" placeholder="請輸入電話">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">身份證字號 <span class="required">*</span></label>
+                                <input type="text" class="form-input member-id" placeholder="請輸入身份證字號">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Member 5 -->
+                    <div class="member-detail-card">
+                        <div class="member-header">
+                            <span class="member-number">5</span>
+                            <strong>隊員 5</strong>
+                        </div>
+                        <div class="info-grid">
+                            <div class="form-group">
+                                <label class="form-label">姓名 <span class="required">*</span></label>
+                                <input type="text" class="form-input member-name" placeholder="請輸入姓名">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">信箱</label>
+                                <input type="email" class="form-input member-email" placeholder="請輸入信箱">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">電話 <span class="required">*</span></label>
+                                <input type="tel" class="form-input member-phone" placeholder="請輸入電話">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">身份證字號 <span class="required">*</span></label>
+                                <input type="text" class="form-input member-id" placeholder="請輸入身份證字號">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Button Group -->
+            <div class="button-group">
+                <button class="btn btn-back" onclick="window.location.href='cup-home.html'">
+                    <i class="fas fa-arrow-left"></i> 返回賽事頁面
+                </button>
+                <button class="btn btn-next" onclick="submitForm()">
+                    下一步：確認繳費 <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Import Team Modal -->
+    <div class="modal" id="importModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fas fa-download" style="color: var(--signup-primary); margin-right: 8px;"></i>
+                    選擇要匯入的隊伍
+                </h3>
+                <button class="btn-close" onclick="closeImportModal()">&times;</button>
+            </div>
+            <div id="teamsList">
+                <!-- Team 1 -->
+                <div class="team-select-item" onclick="selectTeam(this, 'team1')">
+                    <div class="team-select-header">
+                        <span class="team-select-name">雷霆籃球隊</span>
+                    </div>
+                    <div class="team-select-info">
+                        <i class="fas fa-user"></i> 隊長：張小明
+                    </div>
+                    <div class="team-select-info">
+                        <i class="fas fa-users"></i> 隊員數：5 人
+                    </div>
+                </div>
+
+                <!-- Team 2 -->
+                <div class="team-select-item" onclick="selectTeam(this, 'team2')">
+                    <div class="team-select-header">
+                        <span class="team-select-name">火箭籃球隊</span>
+                    </div>
+                    <div class="team-select-info">
+                        <i class="fas fa-user"></i> 隊長：李小華
+                    </div>
+                    <div class="team-select-info">
+                        <i class="fas fa-users"></i> 隊員數：6 人
+                    </div>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-back" onclick="closeImportModal()">
+                    取消
+                </button>
+                <button class="btn btn-next" onclick="importTeamData()" id="btnImport" disabled>
+                    <i class="fas fa-check"></i> 確認匯入
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="signup-footer">
+        <p>&copy; 2026 競賽咖 RaceGo. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Team data
+        const teamsData = {
+            team1: {
+                name: '雷霆籃球隊',
+                captain: '張小明',
+                email: 'team1@example.com',
+                phone: '0912-345-678',
+                members: [
+                    { name: '張小明', email: 'captain1@example.com', phone: '0912-345-678', id: 'A123456789' },
+                    { name: '王大明', email: 'member1@example.com', phone: '0922-111-222', id: 'B234567890' },
+                    { name: '陳小美', email: 'member2@example.com', phone: '0933-222-333', id: 'C345678901' },
+                    { name: '林志強', email: 'member3@example.com', phone: '0944-333-444', id: 'D456789012' },
+                    { name: '黃建國', email: 'member4@example.com', phone: '0955-444-555', id: 'E567890123' }
+                ]
+            },
+            team2: {
+                name: '火箭籃球隊',
+                captain: '李小華',
+                email: 'team2@example.com',
+                phone: '0913-456-789',
+                members: [
+                    { name: '李小華', email: 'captain2@example.com', phone: '0913-456-789', id: 'F678901234' },
+                    { name: '趙文傑', email: 'player1@example.com', phone: '0923-111-222', id: 'G789012345' },
+                    { name: '孫雅婷', email: 'player2@example.com', phone: '0934-222-333', id: 'H890123456' },
+                    { name: '周建宏', email: 'player3@example.com', phone: '0945-333-444', id: 'I901234567' },
+                    { name: '吳美玲', email: 'player4@example.com', phone: '0956-444-555', id: 'J012345678' }
+                ]
+            }
+        };
+
+        let selectedTeamId = null;
+
+        // Open import modal
+        function openImportModal() {
+            document.getElementById('importModal').classList.add('show');
+        }
+
+        // Close import modal
+        function closeImportModal() {
+            document.getElementById('importModal').classList.remove('show');
+            selectedTeamId = null;
+            document.querySelectorAll('.team-select-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            document.getElementById('btnImport').disabled = true;
+        }
+
+        // Select team
+        function selectTeam(element, teamId) {
+            document.querySelectorAll('.team-select-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            selectedTeamId = teamId;
+            document.getElementById('btnImport').disabled = false;
+        }
+
+        // Import team data
+        function importTeamData() {
+            if (!selectedTeamId) return;
+
+            const team = teamsData[selectedTeamId];
+            
+            // Fill team basic info
+            document.getElementById('teamName').value = team.name;
+            document.getElementById('captainName').value = team.captain;
+            document.getElementById('teamEmail').value = team.email;
+            document.getElementById('teamPhone').value = team.phone;
+
+            // Fill members info
+            const memberCards = document.querySelectorAll('.member-detail-card');
+            team.members.forEach((member, index) => {
+                if (index < memberCards.length) {
+                    const card = memberCards[index];
+                    card.querySelector('.member-name').value = member.name;
+                    card.querySelector('.member-email').value = member.email;
+                    card.querySelector('.member-phone').value = member.phone;
+                    card.querySelector('.member-id').value = member.id;
+                }
+            });
+
+            closeImportModal();
+            alert('隊伍資料已成功匯入！您可以繼續修改資料。');
+        }
+
+        // Submit form
+        function submitForm() {
+            const teamName = document.getElementById('teamName').value;
+            if (!teamName) {
+                alert('請填寫隊伍名稱');
+                return;
+            }
+            // Navigate to payment page
+            window.location.href = 'signup-step2.html';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,185 @@
+/* 表格樣式 */
+/* 各種表格的統一樣式 */
+
+/* 基礎表格 */
+table,
+.field-table,
+.ranking-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+/* 表格標題列 */
+table thead,
+.field-table thead,
+.ranking-table thead {
+    background: #f8f9fa;
+}
+
+/* 表格標題格 */
+table th,
+.field-table th,
+.ranking-table th {
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 600;
+    color: #333;
+    border-bottom: 2px solid #dee2e6;
+}
+
+/* 表格資料格 */
+table td,
+.field-table td,
+.ranking-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #dee2e6;
+    color: #666;
+}
+
+/* 表格列 hover 效果 */
+table tbody tr:hover,
+.field-table tbody tr:hover,
+.ranking-table tbody tr:hover {
+    background: #f8f9fa;
+}
+
+/* 排名表格特殊樣式 */
+.ranking-table tbody tr:nth-child(1) td:first-child {
+    color: #ffd700;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.ranking-table tbody tr:nth-child(2) td:first-child {
+    color: #c0c0c0;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.ranking-table tbody tr:nth-child(3) td:first-child {
+    color: #cd7f32;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+/* 成績表格 */
+.scores-table td {
+    text-align: center;
+}
+
+.scores-table .team-name {
+    text-align: left;
+    font-weight: 600;
+}
+
+.scores-table .winner {
+    font-weight: bold;
+    color: #28a745;
+}
+
+/* 報名清單表格 */
+.signup-table,
+.signups-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+.signup-table th,
+.signups-table th {
+    background: #00C4A0;
+    color: white;
+    padding: 12px 16px;
+    text-align: left;
+}
+
+.signup-table td,
+.signups-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.signup-table tbody tr:hover,
+.signups-table tbody tr:hover {
+    background: #f0f2ff;
+}
+
+/* 表格動作按鈕 */
+.table-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.table-actions button,
+.table-actions a {
+    padding: 6px 12px;
+    font-size: 13px;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+/* 空白狀態 */
+.table-empty {
+    text-align: center;
+    padding: 48px 20px;
+    color: #999;
+}
+
+.table-empty i {
+    font-size: 48px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+/* 表格容器 */
+.table-container {
+    overflow-x: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+    table,
+    .field-table,
+    .ranking-table,
+    .signup-table,
+    .signups-table {
+        font-size: 14px;
+    }
+
+    table th,
+    table td,
+    .field-table th,
+    .field-table td {
+        padding: 8px 12px;
+    }
+
+    /* 小螢幕時改為卡片式顯示 */
+    .table-container.mobile-cards table,
+    .table-container.mobile-cards thead {
+        display: none;
+    }
+
+    .table-container.mobile-cards tbody,
+    .table-container.mobile-cards tr {
+        display: block;
+        margin-bottom: 16px;
+    }
+
+    .table-container.mobile-cards td {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 16px;
+        border: none;
+        border-bottom: 1px solid #eee;
+    }
+
+    .table-container.mobile-cards td:before {
+        content: attr(data-label);
+        font-weight: bold;
+        color: #333;
+    }
+}

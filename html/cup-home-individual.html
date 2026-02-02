@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>城市馬拉松 2026 - 競賽咖</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/buttons.css">
+    <link rel="stylesheet" href="../css/cards.css">
+    <link rel="stylesheet" href="../css/forms.css">
+    <link rel="stylesheet" href="../css/sidebar.css">
+    <link rel="stylesheet" href="../css/utilities.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Inter, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+            background-color: #f5f7fa;
+            color: #2c3e50;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #00C4A0 0%, #00A080 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        /* Banner */
+        .banner {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 50px 30px;
+            text-align: center;
+        }
+
+        .banner h1 {
+            font-size: 42px;
+            margin-bottom: 10px;
+        }
+
+        .banner-subtitle {
+            font-size: 18px;
+            opacity: 0.9;
+            margin-bottom: 0;
+        }
+
+        /* Main Layout */
+        .main-layout {
+            max-width: 1400px;
+            margin: 30px auto;
+            padding: 0 30px;
+            display: flex;
+            gap: 30px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-nav {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 100px;
+            overflow: hidden;
+        }
+
+        .sidebar-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 20px;
+            color: #666;
+            text-decoration: none;
+            font-weight: 500;
+            border-left: 3px solid transparent;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .sidebar-nav-item:hover {
+            background: #f8f9fa;
+            color: #4facfe;
+        }
+
+        .sidebar-nav-item.active {
+            background: #e7f3ff;
+            color: #4facfe;
+            border-left-color: #4facfe;
+            font-weight: 600;
+        }
+
+        .sidebar-nav-item i {
+            width: 20px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        /* Content Area */
+        .content-area {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .content-section {
+            display: none;
+            background: white;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-size: 28px;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .section-content {
+            color: #666;
+            line-height: 1.8;
+        }
+
+        .section-content h3 {
+            color: #2c3e50;
+            font-size: 20px;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        .section-content p {
+            margin-bottom: 15px;
+        }
+
+        .section-content ul {
+            margin: 15px 0 15px 25px;
+        }
+
+        .section-content li {
+            margin-bottom: 10px;
+        }
+
+        /* Info Grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .info-item {
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .info-label {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 16px;
+        }
+
+        /* Category Cards */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 25px;
+        }
+
+        .category-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 30px;
+            transition: all 0.3s;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .category-card:hover {
+            border-color: #4facfe;
+            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.15);
+            transform: translateY(-5px);
+        }
+
+        .category-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .category-icon i {
+            font-size: 36px;
+            color: white;
+        }
+
+        .category-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .category-distance {
+            font-size: 28px;
+            font-weight: 700;
+            color: #4facfe;
+            margin-bottom: 15px;
+        }
+
+        .category-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .category-info-item {
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+
+        .category-price {
+            font-size: 20px;
+            font-weight: 600;
+            color: #28a745;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 14px 32px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: #4facfe;
+            color: white;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background: #3d8dd6;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Announcements */
+        .announcement-item {
+            background: #e7f3ff;
+            border-left: 4px solid #4facfe;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+
+        .announcement-item h4 {
+            color: #2c5282;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .announcement-item p {
+            color: #2c5282;
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .announcement-date {
+            color: #999;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+
+        /* Downloads */
+        .download-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .download-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .download-card:hover {
+            border-color: #4facfe;
+            box-shadow: 0 4px 12px rgba(79, 172, 254, 0.15);
+        }
+
+        .download-icon {
+            width: 50px;
+            height: 50px;
+            background: #e7f3ff;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .download-icon i {
+            font-size: 24px;
+            color: #4facfe;
+        }
+
+        .download-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .download-size {
+            color: #999;
+            font-size: 13px;
+        }
+
+        /* Contact Info */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 25px;
+        }
+
+        .contact-item {
+            display: flex;
+            gap: 15px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .contact-icon {
+            width: 45px;
+            height: 45px;
+            background: #4facfe;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .contact-icon i {
+            color: white;
+            font-size: 20px;
+        }
+
+        .contact-info h4 {
+            color: #2c3e50;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .contact-info p {
+            color: #666;
+            font-size: 14px;
+            margin: 0;
+        }
+
+        /* Footer */
+        .footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            .sidebar-nav {
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <img src="../images/logo.svg" alt="競賽咖" class="logo-img">
+            </a>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">首頁</a>
+                <a href="cups-list.html" class="nav-link">賽事列表</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Banner -->
+    <div class="banner">
+        <h1>城市馬拉松 2026</h1>
+        <p class="banner-subtitle">挑戰自我，超越極限｜2026年6月15日</p>
+    </div>
+
+    <!-- Main Layout -->
+    <div class="main-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <a class="sidebar-nav-item active" onclick="showSection('announcements')">
+                    <i class="fas fa-bullhorn"></i>
+                    <span>最新公告</span>
+                </a>
+                <a class="sidebar-nav-item" onclick="showSection('about')">
+                    <i class="fas fa-info-circle"></i>
+                    <span>賽事介紹</span>
+                </a>
+                <a class="sidebar-nav-item" onclick="showSection('categories')">
+                    <i class="fas fa-running"></i>
+                    <span>參賽組別</span>
+                </a>
+                <a class="sidebar-nav-item" onclick="showSection('route')">
+                    <i class="fas fa-route"></i>
+                    <span>路線說明</span>
+                </a>
+                <a class="sidebar-nav-item" onclick="showSection('downloads')">
+                    <i class="fas fa-download"></i>
+                    <span>檔案下載</span>
+                </a>
+                <a class="sidebar-nav-item" onclick="showSection('contact')">
+                    <i class="fas fa-envelope"></i>
+                    <span>聯絡主辦方</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Content Area -->
+        <div class="content-area">
+            <!-- Announcements Section -->
+            <div id="announcements-section" class="content-section active">
+                <h2 class="section-title">
+                    <i class="fas fa-bullhorn"></i> 最新公告
+                </h2>
+                <div class="section-content">
+                    <div class="announcement-item">
+                        <h4><i class="fas fa-star"></i> 報名人數已達5成</h4>
+                        <p>馬拉松各組別報名踴躍，請盡早完成報名以免向隅！</p>
+                        <div class="announcement-date">2026-05-20 發布</div>
+                    </div>
+                    <div class="announcement-item">
+                        <h4><i class="fas fa-check-circle"></i> 路線勘查完成</h4>
+                        <p>所有賽道路線已完成勘查，路線圖已更新至檔案下載區。</p>
+                        <div class="announcement-date">2026-05-15 發布</div>
+                    </div>
+                    <div class="announcement-item">
+                        <h4><i class="fas fa-info-circle"></i> 賽前說明會</h4>
+                        <p>將於6月10日舉行賽前說明會，請所有參賽者準時出席。</p>
+                        <div class="announcement-date">2026-05-10 發布</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- About Section -->
+            <div id="about-section" class="content-section">
+                <h2 class="section-title">
+                    <i class="fas fa-info-circle"></i> 賽事介紹
+                </h2>
+                <div class="section-content">
+                    <h3>活動宗旨</h3>
+                    <p>
+                        城市馬拉松2026旨在推廣全民運動風氣，透過馬拉松賽事讓更多人愛上跑步、享受運動的樂趣。
+                        我們提供多元化的距離選擇，從5公里到全程馬拉松，滿足不同程度跑者的需求。
+                    </p>
+
+                    <h3>賽事特色</h3>
+                    <ul>
+                        <li><strong>風景優美：</strong>路線經過城市最美的景點，讓您邊跑邊欣賞美景</li>
+                        <li><strong>專業計時：</strong>採用晶片計時系統，確保成績精確</li>
+                        <li><strong>完善補給：</strong>每5公里設置補給站，提供水、運動飲料及能量補給</li>
+                        <li><strong>完賽禮物：</strong>所有完賽者均可獲得完賽獎牌及證書</li>
+                        <li><strong>醫療支援：</strong>全程配置專業醫療團隊</li>
+                    </ul>
+
+                    <h3>參賽資格</h3>
+                    <p>
+                        歡迎所有熱愛跑步的朋友參加。5K及10K組別年滿12歲即可報名，半馬及全馬組別需年滿18歲。
+                        所有參賽者需簽署參賽同意書並投保運動傷害險。
+                    </p>
+
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">比賽日期</div>
+                            <div class="info-value">2026/06/15 (日)</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">報名截止</div>
+                            <div class="info-value">2026/06/01</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">起跑地點</div>
+                            <div class="info-value">市政府廣場</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">報名人數</div>
+                            <div class="info-value">2,580 / 5,000 人</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Categories Section -->
+            <div id="categories-section" class="content-section">
+                <h2 class="section-title">
+                    <i class="fas fa-running"></i> 參賽組別
+                </h2>
+                <div class="categories-grid">
+                    <!-- 5K -->
+                    <div class="category-card" onclick="window.location.href='signup-individual.html?item=running-5k'">
+                        <div class="category-icon">
+                            <i class="fas fa-running"></i>
+                        </div>
+                        <div class="category-title">休閒組</div>
+                        <div class="category-distance">5 公里</div>
+                        <div class="category-info">
+                            <div class="category-info-item">
+                                <div class="info-label">起跑時間</div>
+                                <div class="info-value">07:30</div>
+                            </div>
+                            <div class="category-info-item">
+                                <div class="info-label">報名人數</div>
+                                <div class="info-value">580 / 1,500</div>
+                            </div>
+                        </div>
+                        <div class="category-price">NT$ 300 / 人</div>
+                        <a href="signup-individual.html?item=running-5k" class="btn btn-primary">
+                            <i class="fas fa-pen-alt"></i> 立即報名
+                        </a>
+                    </div>
+
+                    <!-- 10K -->
+                    <div class="category-card" onclick="window.location.href='signup-individual.html?item=running-10k'">
+                        <div class="category-icon">
+                            <i class="fas fa-running"></i>
+                        </div>
+                        <div class="category-title">挑戰組</div>
+                        <div class="category-distance">10 公里</div>
+                        <div class="category-info">
+                            <div class="category-info-item">
+                                <div class="info-label">起跑時間</div>
+                                <div class="info-value">07:00</div>
+                            </div>
+                            <div class="category-info-item">
+                                <div class="info-label">報名人數</div>
+                                <div class="info-value">820 / 2,000</div>
+                            </div>
+                        </div>
+                        <div class="category-price">NT$ 500 / 人</div>
+                        <a href="signup-individual.html?item=running-10k" class="btn btn-primary">
+                            <i class="fas fa-pen-alt"></i> 立即報名
+                        </a>
+                    </div>
+
+                    <!-- Half Marathon -->
+                    <div class="category-card" onclick="window.location.href='signup-individual.html?item=half-marathon'">
+                        <div class="category-icon">
+                            <i class="fas fa-running"></i>
+                        </div>
+                        <div class="category-title">半程馬拉松</div>
+                        <div class="category-distance">21.0975 公里</div>
+                        <div class="category-info">
+                            <div class="category-info-item">
+                                <div class="info-label">起跑時間</div>
+                                <div class="info-value">06:30</div>
+                            </div>
+                            <div class="category-info-item">
+                                <div class="info-label">報名人數</div>
+                                <div class="info-value">680 / 1,000</div>
+                            </div>
+                        </div>
+                        <div class="category-price">NT$ 800 / 人</div>
+                        <a href="signup-individual.html?item=half-marathon" class="btn btn-primary">
+                            <i class="fas fa-pen-alt"></i> 立即報名
+                        </a>
+                    </div>
+
+                    <!-- Full Marathon -->
+                    <div class="category-card" onclick="window.location.href='signup-individual.html?item=full-marathon'">
+                        <div class="category-icon">
+                            <i class="fas fa-running"></i>
+                        </div>
+                        <div class="category-title">全程馬拉松</div>
+                        <div class="category-distance">42.195 公里</div>
+                        <div class="category-info">
+                            <div class="category-info-item">
+                                <div class="info-label">起跑時間</div>
+                                <div class="info-value">06:00</div>
+                            </div>
+                            <div class="category-info-item">
+                                <div class="info-label">報名人數</div>
+                                <div class="info-value">500 / 500</div>
+                            </div>
+                        </div>
+                        <div class="category-price" style="color: #dc3545;">NT$ 1,200 / 人</div>
+                        <a href="#" class="btn btn-primary" style="background: #ccc; cursor: not-allowed;" onclick="alert('此組別已額滿'); return false;">
+                            <i class="fas fa-ban"></i> 已額滿
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Route Section -->
+            <div id="route-section" class="content-section">
+                <h2 class="section-title">
+                    <i class="fas fa-route"></i> 路線說明
+                </h2>
+                <div class="section-content">
+                    <h3>5K 路線</h3>
+                    <p>起點：市政府廣場 → 仁愛路 → 敦化南路 → 終點：市政府廣場</p>
+                    <p style="color: #4facfe; font-weight: 600;">累積爬升：50公尺｜路面狀況：平坦柏油路</p>
+
+                    <h3>10K 路線</h3>
+                    <p>起點：市政府廣場 → 仁愛路 → 敦化南路 → 信義路 → 光復南路 → 終點：市政府廣場</p>
+                    <p style="color: #4facfe; font-weight: 600;">累積爬升：120公尺｜路面狀況：平坦柏油路</p>
+
+                    <h3>半程馬拉松路線</h3>
+                    <p>起點：市政府廣場 → 經過河濱公園 → 沿著河岸景觀道路 → 折返點 → 終點：市政府廣場</p>
+                    <p style="color: #4facfe; font-weight: 600;">累積爬升：200公尺｜路面狀況：混合路面</p>
+
+                    <h3>全程馬拉松路線</h3>
+                    <p>起點：市政府廣場 → 經過城市主要景點 → 河濱公園 → 山區路段 → 折返點 → 終點：市政府廣場</p>
+                    <p style="color: #4facfe; font-weight: 600;">累積爬升：450公尺｜路面狀況：混合路面，含部分爬坡路段</p>
+
+                    <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 20px; margin-top: 30px; border-radius: 5px;">
+                        <h4 style="color: #856404; margin-bottom: 10px;"><i class="fas fa-exclamation-triangle"></i> 注意事項</h4>
+                        <ul style="color: #856404; margin-left: 20px;">
+                            <li>請所有參賽者於起跑前30分鐘到達集合區</li>
+                            <li>每5公里設有補給站，請適時補充水分</li>
+                            <li>請遵守交通管制，注意自身安全</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Downloads Section -->
+            <div id="downloads-section" class="content-section">
+                <h2 class="section-title">
+                    <i class="fas fa-download"></i> 檔案下載
+                </h2>
+                <div class="download-grid">
+                    <div class="download-card">
+                        <div class="download-icon">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <div class="download-title">賽事簡章</div>
+                        <div class="download-size">PDF, 1.8 MB</div>
+                    </div>
+                    <div class="download-card">
+                        <div class="download-icon">
+                            <i class="fas fa-map"></i>
+                        </div>
+                        <div class="download-title">路線圖</div>
+                        <div class="download-size">PDF, 3.2 MB</div>
+                    </div>
+                    <div class="download-card">
+                        <div class="download-icon">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <div class="download-title">參賽同意書</div>
+                        <div class="download-size">PDF, 250 KB</div>
+                    </div>
+                    <div class="download-card">
+                        <div class="download-icon">
+                            <i class="fas fa-file-word"></i>
+                        </div>
+                        <div class="download-title">訓練計畫表</div>
+                        <div class="download-size">DOCX, 180 KB</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Section -->
+            <div id="contact-section" class="content-section">
+                <h2 class="section-title">
+                    <i class="fas fa-envelope"></i> 聯絡主辦方
+                </h2>
+                <div class="section-content">
+                    <p style="margin-bottom: 20px;">如有任何問題，歡迎透過以下方式聯絡我們：</p>
+                    <div class="contact-grid">
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="contact-info">
+                                <h4>主辦單位</h4>
+                                <p>城市馬拉松協會</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div class="contact-info">
+                                <h4>聯絡電話</h4>
+                                <p>(02) 8888-9999</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="contact-info">
+                                <h4>電子信箱</h4>
+                                <p>contact@citymarathon.tw</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="contact-info">
+                                <h4>聯絡地址</h4>
+                                <p>台北市信義區市府路1號</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; 2026 競賽咖 Basaila. All rights reserved.</p>
+    </div>
+
+    <script>
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Remove active class from all nav items
+            document.querySelectorAll('.sidebar-nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // Show selected section
+            document.getElementById(sectionName + '-section').classList.add('active');
+
+            // Add active class to clicked nav item
+            event.target.closest('.sidebar-nav-item').classList.add('active');
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

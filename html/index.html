@@ -1,0 +1,1427 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="BSaiLa">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://www.bsaila.com.tw/">
+    <meta property="og:image" content="http://www.bsaila.com.tw/Images/BSaiLa/LOGO.png">
+    <title>BSaiLa - 競賽咖 | 讓你簡單辦比賽</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/base.css">
+    
+    <style>
+        /* 覆蓋舊紫色漸層為新品牌色 */
+        :root {
+            --old-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --new-gradient: linear-gradient(135deg, #00C4A0 0%, #00A080 100%);
+            --new-secondary-gradient: linear-gradient(135deg, #ff8d27 0%, #ff6a00 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Inter, 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
+            background: linear-gradient(180deg, #ffffff 0%, #f2f2f2 100%);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid #e8eaed;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 0;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .logo-search {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .logo-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            transition: transform 0.3s;
+        }
+
+        .logo-link:hover {
+            transform: scale(1.05);
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #00C4A0 0%, #00A080 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            box-shadow: 0 4px 12px rgba(0, 196, 160, 0.3);
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-title {
+            font-size: 20px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #00C4A0 0%, #00A080 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo-subtitle {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .search-wrapper {
+            position: relative;
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 12px 16px 12px 48px;
+            border: 2px solid #e8eaed;
+            border-radius: 25px;
+            font-size: 14px;
+            transition: all 0.2s;
+            background: #f8f9fa;
+            height: 48px;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #00C4A0;
+            box-shadow: 0 0 0 4px rgba(0, 196, 160, 0.1);
+            background: white;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+        }
+
+        .search-results {
+            display: none;
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            right: 0;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            max-height: 400px;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .search-results.show {
+            display: block;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border: none;
+            cursor: pointer;
+            white-space: nowrap;
+            height: 48px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-create {
+            background: linear-gradient(135deg, #00C4A0 0%, #00A080 100%);
+            color: white;
+        }
+
+        .btn-share {
+            background: linear-gradient(135deg, #ff8d27 0%, #ff6a00 100%);
+            color: white;
+        }
+
+        .btn-team {
+            background: linear-gradient(135deg, #00C4A0 0%, #00A080 100%);
+            color: white;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00C4A0 0%, #00A080 100%);
+            color: white;
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .user-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            color: #374151;
+            transition: all 0.3s;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+        }
+
+        .user-btn:hover {
+            background: rgba(0, 196, 160, 0.1);
+        }
+
+        .btn-register {
+            background: linear-gradient(135deg, #00C4A0 0%, #00A080 100%);
+            color: white;
+            box-shadow: 0 2px 8px rgba(0, 196, 160, 0.3);
+        }
+
+        .btn-register:hover {
+            background: linear-gradient(135deg, #00A080 0%, #008060 100%);
+        }
+
+        .divider {
+            width: 1px;
+            height: 24px;
+            background: #d1d5db;
+        }
+
+        .login-panel {
+            display: none;
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            width: 320px;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+        }
+
+        .login-panel.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.6);
+            cursor: pointer;
+            font-size: 24px;
+            line-height: 1;
+            padding: 0;
+            width: 24px;
+            height: 24px;
+        }
+
+        .login-close:hover {
+            color: white;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: white;
+            font-size: 14px;
+        }
+
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #00C4A0;
+            box-shadow: 0 0 0 3px rgba(0, 196, 160, 0.2);
+        }
+
+        .social-login {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .social-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+            border: none;
+        }
+
+        .social-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .social-btn.facebook {
+            background: #1877f2;
+        }
+
+        .social-btn.google {
+            background: white;
+        }
+
+        /* Navigation */
+        nav {
+            margin: 20px 0;
+        }
+
+        .nav-menu {
+            background: linear-gradient(90deg, #2c3e50 0%, #34495e 100%);
+            border-radius: 16px;
+            display: flex;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .nav-item {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 16px;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%) scaleX(0);
+            width: 80%;
+            height: 3px;
+            background: linear-gradient(90deg, #00C4A0 0%, #00A080 100%);
+            border-radius: 2px 2px 0 0;
+            transition: transform 0.3s;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-link:hover::after {
+            transform: translateX(-50%) scaleX(1);
+        }
+
+        .nav-divider {
+            width: 1px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 40px;
+            margin-bottom: 32px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+        }
+
+        .hero-content h1 {
+            font-size: 40px;
+            font-weight: bold;
+            margin-bottom: 24px;
+            line-height: 1.2;
+        }
+
+        .hero-title-gradient {
+            background: linear-gradient(135deg, #00C4A0 0%, #00A080 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-content p {
+            color: #4b5563;
+            font-size: 16px;
+            margin-bottom: 16px;
+            line-height: 1.8;
+        }
+
+        .hero-content a {
+            color: #00C4A0;
+            font-weight: 600;
+            text-decoration: underline;
+            text-decoration-thickness: 2px;
+            text-underline-offset: 4px;
+        }
+
+        .hero-content a:hover {
+            color: #00A080;
+        }
+
+        .stats-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #00C4A0 0%, #00A080 100%);
+            border-radius: 16px;
+            padding: 24px;
+            color: white;
+            box-shadow: 0 4px 20px rgba(0, 196, 160, 0.3);
+        }
+
+        .stat-card.alt {
+            background: linear-gradient(135deg, #ff8d27 0%, #ff6a00 100%);
+        }
+
+        .stat-content {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .stat-icon {
+            font-size: 32px;
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: bold;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .info-card {
+            display: block;
+            background: linear-gradient(135deg, #ff8d27 0%, #ff6a00 100%);
+            border-radius: 16px;
+            padding: 20px;
+            color: white;
+            text-decoration: none;
+            box-shadow: 0 4px 20px rgba(255, 141, 39, 0.3);
+            transition: all 0.3s;
+        }
+
+        .info-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(255, 141, 39, 0.4);
+        }
+
+        .info-card.blue {
+            background: linear-gradient(135deg, #00C4A0 0%, #00A080 100%);
+        }
+
+        .info-card-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .info-card-icon {
+            font-size: 24px;
+        }
+
+        .info-card-title {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .info-card-subtitle {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        /* Features Section */
+        .features {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 40px;
+            margin-bottom: 32px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 48px;
+            flex-wrap: wrap;
+        }
+
+        .feature-btn {
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 2px solid #e5e7eb;
+            background: white;
+            color: #374151;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .feature-btn:hover {
+            transform: scale(1.1);
+            border-color: #00C4A0;
+            box-shadow: 0 8px 24px rgba(0, 196, 160, 0.3);
+        }
+
+        .feature-btn.active {
+            transform: scale(1.15);
+            background: linear-gradient(135deg, #00C4A0 0%, #00A080 100%);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 12px 32px rgba(0, 196, 160, 0.4);
+        }
+
+        .feature-btn-icon {
+            font-size: 28px;
+            margin-bottom: 4px;
+        }
+
+        .feature-description {
+            position: relative;
+        }
+
+        .feature-desc {
+            display: none;
+        }
+
+        .feature-desc.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .feature-desc h2 {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, #00C4A0 0%, #00A080 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .feature-desc p {
+            color: #4b5563;
+            font-size: 16px;
+            line-height: 1.8;
+        }
+
+        /* Service Cards */
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
+            margin-bottom: 32px;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            transition: all 0.5s;
+            border: 2px solid transparent;
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+            border-color: #00C4A0;
+        }
+
+        .service-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .service-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #00C4A0 0%, #00A080 100%);
+            color: white;
+            font-size: 24px;
+            flex-shrink: 0;
+            transition: transform 0.3s;
+        }
+
+        .service-card:hover .service-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .service-icon.green {
+            background: linear-gradient(135deg, #ff8d27 0%, #ff6a00 100%);
+        }
+
+        .service-card h3 {
+            font-size: 20px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #00C4A0 0%, #00A080 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .service-card.green h3 {
+            background: linear-gradient(135deg, #ff8d27 0%, #ff6a00 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .service-card p {
+            color: #4b5563;
+            line-height: 1.8;
+            margin-bottom: 12px;
+        }
+
+        .service-card .highlight {
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .service-card .cta {
+            color: #00C4A0;
+            font-weight: bold;
+            font-size: 18px;
+            margin-top: 16px;
+        }
+
+        .service-card.green .cta {
+            color: #ff8d27;
+        }
+
+        .service-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 20px;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #00C4A0 0%, #00A080 100%);
+            color: white;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0, 196, 160, 0.3);
+        }
+
+        .service-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 196, 160, 0.4);
+        }
+
+        .service-card.green .service-link {
+            background: linear-gradient(135deg, #ff8d27 0%, #ff6a00 100%);
+        }
+
+        /* Social Section */
+        .social-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 40px;
+            margin-bottom: 32px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .social-section h3 {
+            font-size: 28px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #00C4A0 0%, #00A080 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 16px;
+        }
+
+        .social-section p {
+            color: #4b5563;
+            font-size: 16px;
+            margin-bottom: 24px;
+        }
+
+        .social-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 32px;
+            background: #1877f2;
+            color: white;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(24, 119, 242, 0.3);
+        }
+
+        .social-link:hover {
+            background: #0c63d4;
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(24, 119, 242, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 64px;
+            padding-bottom: 32px;
+        }
+
+        .footer-content {
+            background: linear-gradient(90deg, #2c3e50 0%, #34495e 100%);
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .footer-main {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .footer-star {
+            color: #00C4A0;
+            font-size: 24px;
+        }
+
+        .footer-links {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .footer-link {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 4px 8px;
+        }
+
+        .footer-link:hover {
+            color: #00C4A0;
+        }
+
+        .footer-separator {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .footer-copyright {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            text-align: right;
+        }
+
+        .footer-bottom {
+            padding-top: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 12px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                order: 3;
+                width: 100%;
+            }
+
+            .logo-text {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 16px;
+            }
+
+            .hero,
+            .features,
+            .social-section {
+                padding: 24px;
+            }
+
+            .hero-content h1 {
+                font-size: 28px;
+            }
+
+            .feature-btn {
+                width: 72px;
+                height: 72px;
+                font-size: 12px;
+            }
+
+            .feature-btn-icon {
+                font-size: 20px;
+            }
+
+            .footer-main {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-copyright {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-search">
+                    <a href="/" class="logo-link">
+                        <div class="logo-icon">BS</div>
+                        <div class="logo-text">
+                            <div class="logo-title">BSaiLa</div>
+                            <div class="logo-subtitle">讓你簡單辦比賽</div>
+                        </div>
+                    </a>
+
+                    <div class="search-wrapper">
+                        <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                        <input 
+                            type="text" 
+                            class="search-box" 
+                            id="searchInput"
+                            placeholder="搜尋盃賽、隊伍、會員..."
+                            maxlength="50"
+                        >
+                        <div class="search-results" id="searchResults">
+                            <div style="padding: 16px; text-align: center; color: #6b7280;">
+                                沒有找到任何符合結果
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <a href="cups-list.html" class="btn btn-primary">
+                        <i class="fas fa-list"></i> 瀏覽賽事
+                    </a>
+                    <a href="create-cup.html" class="btn btn-create">
+                        <i class="fas fa-plus-circle"></i> 創建盃賽
+                    </a>
+                    <a href="/cups/share.aspx" class="btn btn-share">
+                        <i class="fas fa-share-alt"></i> 比賽分享
+                    </a>
+                    <a href="/team/create/terms.aspx" class="btn btn-team">
+                        <i class="fas fa-users"></i> 建立隊伍
+                    </a>
+                </div>
+
+                <div class="user-actions">
+                    <div style="position: relative;">
+                        <button class="user-btn" id="loginBtn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                            <span>登入</span>
+                        </button>
+
+                        <div class="login-panel" id="loginPanel">
+                            <button class="login-close" id="loginClose">×</button>
+                            
+                            <div class="form-group">
+                                <label class="form-label">帳號</label>
+                                <input type="text" class="form-input" placeholder="請輸入帳號" maxlength="50">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">密碼</label>
+                                <input type="password" class="form-input" placeholder="請輸入密碼" maxlength="50">
+                            </div>
+
+                            <div class="social-login">
+                                <div class="social-icons">
+                                    <button class="social-btn facebook">
+                                        <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+                                            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                                        </svg>
+                                    </button>
+                                    <button class="social-btn google">
+                                        <svg width="20" height="20" viewBox="0 0 24 24">
+                                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                                            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <button class="btn btn-primary">登入</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <a href="/pay/cart.aspx" class="user-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                        </svg>
+                        <span>購物車</span>
+                    </a>
+
+                    <div class="divider"></div>
+
+                    <a href="/member/signup.aspx" class="user-btn btn-register">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <line x1="19" y1="8" x2="19" y2="14"></line>
+                            <line x1="22" y1="11" x2="16" y2="11"></line>
+                        </svg>
+                        <span>註冊</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <div class="container">
+        <nav>
+            <div class="nav-menu">
+                <div class="nav-item">
+                    <a href="/cups/list.aspx?cid=1" class="nav-link">排球</a>
+                </div>
+                <div class="nav-divider"></div>
+                <div class="nav-item">
+                    <a href="/cups/list.aspx?cid=2" class="nav-link">籃球</a>
+                </div>
+                <div class="nav-divider"></div>
+                <div class="nav-item">
+                    <a href="/cups/list.aspx?cid=4" class="nav-link">壘球</a>
+                </div>
+                <div class="nav-divider"></div>
+                <div class="nav-item">
+                    <a href="/cups/list.aspx?cid=6" class="nav-link">羽球</a>
+                </div>
+                <div class="nav-divider"></div>
+                <div class="nav-item">
+                    <a href="/cups/list.aspx?cid=7" class="nav-link">桌球</a>
+                </div>
+                <div class="nav-divider"></div>
+                <div class="nav-item">
+                    <a href="/cups/list.aspx?cid=9" class="nav-link">沙排</a>
+                </div>
+                <div class="nav-divider"></div>
+                <div class="nav-item">
+                    <a href="/cups/list.aspx?cid=0" class="nav-link">其他</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-grid">
+                <div class="hero-content">
+                    <h1>
+                        <span class="hero-title-gradient">BSaiLa</span><br>
+                        您的線上盃賽管理系統
+                    </h1>
+                    <p>
+                        您每次舉辦比賽的時候，都花費大量時間處理報名資料與通知聯繫隊伍？賽程圖與場地時間改了又改，舉辦領隊會議來抽籤又費時費力？還是比完賽之後大家就找不到上一屆的比賽紀錄與參賽名單嗎？
+                    </p>
+                    <p>
+                        在BsaiLa建立賽事網站是如此簡單，一切挑戰都在彈指之間輕鬆完成。
+                        <a href="/About/Guide.aspx">彈指之間的功能</a>
+                    </p>
+                </div>
+
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-content">
+                            <div class="stat-icon">🏆</div>
+                            <div>
+                                <div class="stat-number">5,291</div>
+                                <div class="stat-label">比賽場次</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card alt">
+                        <div class="stat-content">
+                            <div class="stat-icon">👥</div>
+                            <div>
+                                <div class="stat-number">1,165,046</div>
+                                <div class="stat-label">參賽人數</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="/about/guide.aspx" class="info-card">
+                        <div class="info-card-content">
+                            <div class="info-card-icon">📖</div>
+                            <div>
+                                <div class="info-card-title">功能詳細介紹</div>
+                                <div class="info-card-subtitle">了解更多功能說明</div>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="/cup/create/default.aspx" class="info-card blue">
+                        <div class="info-card-content">
+                            <div class="info-card-icon">🎓</div>
+                            <div>
+                                <div class="info-card-title">免費學生專案</div>
+                                <div class="info-card-subtitle">立即開始建立比賽</div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features">
+            <div class="feature-buttons">
+                <button class="feature-btn active" data-feature="sign_up">
+                    <div class="feature-btn-icon">📋</div>
+                    <div>線上<br>報名</div>
+                </button>
+                <button class="feature-btn" data-feature="graphic">
+                    <div class="feature-btn-icon">📊</div>
+                    <div>賽程<br>圖表</div>
+                </button>
+                <button class="feature-btn" data-feature="lot">
+                    <div class="feature-btn-icon">🎲</div>
+                    <div>線上<br>抽籤</div>
+                </button>
+                <button class="feature-btn" data-feature="record">
+                    <div class="feature-btn-icon">📝</div>
+                    <div>比賽<br>紀錄</div>
+                </button>
+                <button class="feature-btn" data-feature="news">
+                    <div class="feature-btn-icon">🔔</div>
+                    <div>公告<br>通知</div>
+                </button>
+                <button class="feature-btn" data-feature="design">
+                    <div class="feature-btn-icon">✨</div>
+                    <div>貼心<br>設計</div>
+                </button>
+            </div>
+
+            <div class="feature-description">
+                <div class="feature-desc active" data-feature-desc="sign_up">
+                    <h2>彈性設計線上報名表</h2>
+                    <p>簡單幾個步驟，選取常用的報名欄位或自定的表單欄位。前台即時顯示最新報名現況，讓參賽隊伍清楚掌握活動資訊；後台簡單整理隊伍相關資訊，減少大量人工重複作業。</p>
+                </div>
+                <div class="feature-desc" data-feature-desc="graphic">
+                    <h2>簡單設定賽程圖表</h2>
+                    <p>單敗雙敗循環賽，初賽複賽決賽小分組賽事。簡單設定幾個數據，瞬間搞定惱人的賽程圖表。</p>
+                </div>
+                <div class="feature-desc" data-feature-desc="lot">
+                    <h2>線上抽籤與自動晉級</h2>
+                    <p>線上亂數抽籤讓來自四方的隊伍不用為了抽籤特地舟車勞頓，或是可以選擇現場抽籤在將隊伍填入賽程圖中。抽籤結束可以立刻得知自己的出賽時間和對手資訊，不用一直聯繫主辦單位。輸入比賽結果後，依照初賽成績或分組排名，賽程圖可以設定隊伍自動晉級，比完初賽直接知道複賽對戰組合。</p>
+                </div>
+                <div class="feature-desc" data-feature-desc="record">
+                    <h2>比賽紀錄永留存</h2>
+                    <p>想知道昨天的比賽最後誰是勝利者？上屆的冠軍隊伍裡有沒有你認識的人？找不到過去的比賽紀錄？想知道這是你們今年的第幾勝？這些問題BSaiLa幫你一次通通解決。</p>
+                </div>
+                <div class="feature-desc" data-feature-desc="news">
+                    <h2>最新公告與通知提醒</h2>
+                    <p>系統自動發送提醒信件提醒參賽隊伍與主辦單位最新事件。發送最新公告或說明只要一個按鍵，就可以在第一時間使用郵件系統通知所有參賽隊伍，再也不用一隊隊電話聯繫通知了。還可以加購手機簡訊服務，讓聯繫通知更便利更即時。</p>
+                </div>
+                <div class="feature-desc" data-feature-desc="design">
+                    <h2>版面設計與待辦事項</h2>
+                    <p>BSaiLa內建多種色系版型並提供橫幅上傳，展現各自獨特魅力。獨創比賽待辦事項列表，幫您搞定辦比賽的每一個細節，讓您簡單辦比賽。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Service Cards -->
+        <section class="service-grid">
+            <div class="service-card">
+                <div class="service-header">
+                    <div class="service-icon">🌐</div>
+                    <div>
+                        <h3>可自定功能的活動網站</h3>
+                    </div>
+                </div>
+                <p>想要更多功能的盃賽系統嗎？</p>
+                <p class="highlight">只要你想得到，我們就做得到！</p>
+                <p>想要更美觀的網頁設計嗎？</p>
+                <p class="cta">請與我們聯繫！</p>
+                <a href="/about/contactus.aspx" class="service-link">
+                    立即聯繫
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
+
+            <div class="service-card green">
+                <div class="service-header">
+                    <div class="service-icon green">👥</div>
+                    <div>
+                        <h3>賽事規劃顧問服務</h3>
+                    </div>
+                </div>
+                <p>第一次就想完美無缺？想要更進一步的賽事規劃顧問，或是運動行銷服務嗎？缺裁判缺工作人員嗎？</p>
+                <p class="cta">請聯絡我們，BSaiLa競賽咖提供完整賽會解決方案。</p>
+                <a href="/about/contactus.aspx" class="service-link">
+                    了解更多
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
+        </section>
+
+        <!-- Social Media Section -->
+        <section class="social-section">
+            <h3>📱 追蹤我們的最新動態</h3>
+            <p>關注我們的 Facebook 粉絲專頁，獲取最新比賽資訊與活動更新</p>
+            <a href="https://www.facebook.com/pages/BSaiLa%E7%9B%83%E8%B3%BD%E7%B6%B2/107390362678432" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               class="social-link">
+                <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
+                前往 Facebook 粉絲專頁
+            </a>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-main">
+                    <div class="footer-star">★</div>
+                    
+                    <div class="footer-links">
+                        <a href="/about/about.aspx" class="footer-link">關於我們</a>
+                        <span class="footer-separator">|</span>
+                        <a href="/about/membershipterms.aspx" class="footer-link">使用條款</a>
+                        <span class="footer-separator">|</span>
+                        <a href="/about/contactus.aspx" class="footer-link">連絡我們</a>
+                        <span class="footer-separator">|</span>
+                        <a href="/about/guide.aspx" class="footer-link">功能導覽</a>
+                    </div>
+                    
+                    <div class="footer-copyright">
+                        COPYRIGHT© 2012 Volleyer Tech.<br>
+                        All Rights Reserved.
+                    </div>
+                </div>
+                
+                <div class="footer-bottom">
+                    <p>讓你簡單辦比賽 - BSaiLa 競賽咖</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Login Panel Toggle
+        const loginBtn = document.getElementById('loginBtn');
+        const loginPanel = document.getElementById('loginPanel');
+        const loginClose = document.getElementById('loginClose');
+
+        loginBtn.addEventListener('click', function() {
+            loginPanel.classList.toggle('show');
+        });
+
+        loginClose.addEventListener('click', function() {
+            loginPanel.classList.remove('show');
+        });
+
+        // Close login panel when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!loginPanel.contains(event.target) && !loginBtn.contains(event.target)) {
+                loginPanel.classList.remove('show');
+            }
+        });
+
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        const searchResults = document.getElementById('searchResults');
+
+        // 模擬賽事資料
+        const competitions = [
+            { id: 1, name: '2026 春季運動嘉年華', type: '多項運動', status: '報名中', organizer: '台北市體育局' },
+            { id: 2, name: '台北市社區籃球聯賽', type: '籃球', status: '進行中', organizer: '台北市體育局' },
+            { id: 3, name: '全國大專排球錦標賽', type: '排球', status: '報名中', organizer: '教育部體育署' },
+            { id: 4, name: '台灣馬拉松接力賽', type: '田徑', status: '報名中', organizer: '中華田徑協會' },
+            { id: 5, name: '青年羽球公開賽', type: '羽球', status: '已結束', organizer: '中華羽球協會' },
+            { id: 6, name: '企業足球聯賽', type: '足球', status: '進行中', organizer: '台灣足球協會' }
+        ];
+
+        searchInput.addEventListener('input', function() {
+            const keyword = this.value.trim().toLowerCase();
+            
+            if (keyword) {
+                // 搜尋賽事
+                const filtered = competitions.filter(comp => 
+                    comp.name.toLowerCase().includes(keyword) ||
+                    comp.type.toLowerCase().includes(keyword) ||
+                    comp.organizer.toLowerCase().includes(keyword)
+                );
+
+                if (filtered.length > 0) {
+                    let resultsHTML = '<div style="padding: 12px; background: #f8f9fa; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb;">找到 ' + filtered.length + ' 個賽事</div>';
+                    
+                    filtered.forEach(comp => {
+                        const statusClass = comp.status === '報名中' ? 'style="color: #10b981;"' : 
+                                          comp.status === '進行中' ? 'style="color: #f59e0b;"' : 
+                                          'style="color: #6b7280;"';
+                        
+                        resultsHTML += `
+                            <a href="cup-home.html" style="display: block; padding: 16px; border-bottom: 1px solid #f3f4f6; text-decoration: none; color: inherit; transition: background 0.2s;">
+                                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+                                    <div style="font-weight: 600; color: #1f2937; font-size: 15px;">${comp.name}</div>
+                                    <span ${statusClass} style="font-size: 12px; font-weight: 600; white-space: nowrap; margin-left: 12px;">${comp.status}</span>
+                                </div>
+                                <div style="display: flex; gap: 16px; font-size: 13px; color: #6b7280;">
+                                    <span><i class="fas fa-basketball-ball"></i> ${comp.type}</span>
+                                    <span><i class="fas fa-user"></i> ${comp.organizer}</span>
+                                </div>
+                            </a>
+                        `;
+                    });
+                    
+                    searchResults.innerHTML = resultsHTML;
+                } else {
+                    searchResults.innerHTML = '<div style="padding: 32px; text-align: center; color: #9ca3af;"><i class="fas fa-search" style="font-size: 48px; margin-bottom: 12px; opacity: 0.3;"></i><div>沒有找到符合「' + keyword + '」的賽事</div><div style="font-size: 13px; margin-top: 8px;">請嘗試其他關鍵字</div></div>';
+                }
+                
+                searchResults.classList.add('show');
+            } else {
+                searchResults.classList.remove('show');
+            }
+        });
+
+        // Hover effect for search results
+        searchResults.addEventListener('mouseover', function(e) {
+            if (e.target.closest('a')) {
+                e.target.closest('a').style.background = '#f8f9fa';
+            }
+        });
+
+        searchResults.addEventListener('mouseout', function(e) {
+            if (e.target.closest('a')) {
+                e.target.closest('a').style.background = 'transparent';
+            }
+        });
+
+        // Close search results when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!searchResults.contains(event.target) && !searchInput.contains(event.target)) {
+                searchResults.classList.remove('show');
+            }
+        });
+
+        // Feature buttons functionality
+        const featureBtns = document.querySelectorAll('.feature-btn');
+        const featureDescs = document.querySelectorAll('.feature-desc');
+
+        featureBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const feature = this.getAttribute('data-feature');
+                
+                // Remove active class from all buttons
+                featureBtns.forEach(b => b.classList.remove('active'));
+                
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                // Hide all descriptions
+                featureDescs.forEach(desc => desc.classList.remove('active'));
+                
+                // Show corresponding description
+                const activeDesc = document.querySelector(`[data-feature-desc="${feature}"]`);
+                if (activeDesc) {
+                    activeDesc.classList.add('active');
+                }
+            });
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

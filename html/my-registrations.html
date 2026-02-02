@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的報名紀錄 - 競賽咖</title>
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- CSS 模組 -->
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/footer.css">
+    <link rel="stylesheet" href="../css/buttons.css">
+    <link rel="stylesheet" href="../css/cards.css">
+    <link rel="stylesheet" href="../css/tables.css">
+    <link rel="stylesheet" href="../css/forms.css">
+    <link rel="stylesheet" href="../css/utilities.css">
+    
+    <style>
+        /* 頁面專屬樣式 */
+        body {
+            background: #f8f9fa;
+        }
+
+        .page-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .page-header {
+            margin-bottom: 32px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* 篩選器區域 */
+        .filter-section {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            margin-bottom: 24px;
+        }
+
+        .filter-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            align-items: end;
+        }
+
+        /* 報名紀錄卡片 */
+        .registration-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .registration-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+        }
+
+        .registration-card:hover {
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .event-info h3 {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .event-meta {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .event-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* 狀態標籤 */
+        .status-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .status-paid {
+            background: #e8f5e9;
+            color: #28a745;
+        }
+
+        .status-cancelled {
+            background: #ffebee;
+            color: #dc3545;
+        }
+
+        .status-completed {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        /* 報名詳情 */
+        .registration-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .detail-label {
+            font-size: 13px;
+            color: #999;
+        }
+
+        .detail-value {
+            font-size: 15px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .order-number {
+            font-family: 'Courier New', monospace;
+            color: #00C4A0;
+            font-weight: bold;
+        }
+
+        /* 操作按鈕 */
+        .card-actions {
+            display: flex;
+            gap: 12px;
+            padding-top: 16px;
+            border-top: 1px solid #eee;
+        }
+
+        /* 空白狀態 */
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            background: white;
+            border-radius: 12px;
+        }
+
+        .empty-state i {
+            font-size: 64px;
+            color: #ddd;
+            margin-bottom: 16px;
+        }
+
+        .empty-state h3 {
+            font-size: 20px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            color: #999;
+            margin-bottom: 24px;
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            .page-container {
+                padding: 20px 15px;
+            }
+
+            .page-title {
+                font-size: 24px;
+            }
+
+            .filter-row {
+                grid-template-columns: 1fr;
+            }
+
+            .card-header {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .registration-details {
+                grid-template-columns: 1fr;
+            }
+
+            .card-actions {
+                flex-direction: column;
+            }
+
+            .card-actions .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">B</div>
+                <div class="logo-text">
+                    <div class="logo-title">競賽咖</div>
+                    <div class="logo-subtitle">BSaiLa</div>
+                </div>
+            </a>
+            <nav class="nav">
+                <a href="index.html">首頁</a>
+                <a href="cups-list.html">賽事列表</a>
+                <a href="my-registrations.html" class="active">我的報名</a>
+            </nav>
+            <div class="user-menu">
+                <a href="#"><i class="fas fa-user"></i> 會員中心</a>
+                <a href="#"><i class="fas fa-sign-out-alt"></i> 登出</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="page-container">
+        <!-- 頁面標題 -->
+        <div class="page-header">
+            <h1 class="page-title">我的報名紀錄</h1>
+            <p class="page-subtitle">查看您所有的賽事報名狀態與詳細資訊</p>
+        </div>
+
+        <!-- 篩選器 -->
+        <div class="filter-section">
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label>報名狀態</label>
+                    <select id="filterStatus">
+                        <option value="">全部狀態</option>
+                        <option value="pending">待付款</option>
+                        <option value="paid">已付款</option>
+                        <option value="completed">已完成</option>
+                        <option value="cancelled">已取消</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>賽事名稱</label>
+                    <input type="text" id="filterEvent" placeholder="搜尋賽事名稱">
+                </div>
+                <div class="filter-group">
+                    <label>報名時間</label>
+                    <select id="filterTime">
+                        <option value="">全部時間</option>
+                        <option value="recent">最近一個月</option>
+                        <option value="three-months">最近三個月</option>
+                        <option value="this-year">今年</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <button class="btn btn-primary btn-search" onclick="filterRegistrations()">
+                        <i class="fas fa-search"></i> 搜尋
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 報名紀錄列表 -->
+        <div class="registration-list" id="registrationList">
+            <!-- 報名紀錄卡片 1 -->
+            <div class="registration-card" data-status="paid">
+                <div class="card-header">
+                    <div class="event-info">
+                        <h3>2026 春季運動嘉年華</h3>
+                        <div class="event-meta">
+                            <span><i class="fas fa-basketball-ball"></i> 籃球 - 男子組</span>
+                            <span><i class="fas fa-calendar"></i> 2026/03/15</span>
+                            <span><i class="fas fa-map-marker-alt"></i> 台北體育館</span>
+                        </div>
+                    </div>
+                    <span class="status-badge status-paid">已付款</span>
+                </div>
+
+                <div class="registration-details">
+                    <div class="detail-item">
+                        <span class="detail-label">訂單編號</span>
+                        <span class="detail-value order-number">BS20260215001</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">報名者</span>
+                        <span class="detail-value">王小明</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">報名時間</span>
+                        <span class="detail-value">2026/02/15 14:30</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">報名費用</span>
+                        <span class="detail-value">NT$ 1,200</span>
+                    </div>
+                </div>
+
+                <div class="card-actions">
+                    <button class="btn btn-primary btn-sm" onclick="viewDetails('BS20260215001')">
+                        <i class="fas fa-eye"></i> 查看詳情
+                    </button>
+                    <button class="btn btn-secondary btn-sm" onclick="downloadReceipt('BS20260215001')">
+                        <i class="fas fa-download"></i> 下載報名表
+                    </button>
+                    <button class="btn btn-info btn-sm" onclick="Utils.copyToClipboard('BS20260215001')">
+                        <i class="fas fa-copy"></i> 複製訂單編號
+                    </button>
+                </div>
+            </div>
+
+            <!-- 報名紀錄卡片 2 -->
+            <div class="registration-card" data-status="pending">
+                <div class="card-header">
+                    <div class="event-info">
+                        <h3>台北市社區籃球聯賽</h3>
+                        <div class="event-meta">
+                            <span><i class="fas fa-basketball-ball"></i> 籃球 - 不分組</span>
+                            <span><i class="fas fa-calendar"></i> 2026/03/20</span>
+                            <span><i class="fas fa-map-marker-alt"></i> 信義運動中心</span>
+                        </div>
+                    </div>
+                    <span class="status-badge status-pending">待付款</span>
+                </div>
+
+                <div class="registration-details">
+                    <div class="detail-item">
+                        <span class="detail-label">訂單編號</span>
+                        <span class="detail-value order-number">BS20260220002</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">隊伍名稱</span>
+                        <span class="detail-value">飛鷹隊</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">報名時間</span>
+                        <span class="detail-value">2026/02/20 10:15</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">報名費用</span>
+                        <span class="detail-value">NT$ 3,000</span>
+                    </div>
+                </div>
+
+                <div class="card-actions">
+                    <button class="btn btn-warning btn-sm" onclick="gotoPayment('BS20260220002')">
+                        <i class="fas fa-credit-card"></i> 前往付款
+                    </button>
+                    <button class="btn btn-primary btn-sm" onclick="viewDetails('BS20260220002')">
+                        <i class="fas fa-eye"></i> 查看詳情
+                    </button>
+                    <button class="btn btn-danger btn-sm" onclick="cancelRegistration('BS20260220002')">
+                        <i class="fas fa-times"></i> 取消報名
+                    </button>
+                </div>
+            </div>
+
+            <!-- 報名紀錄卡片 3 -->
+            <div class="registration-card" data-status="completed">
+                <div class="card-header">
+                    <div class="event-info">
+                        <h3>2025 冬季馬拉松</h3>
+                        <div class="event-meta">
+                            <span><i class="fas fa-running"></i> 馬拉松 - 半馬組</span>
+                            <span><i class="fas fa-calendar"></i> 2025/12/10</span>
+                            <span><i class="fas fa-map-marker-alt"></i> 河濱公園</span>
+                        </div>
+                    </div>
+                    <span class="status-badge status-completed">已完成</span>
+                </div>
+
+                <div class="registration-details">
+                    <div class="detail-item">
+                        <span class="detail-label">訂單編號</span>
+                        <span class="detail-value order-number">BS20251201003</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">報名者</span>
+                        <span class="detail-value">王小明</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">完成時間</span>
+                        <span class="detail-value">02:15:30</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">排名</span>
+                        <span class="detail-value">第 45 名</span>
+                    </div>
+                </div>
+
+                <div class="card-actions">
+                    <button class="btn btn-primary btn-sm" onclick="viewResults('BS20251201003')">
+                        <i class="fas fa-trophy"></i> 查看成績
+                    </button>
+                    <button class="btn btn-secondary btn-sm" onclick="downloadCertificate('BS20251201003')">
+                        <i class="fas fa-certificate"></i> 下載證書
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 空白狀態（當沒有報名紀錄時顯示） -->
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <i class="fas fa-clipboard-list"></i>
+            <h3>目前沒有報名紀錄</h3>
+            <p>您尚未報名任何賽事，快去探索精彩的賽事吧！</p>
+            <a href="cups-list.html" class="btn btn-primary">
+                <i class="fas fa-search"></i> 瀏覽賽事
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; 2026 競賽咖 BSaiLa. All rights reserved.</p>
+    </div>
+
+    <!-- JavaScript 模組 -->
+    <script src="../js/utils.js"></script>
+    <script src="../js/navigation.js"></script>
+
+    <script>
+        // 查看詳情
+        function viewDetails(orderId) {
+            console.log('查看訂單詳情:', orderId);
+            // 實際應用中會導向詳情頁面
+            Utils.showToast(`正在開啟訂單 ${orderId} 的詳情`, 'info');
+        }
+
+        // 下載報名表
+        function downloadReceipt(orderId) {
+            console.log('下載報名表:', orderId);
+            Utils.showToast('開始下載報名表', 'success');
+        }
+
+        // 前往付款
+        function gotoPayment(orderId) {
+            console.log('前往付款頁面:', orderId);
+            Utils.showToast(`導向付款頁面 - 訂單 ${orderId}`, 'info');
+        }
+
+        // 取消報名
+        async function cancelRegistration(orderId) {
+            const confirmed = await Utils.confirm('確定要取消此報名嗎？取消後將無法恢復。');
+            if (confirmed) {
+                console.log('取消報名:', orderId);
+                Utils.showToast('報名已取消', 'success');
+                // 實際應用中會調用 API 並更新畫面
+            }
+        }
+
+        // 查看成績
+        function viewResults(orderId) {
+            console.log('查看成績:', orderId);
+            Utils.showToast('正在載入比賽成績', 'info');
+        }
+
+        // 下載證書
+        function downloadCertificate(orderId) {
+            console.log('下載證書:', orderId);
+            Utils.showToast('開始下載完賽證書', 'success');
+        }
+
+        // 篩選功能
+        function filterRegistrations() {
+            const status = document.getElementById('filterStatus').value;
+            const event = document.getElementById('filterEvent').value.toLowerCase();
+            const cards = document.querySelectorAll('.registration-card');
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const cardStatus = card.getAttribute('data-status');
+                const cardText = card.textContent.toLowerCase();
+                
+                let matchStatus = !status || cardStatus === status;
+                let matchEvent = !event || cardText.includes(event);
+                
+                if (matchStatus && matchEvent) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // 顯示/隱藏空白狀態
+            const emptyState = document.getElementById('emptyState');
+            const registrationList = document.getElementById('registrationList');
+            
+            if (visibleCount === 0) {
+                registrationList.style.display = 'none';
+                emptyState.style.display = 'block';
+            } else {
+                registrationList.style.display = 'flex';
+                emptyState.style.display = 'none';
+            }
+        }
+
+        // 頁面載入時初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('我的報名紀錄頁面已載入');
+        });
+    </script>
+</body>
+</html>

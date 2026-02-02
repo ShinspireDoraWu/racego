@@ -1,0 +1,722 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>報名管理 - 競賽咖</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/buttons.css">
+    <link rel="stylesheet" href="../css/cards.css">
+    <link rel="stylesheet" href="../css/forms.css">
+    <link rel="stylesheet" href="../css/sidebar.css">
+    <link rel="stylesheet" href="../css/tables.css">
+    <link rel="stylesheet" href="../css/utilities.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Inter, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        .dashboard-layout {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: calc(100vh - 140px);
+        }
+
+        .sidebar {
+            width: 250px;
+            background: white;
+            border-right: 1px solid #e0e0e0;
+            padding: 20px 0;
+        }
+
+        .sidebar-section {
+            margin-bottom: 30px;
+        }
+
+        .sidebar-title {
+            padding: 0 20px;
+            color: #999;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            color: #666;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .sidebar-menu li a:hover {
+            background: #f8f9fa;
+            color: var(--primary);
+        }
+
+        .sidebar-menu li a.active {
+            background: #e6f9f5;
+            color: var(--primary);
+            border-right: 3px solid var(--primary);
+            font-weight: 600;
+        }
+
+        .sidebar-menu li a i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 30px;
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+        }
+
+        .page-title {
+            color: #2c3e50;
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .filter-bar {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            align-items: end;
+        }
+
+        .filter-group {
+            flex: 1;
+        }
+
+        .filter-group label {
+            display: block;
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 13px;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f8f9fa;
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 14px;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+        }
+
+        tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .status-paid {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-unpaid {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            color: #2c3e50;
+            font-size: 22px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #999;
+            cursor: pointer;
+        }
+
+        .info-row {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .info-label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .info-value {
+            color: #2c3e50;
+        }
+
+        .members-list {
+            margin-top: 10px;
+        }
+
+        .member-item {
+            padding: 8px 12px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <img src="../images/logo.svg" alt="競賽咖" class="logo-img">
+            </a>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">首頁</a>
+                <a href="cups-list.html" class="nav-link">賽事列表</a>
+                <a href="organizer-dashboard.html" class="nav-link">主辦專區</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="dashboard-layout">
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">主控台</div>
+                <ul class="sidebar-menu">
+                    <li><a href="organizer-dashboard.html">
+                        <i class="fas fa-home"></i> 總覽
+                    </a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-title">盃賽管理</div>
+                <ul class="sidebar-menu">
+                    <li><a href="manage-items.html">
+                        <i class="fas fa-basketball-ball"></i> 競賽項目
+                    </a></li>
+                    <li><a href="manage-signups.html" class="active">
+                        <i class="fas fa-users"></i> 報名管理
+                    </a></li>
+                    <li><a href="manage-schedule.html">
+                        <i class="fas fa-calendar-alt"></i> 賽程管理
+                    </a></li>
+                    <li><a href="manage-scores.html">
+                        <i class="fas fa-chart-bar"></i> 成績管理
+                    </a></li>
+                    <li><a href="manage-rankings.html">
+                        <i class="fas fa-medal"></i> 排名榜
+                    </a></li>
+                    <li><a href="manage-cup-info.html">
+                        <i class="fas fa-info-circle"></i> 賽事資訊
+                    </a></li>
+                    <li><a href="manage-cup-details.html">
+                        <i class="fas fa-file-alt"></i> 賽事詳情
+                    </a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-title">設定</div>
+                <ul class="sidebar-menu">
+                    <li><a href="cup-settings.html">
+                        <i class="fas fa-cog"></i> 盃賽設定
+                    </a></li>
+                    <li><a href="notifications.html">
+                        <i class="fas fa-bell"></i> 通知中心
+                    </a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="page-header">
+                <h1 class="page-title">報名管理</h1>
+                <p style="color: #666; margin-top: 5px;">2026 春季運動嘉年華</p>
+            </div>
+
+            <div class="filter-bar">
+                <div class="filter-group">
+                    <label>競賽項目</label>
+                    <select>
+                        <option value="">全部項目</option>
+                        <option value="basketball">籃球 - 男子組</option>
+                        <option value="volleyball-male">排球 - 男子組</option>
+                        <option value="volleyball-female">排球 - 女子組</option>
+                        <option value="volleyball-mixed">排球 - 混合組</option>
+                        <option value="running-5k">馬拉松 - 5K</option>
+                        <option value="running-10k">馬拉松 - 10K</option>
+                        <option value="running-half">馬拉松 - 半馬</option>
+                        <option value="running-full">馬拉松 - 全馬</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>付款狀態</label>
+                    <select>
+                        <option value="">全部狀態</option>
+                        <option value="paid">已付款</option>
+                        <option value="unpaid">未付款</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>搜尋</label>
+                    <input type="text" placeholder="隊伍名稱/姓名">
+                </div>
+                <button class="btn btn-primary" style="align-self: end;">
+                    <i class="fas fa-search"></i> 搜尋
+                </button>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>報名編號</th>
+                            <th>隊伍/姓名</th>
+                            <th>競賽項目</th>
+                            <th>組別</th>
+                            <th>報名日期</th>
+                            <th>狀態</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>#20260125001</td>
+                            <td>猛虎隊</td>
+                            <td>籃球</td>
+                            <td>男子組</td>
+                            <td>2026/01/25</td>
+                            <td><span class="status-badge status-unpaid">未付款</span></td>
+                            <td>
+                                <div class="actions">
+                                    <button class="btn btn-sm btn-primary" onclick="viewDetails('001')">
+                                        <i class="fas fa-eye"></i> 查看
+                                    </button>
+                                    <button class="btn btn-sm btn-warning" onclick="editSignup('001')">
+                                        <i class="fas fa-edit"></i> 編輯
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#20260125002</td>
+                            <td>雄鷹隊</td>
+                            <td>排球</td>
+                            <td>男子組</td>
+                            <td>2026/01/25</td>
+                            <td><span class="status-badge status-paid">已付款</span></td>
+                            <td>
+                                <div class="actions">
+                                    <button class="btn btn-sm btn-primary" onclick="viewDetails('002')">
+                                        <i class="fas fa-eye"></i> 查看
+                                    </button>
+                                    <button class="btn btn-sm btn-warning" onclick="editSignup('002')">
+                                        <i class="fas fa-edit"></i> 編輯
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#20260125003</td>
+                            <td>李大明</td>
+                            <td>馬拉松</td>
+                            <td>半馬</td>
+                            <td>2026/01/25</td>
+                            <td><span class="status-badge status-paid">已付款</span></td>
+                            <td>
+                                <div class="actions">
+                                    <button class="btn btn-sm btn-primary" onclick="viewDetails('003')">
+                                        <i class="fas fa-eye"></i> 查看
+                                    </button>
+                                    <button class="btn btn-sm btn-warning" onclick="editSignup('003')">
+                                        <i class="fas fa-edit"></i> 編輯
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#20260124004</td>
+                            <td>飛龍隊</td>
+                            <td>籃球</td>
+                            <td>男子組</td>
+                            <td>2026/01/24</td>
+                            <td><span class="status-badge status-paid">已付款</span></td>
+                            <td>
+                                <div class="actions">
+                                    <button class="btn btn-sm btn-primary" onclick="viewDetails('004')">
+                                        <i class="fas fa-eye"></i> 查看
+                                    </button>
+                                    <button class="btn btn-sm btn-warning" onclick="editSignup('004')">
+                                        <i class="fas fa-edit"></i> 編輯
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#20260124005</td>
+                            <td>閃電隊</td>
+                            <td>排球</td>
+                            <td>混合組</td>
+                            <td>2026/01/24</td>
+                            <td><span class="status-badge status-unpaid">未付款</span></td>
+                            <td>
+                                <div class="actions">
+                                    <button class="btn btn-sm btn-primary" onclick="viewDetails('005')">
+                                        <i class="fas fa-eye"></i> 查看
+                                    </button>
+                                    <button class="btn btn-sm btn-warning" onclick="editSignup('005')">
+                                        <i class="fas fa-edit"></i> 編輯
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <!-- Detail Modal -->
+    <div id="detailModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>報名詳情</h2>
+                <button class="close-btn" onclick="closeModal('detailModal')">&times;</button>
+            </div>
+            <div>
+                <div class="info-row">
+                    <div class="info-label">報名編號</div>
+                    <div class="info-value">#20260125001</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">隊伍名稱</div>
+                    <div class="info-value">猛虎隊</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">競賽項目</div>
+                    <div class="info-value">籃球 - 男子組</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">隊長</div>
+                    <div class="info-value">王大明 / 0912-345-678</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Email</div>
+                    <div class="info-value">captain@example.com</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">報名日期</div>
+                    <div class="info-value">2026/01/25 14:30</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">隊員名單</div>
+                    <div class="info-value">
+                        <div class="members-list">
+                            <div class="member-item">1. 王大明 (captain@example.com)</div>
+                            <div class="member-item">2. 李小華 (member1@example.com)</div>
+                            <div class="member-item">3. 陳志明 (member2@example.com)</div>
+                            <div class="member-item">4. 林文傑 (member3@example.com)</div>
+                            <div class="member-item">5. 張建國 (member4@example.com)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
+                <button class="btn btn-primary" onclick="closeModal('detailModal')">
+                    <i class="fas fa-times"></i> 關閉
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <div class="modal-header">
+                <h2>編輯報名資料</h2>
+                <button class="close-btn" onclick="closeModal('editModal')">&times;</button>
+            </div>
+            <form id="editForm">
+                <div class="info-row">
+                    <div class="info-label">報名編號</div>
+                    <div class="info-value">#20260125001</div>
+                </div>
+                
+                <div class="form-group">
+                    <label>隊伍/姓名 <span class="required">*</span></label>
+                    <input type="text" name="teamName" value="猛虎隊" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                </div>
+
+                <div class="form-group">
+                    <label>競賽項目 <span class="required">*</span></label>
+                    <select name="item" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                        <option value="basketball-male" selected>籃球 - 男子組</option>
+                        <option value="volleyball-male">排球 - 男子組</option>
+                        <option value="volleyball-female">排球 - 女子組</option>
+                        <option value="volleyball-mixed">排球 - 混合組</option>
+                        <option value="running-5k">馬拉松 - 5K</option>
+                        <option value="running-10k">馬拉松 - 10K</option>
+                    </select>
+                </div>
+
+                <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                    <div class="form-group">
+                        <label>聯絡人姓名 <span class="required">*</span></label>
+                        <input type="text" name="contactName" value="王大明" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                    </div>
+                    <div class="form-group">
+                        <label>聯絡電話 <span class="required">*</span></label>
+                        <input type="tel" name="contactPhone" value="0912-345-678" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Email <span class="required">*</span></label>
+                    <input type="email" name="email" value="captain@example.com" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                </div>
+
+                <div class="form-group">
+                    <label>付款狀態 <span class="required">*</span></label>
+                    <select name="paymentStatus" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                        <option value="unpaid" selected>未付款</option>
+                        <option value="paid">已付款</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>備註</label>
+                    <textarea name="notes" rows="3" placeholder="輸入備註資訊..." style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;"></textarea>
+                </div>
+
+                <div id="membersEdit" style="display: block;">
+                    <h3 style="margin: 20px 0 15px 0; color: #2c3e50;">隊員名單</h3>
+                    <div id="membersList">
+                        <div class="member-edit-item" style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                            <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                                <input type="text" placeholder="姓名" value="王大明" required style="padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                <input type="email" placeholder="Email" value="captain@example.com" style="padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                            </div>
+                        </div>
+                        <div class="member-edit-item" style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                            <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                                <input type="text" placeholder="姓名" value="李小華" style="padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                <input type="email" placeholder="Email" value="member1@example.com" style="padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                            </div>
+                        </div>
+                        <div class="member-edit-item" style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                            <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                                <input type="text" placeholder="姓名" value="陳志明" style="padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                <input type="email" placeholder="Email" value="member2@example.com" style="padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('editModal')">
+                        <i class="fas fa-times"></i> 取消
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> 儲存
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2026 競賽咖 Basaila. All rights reserved.</p>
+    </div>
+
+    <script>
+        function viewDetails(id) {
+            document.getElementById('detailModal').classList.add('active');
+        }
+
+        function editSignup(id) {
+            document.getElementById('editModal').classList.add('active');
+            // TODO: 根據 id 載入對應的報名資料
+        }
+
+        function closeModal(modalId) {
+            if (modalId) {
+                document.getElementById(modalId).classList.remove('active');
+            } else {
+                // 相容性支持
+                document.querySelectorAll('.modal').forEach(modal => {
+                    modal.classList.remove('active');
+                });
+            }
+        }
+
+        // 編輯表單提交
+        document.getElementById('editForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // TODO: 實際儲存邏輯
+            alert('報名資料已更新！');
+            closeModal('editModal');
+            
+            // 重新載入表格資料
+            location.reload();
+        });
+
+        // 點擊 modal 背景關閉
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeModal(this.id);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
