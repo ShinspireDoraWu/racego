@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的盃賽 - RaceGo</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/footer.css">
+    <link rel="stylesheet" href="../css/buttons.css">
+    <link rel="stylesheet" href="../css/forms.css">
+    <link rel="stylesheet" href="../css/utilities.css">
+    
+    <style>
+        body {
+            background: #f8f9fa;
+        }
+
+        .page-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .profile-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 30px;
+        }
+
+        /* 側邊欄 */
+        .sidebar {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            height: fit-content;
+        }
+
+        .profile-avatar {
+            text-align: center;
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .avatar-image {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 12px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .profile-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .profile-email {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 4px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: #666;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: #f0f4ff;
+            color: #667eea;
+        }
+
+        .sidebar-menu i {
+            width: 20px;
+            text-align: center;
+        }
+
+        /* 主要內容 */
+        .main-content {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            min-height: 600px;
+        }
+
+        .content-header {
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #f3f4f6;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .content-titles {
+            flex: 1;
+        }
+
+        .content-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .content-subtitle {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* Cups Grid - Adapted from organizer-cups.html */
+        .cups-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .cup-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #eee;
+        }
+
+        .cup-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            border-color: #667eea;
+        }
+
+        .cup-header {
+            height: 140px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+        }
+
+        .cup-status {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            backdrop-filter: blur(5px);
+        }
+
+        .cup-content {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cup-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #1f2937;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .cup-info {
+            flex: 1;
+        }
+
+        .info-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .cup-footer {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #f3f4f6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stats-summary {
+            display: flex;
+            gap: 15px;
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .stats-summary span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .manage-btn {
+            background: #f3f4f6;
+            color: #4b5563;
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .manage-btn:hover {
+            background: #e5e7eb;
+            color: #1f2937;
+        }
+
+        .warning-box {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            border: 1px solid #ffeeba;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .profile-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">
+                    <div class="logo-icon">R</div>
+                    <div class="logo-text">
+                        <div class="logo-title">RaceGo</div>
+                        <div class="logo-subtitle">競賽咖</div>
+                    </div>
+                </a>
+                <nav class="nav">
+                    <a href="index.html">首頁</a>
+                    <a href="cups-list.html">賽事列表</a>
+                    <a href="my-registrations.html">我的報名</a>
+                </nav>
+                <div class="user-menu">
+                    <a href="profile.html" class="active"><i class="fas fa-user"></i> 會員中心</a>
+                    <a href="#"><i class="fas fa-sign-out-alt"></i> 登出</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="page-container">
+        <div class="profile-layout">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="profile-avatar">
+                    <div class="avatar-image">王</div>
+                    <div class="profile-name">王小明</div>
+                    <div class="profile-email">wang@email.com</div>
+                </div>
+
+                <ul class="sidebar-menu">
+                    <li><a href="profile.html"><i class="fas fa-user"></i> 個人資料</a></li>
+                    <li><a href="my-registrations.html"><i class="fas fa-clipboard-list"></i> 報名記錄</a></li>
+                    <li><a href="my-cups.html" class="active"><i class="fas fa-trophy"></i> 我的盃賽</a></li>
+                    <li><a href="my-favorites.html"><i class="fas fa-heart"></i> 我的收藏</a></li>
+                    <li><a href="my-teams.html"><i class="fas fa-users"></i> 我的隊伍</a></li>
+                    <li><a href="#" style="color: #ef4444;"><i class="fas fa-sign-out-alt"></i> 登出</a></li>
+                </ul>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <div class="content-header">
+                    <div class="content-titles">
+                        <h1 class="content-title">我的盃賽</h1>
+                        <p class="content-subtitle">管理您以個人名義創建的盃賽</p>
+                    </div>
+                    <a href="create-new-cup.html" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> 建立個人盃賽
+                    </a>
+                </div>
+
+                <div class="warning-box">
+                    <i class="fas fa-exclamation-triangle" style="margin-top: 3px;"></i>
+                    <div>
+                        <strong>注意：</strong>
+                        個人創建的盃賽僅限個人管理，不支援多管理員協作。如需與團隊共同與管理賽事，請<a href="create-cup.html" style="color: #856404; text-decoration: underline;">申請成為主辦單位</a>。
+                    </div>
+                </div>
+
+                <!-- Cups Grid -->
+                <!-- 使用 organizer-cups.html 的卡片樣式 -->
+                <div class="cups-grid">
+                    <!-- Cup 1 -->
+                    <div class="cup-card">
+                        <div class="cup-header" style="background-image: url('https://source.unsplash.com/random/800x600/?badminton'); background-size: cover;">
+                            <div class="cup-status" style="background: rgba(40, 167, 69, 0.9);">籌備中</div>
+                        </div>
+                        <div class="cup-content">
+                            <div class="cup-title">2026 社區羽球友誼賽</div>
+                            <div class="cup-info">
+                                <div class="info-row">
+                                    <i class="far fa-calendar-alt"></i>
+                                    <span>2026/04/10</span>
+                                </div>
+                                <div class="info-row">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>大同運動中心</span>
+                                </div>
+                            </div>
+                            <div class="cup-footer">
+                                <div class="stats-summary">
+                                    <span><i class="fas fa-users"></i> 12 選手</span>
+                                    <span><i class="fas fa-clipboard-list"></i> 1 項目</span>
+                                </div>
+                                <a href="organizer-dashboard.html" class="manage-btn">
+                                    管理賽事 <i class="fas fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2026 RaceGo. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="../css/buttons.css">
     <link rel="stylesheet" href="../css/cards.css">
     <link rel="stylesheet" href="../css/forms.css">
-    <link rel="stylesheet" href="../css/sidebar.css">
     <link rel="stylesheet" href="../css/utilities.css">
     <style>
         * {
@@ -26,45 +25,66 @@
             color: #333;
         }
 
+        /* 版面佈局：對齊 cup-home 左側欄風格 */
         .dashboard-layout {
             display: flex;
             max-width: 1400px;
-            margin: 0 auto;
-            min-height: calc(100vh - 140px);
+            margin: 24px auto 40px;
+            padding: 0 32px;
+            gap: 32px;
         }
 
+        /* 左側欄容器（寬度與 cup-home 一致） */
         .sidebar {
-            width: 250px;
-            background: white;
-            border-right: 1px solid #e0e0e0;
-            padding: 20px 0;
+            width: 280px;
+            flex-shrink: 0;
+        }
+
+        /* 左側欄卡片外觀 + 固定位置 */
+        .sidebar-nav {
+            background: #ffffff;
+            border-radius: 12px;
+            border: 1px solid #e8eaed;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 100px;
+            overflow: hidden;
         }
 
         .sidebar-section {
-            margin-bottom: 30px;
+            border-top: 1px solid #f1f3f4;
+        }
+
+        .sidebar-section:first-child {
+            border-top: none;
         }
 
         .sidebar-title {
-            padding: 0 20px;
-            color: #999;
-            font-size: 12px;
-            font-weight: 600;
+            padding: 16px 24px 8px;
+            color: #202124;
+            font-size: 16px;
+            font-weight:400;
             text-transform: uppercase;
-            margin-bottom: 10px;
+            letter-spacing: 0.06em;
         }
 
         .sidebar-menu {
             list-style: none;
+            margin: 0;
+            padding: 4px 0 12px;
         }
 
         .sidebar-menu li a {
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 12px 20px;
-            color: #666;
+            padding: 12px 24px;
+            color: #5f6368;
             text-decoration: none;
-            transition: all 0.3s;
+            font-weight: 500;
+            font-size: 1.2em;
+            border-left: 4px solid transparent;
+            transition: all 0.2s;
         }
 
         .sidebar-menu li a:hover {
@@ -73,15 +93,16 @@
         }
 
         .sidebar-menu li a.active {
-            background: #e7f3ff;
-            color: #00C4A0;
-            border-right: 3px solid #00C4A0;
+            background: rgba(0, 196, 160, 0.1);
+            color: #009B7D;
+            border-left-color: #00C4A0;
             font-weight: 600;
         }
 
         .sidebar-menu li a i {
             width: 20px;
             text-align: center;
+            font-size: 15px;
         }
 
         .main-content {
@@ -166,24 +187,26 @@
             padding: 20px;
         }
 
-        /* 頁面特定樣式 */
+        /* 頁面特定樣式（與上方佈局設定保持一致） */
         .dashboard-layout {
             display: flex;
             max-width: 1400px;
-            margin: 0 auto;
-            min-height: calc(100vh - 140px);
+            margin: 24px auto 40px;
+            padding: 0 32px;
+            gap: 32px;
         }
 
         .sidebar-menu li a.active {
-            background: #e7f3ff;
-            color: #00C4A0;
-            border-right: 3px solid #00C4A0;
+            background: rgba(0, 196, 160, 0.1);
+            color: #009B7D;
+            border-left-color: #00C4A0;
             font-weight: 600;
         }
 
         .sidebar-menu li a i {
             width: 20px;
             text-align: center;
+            font-size: 15px;
         }
 
         .main-content {
@@ -217,43 +240,71 @@
             gap: 10px;
         }
 
+        /* 表單欄位風格：對齊 create-cup 頁面 */
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 16px;
+        }
+
         .form-group {
-            margin-bottom: 25px;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
         }
 
         .form-group label {
-            display: block;
             font-weight: 500;
-            color: #2c3e50;
-            margin-bottom: 8px;
-            font-size: 14px;
+            color: var(--text);
+            margin-bottom: 4px;
+            font-size: 16px;
+        }
+
+        .form-group label .required {
+            margin-left: 3px;
         }
 
         .form-group input,
         .form-group select,
         .form-group textarea {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 14px;
+            padding: 14px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.2s ease;
             font-family: inherit;
+            background: #f2f2f2;
+            color: #202124;
+            height: 48px;
         }
 
         .form-group textarea {
             resize: vertical;
-            min-height: 100px;
+            min-height: 120px;
+            height: auto;
         }
 
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #9ca3af;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(0, 196, 160, 0.1);
         }
 
         .hint {
-            font-size: 12px;
-            color: #999;
+            font-size: 16px;
+            color: var(--text-secondary);
             margin-top: 5px;
         }
 
@@ -439,7 +490,7 @@
     <header class="header">
         <div class="header-container">
             <a href="index.html" class="logo">
-                <img src="../images/logo.svg" alt="競賽咖" class="logo-img">
+                <img src="../images/logo.svg" alt="競賽咖" class="logo-img" style="height: 32px; width: auto;">
             </a>
             <nav class="nav">
                 <a href="index.html" class="nav-link">首頁</a>
@@ -450,53 +501,55 @@
 
     <div class="dashboard-layout">
         <aside class="sidebar">
-            <div class="sidebar-section">
-                <div class="sidebar-title">主控台</div>
-                <ul class="sidebar-menu">
-                    <li><a href="organizer-dashboard.html">
-                        <i class="fas fa-home"></i> 總覽
-                    </a></li>
-                </ul>
-            </div>
+            <nav class="sidebar-nav">
+                <div class="sidebar-section">
+                    <div class="sidebar-title">主控台</div>
+                    <ul class="sidebar-menu">
+                        <li><a href="organizer-dashboard.html">
+                            <i class="fas fa-home"></i> 總覽
+                        </a></li>
+                    </ul>
+                </div>
 
-            <div class="sidebar-section">
-                <div class="sidebar-title">盃賽管理</div>
-                <ul class="sidebar-menu">
-                    <li><a href="manage-items.html">
-                        <i class="fas fa-basketball-ball"></i> 競賽項目
-                    </a></li>
-                    <li><a href="manage-signups.html">
-                        <i class="fas fa-users"></i> 報名管理
-                    </a></li>
-                    <li><a href="manage-schedule.html">
-                        <i class="fas fa-calendar-alt"></i> 賽程管理
-                    </a></li>
-                    <li><a href="manage-scores.html">
-                        <i class="fas fa-chart-bar"></i> 成績管理
-                    </a></li>
-                    <li><a href="manage-rankings.html">
-                        <i class="fas fa-medal"></i> 排名榜
-                    </a></li>
-                    <li><a href="manage-cup-info.html">
-                        <i class="fas fa-info-circle"></i> 賽事資訊
-                    </a></li>
-                    <li><a href="manage-cup-details.html">
-                        <i class="fas fa-file-alt"></i> 賽事詳情
-                    </a></li>
-                </ul>
-            </div>
+                <div class="sidebar-section">
+                    <div class="sidebar-title">盃賽管理</div>
+                    <ul class="sidebar-menu">
+                        <li><a href="manage-items.html">
+                            <i class="fas fa-basketball-ball"></i> 競賽項目
+                        </a></li>
+                        <li><a href="manage-signups.html">
+                            <i class="fas fa-users"></i> 報名管理
+                        </a></li>
+                        <li><a href="manage-schedule.html">
+                            <i class="fas fa-calendar-alt"></i> 賽程管理
+                        </a></li>
+                        <li><a href="manage-scores.html">
+                            <i class="fas fa-chart-bar"></i> 成績管理
+                        </a></li>
+                        <li><a href="manage-rankings.html">
+                            <i class="fas fa-medal"></i> 排名榜
+                        </a></li>
+                        <li><a href="manage-cup-info.html">
+                            <i class="fas fa-info-circle"></i> 賽事資訊
+                        </a></li>
+                        <li><a href="manage-cup-details.html">
+                            <i class="fas fa-file-alt"></i> 賽事詳情
+                        </a></li>
+                    </ul>
+                </div>
 
-            <div class="sidebar-section">
-                <div class="sidebar-title">設定</div>
-                <ul class="sidebar-menu">
-                    <li><a href="cup-settings.html" class="active">
-                        <i class="fas fa-cog"></i> 盃賽設定
-                    </a></li>
-                    <li><a href="notifications.html">
-                        <i class="fas fa-bell"></i> 通知中心
-                    </a></li>
-                </ul>
-            </div>
+                <div class="sidebar-section">
+                    <div class="sidebar-title">設定</div>
+                    <ul class="sidebar-menu">
+                        <li><a href="cup-settings.html" class="active">
+                            <i class="fas fa-cog"></i> 盃賽設定
+                        </a></li>
+                        <li><a href="notifications.html">
+                            <i class="fas fa-bell"></i> 通知中心
+                        </a></li>
+                    </ul>
+                </div>
+            </nav>
         </aside>
 
         <main class="main-content">
@@ -539,7 +592,7 @@
                         <input type="file" accept="image/*" style="padding: 10px;">
                         <span class="hint">建議尺寸：800x600 px，用於賽事列表顯示</span>
                         <div style="margin-top: 10px;">
-                            <img src="https://via.placeholder.com/800x600/667eea/ffffff?text=2026+春季運動嘉年華" style="max-width: 300px; border-radius: 8px; border: 1px solid #ddd;">
+                            <img src="../images/public-04.png" style="max-width: 300px; border-radius: 8px; border: 1px solid #ddd;">
                         </div>
                     </div>
 
@@ -548,7 +601,7 @@
                         <input type="file" accept="image/*" style="padding: 10px;">
                         <span class="hint">建議尺寸：1920x400 px，用於賽事頁面頂部橫幅</span>
                         <div style="margin-top: 10px;">
-                            <img src="https://via.placeholder.com/1920x400/764ba2/ffffff?text=賽事橫幅" style="max-width: 100%; border-radius: 8px; border: 1px solid #ddd;">
+                            <img src="../images/page-banner-2.png" style="max-width: 100%; border-radius: 8px; border: 1px solid #ddd;">
                         </div>
                     </div>
 
