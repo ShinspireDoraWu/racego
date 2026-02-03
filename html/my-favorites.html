@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的收藏 - 競賽咖</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/footer.css">
+    <link rel="stylesheet" href="../css/buttons.css">
+    <link rel="stylesheet" href="../css/cards.css">
+    <link rel="stylesheet" href="../css/utilities.css">
+    
+    <style>
+        body {
+            background: #f8f9fa;
+        }
+
+        .page-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .profile-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 30px;
+        }
+
+        /* 側邊欄樣式 */
+        .sidebar {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            height: fit-content;
+        }
+
+        .profile-avatar {
+            text-align: center;
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .avatar-image {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 12px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .profile-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .profile-email {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 4px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: #666;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: #f0f4ff;
+            color: #667eea;
+        }
+
+        .sidebar-menu i {
+            width: 20px;
+            text-align: center;
+        }
+
+        /* 主要內容 */
+        .main-content {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .content-header {
+            margin-bottom: 32px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #f3f4f6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .content-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .favorites-count {
+            color: #667eea;
+            font-size: 14px;
+        }
+
+        /* 收藏卡片 */
+        .favorites-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .favorite-card {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .favorite-card:hover {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            transform: translateY(-4px);
+        }
+
+        .favorite-remove {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 36px;
+            height: 36px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s;
+            z-index: 10;
+        }
+
+        .favorite-remove:hover {
+            background: #ef4444;
+            color: white;
+        }
+
+        .card-image {
+            height: 160px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: white;
+        }
+
+        .card-image.volleyball {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .card-image.running {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .card-content {
+            padding: 20px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 12px;
+        }
+
+        .card-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .info-item i {
+            width: 16px;
+            color: #667eea;
+        }
+
+        .card-status {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 12px;
+        }
+
+        .status-open {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-coming {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* 空白狀態 */
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .empty-state i {
+            font-size: 80px;
+            color: #d1d5db;
+            margin-bottom: 20px;
+        }
+
+        .empty-state h3 {
+            font-size: 24px;
+            color: #374151;
+            margin-bottom: 12px;
+        }
+
+        .empty-state p {
+            color: #6b7280;
+            margin-bottom: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .profile-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .favorites-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">
+                    <div class="logo-icon">B</div>
+                    <div class="logo-text">
+                        <div class="logo-title">競賽咖</div>
+                        <div class="logo-subtitle">BSaiLa</div>
+                    </div>
+                </a>
+                <nav class="nav">
+                    <a href="index.html">首頁</a>
+                    <a href="cups-list.html">賽事列表</a>
+                    <a href="my-registrations.html">我的報名</a>
+                </nav>
+                <div class="user-menu">
+                    <a href="profile.html"><i class="fas fa-user"></i> 會員中心</a>
+                    <a href="#"><i class="fas fa-sign-out-alt"></i> 登出</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="page-container">
+        <div class="profile-layout">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="profile-avatar">
+                    <div class="avatar-image">王</div>
+                    <div class="profile-name">王小明</div>
+                    <div class="profile-email">wang@email.com</div>
+                </div>
+
+                <ul class="sidebar-menu">
+                    <li><a href="profile.html"><i class="fas fa-user"></i> 個人資料</a></li>
+                    <li><a href="my-registrations.html"><i class="fas fa-clipboard-list"></i> 報名記錄</a></li>
+                    <li><a href="my-cups.html"><i class="fas fa-trophy"></i> 我的盃賽</a></li>
+                    <li><a href="my-favorites.html" class="active"><i class="fas fa-heart"></i> 我的收藏</a></li>
+                    <li><a href="my-teams.html"><i class="fas fa-users"></i> 我的隊伍</a></li>
+                    <li><a href="#" style="color: #ef4444;"><i class="fas fa-sign-out-alt"></i> 登出</a></li>
+                </ul>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <div class="content-header">
+                    <h1 class="content-title">我的收藏</h1>
+                    <span class="favorites-count"><i class="fas fa-heart"></i> 共 3 個收藏</span>
+                </div>
+
+                <!-- 收藏列表 -->
+                <div class="favorites-grid" id="favoritesList">
+                    <!-- 收藏卡片 1 -->
+                    <div class="favorite-card">
+                        <div class="favorite-remove" onclick="removeFavorite(1)">
+                            <i class="fas fa-times"></i>
+                        </div>
+                        <div class="card-image">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">2026 春季運動嘉年華</h3>
+                            <span class="card-status status-open">報名中</span>
+                            <div class="card-info">
+                                <div class="info-item">
+                                    <i class="fas fa-calendar"></i>
+                                    <span>2026/03/15 - 2026/05/30</span>
+                                </div>
+                                <div class="info-item">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>台北市體育館</span>
+                                </div>
+                                <div class="info-item">
+                                    <i class="fas fa-users"></i>
+                                    <span>已報名 128 人/隊</span>
+                                </div>
+                            </div>
+                            <div class="card-actions">
+                                <a href="cup-home.html" class="btn btn-primary btn-sm" style="flex: 1;">
+                                    查看詳情
+                                </a>
+                                <a href="signup-step1.html" class="btn btn-secondary btn-sm" style="flex: 1;">
+                                    立即報名
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 收藏卡片 2 -->
+                    <div class="favorite-card">
+                        <div class="favorite-remove" onclick="removeFavorite(2)">
+                            <i class="fas fa-times"></i>
+                        </div>
+                        <div class="card-image volleyball">
+                            <i class="fas fa-volleyball-ball"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">全國排球錦標賽</h3>
+                            <span class="card-status status-open">報名中</span>
+                            <div class="card-info">
+                                <div class="info-item">
+                                    <i class="fas fa-calendar"></i>
+                                    <span>2026/04/01 - 2026/04/30</span>
+                                </div>
+                                <div class="info-item">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>台中市立體育場</span>
+                                </div>
+                                <div class="info-item">
+                                    <i class="fas fa-users"></i>
+                                    <span>已報名 16 / 24 隊</span>
+                                </div>
+                            </div>
+                            <div class="card-actions">
+                                <a href="cup-home.html" class="btn btn-primary btn-sm" style="flex: 1;">
+                                    查看詳情
+                                </a>
+                                <a href="signup-step1.html" class="btn btn-secondary btn-sm" style="flex: 1;">
+                                    立即報名
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 收藏卡片 3 -->
+                    <div class="favorite-card">
+                        <div class="favorite-remove" onclick="removeFavorite(3)">
+                            <i class="fas fa-times"></i>
+                        </div>
+                        <div class="card-image running">
+                            <i class="fas fa-running"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">城市馬拉松 2026</h3>
+                            <span class="card-status status-coming">即將開始</span>
+                            <div class="card-info">
+                                <div class="info-item">
+                                    <i class="fas fa-calendar"></i>
+                                    <span>2026/06/15</span>
+                                </div>
+                                <div class="info-item">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>高雄市</span>
+                                </div>
+                                <div class="info-item">
+                                    <i class="fas fa-users"></i>
+                                    <span>已報名 458 / 1000 人</span>
+                                </div>
+                            </div>
+                            <div class="card-actions">
+                                <a href="cup-home-individual.html" class="btn btn-primary btn-sm" style="flex: 1;">
+                                    查看詳情
+                                </a>
+                                <a href="signup-individual.html" class="btn btn-secondary btn-sm" style="flex: 1;">
+                                    立即報名
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 空白狀態 -->
+                <div class="empty-state" id="emptyState" style="display: none;">
+                    <i class="fas fa-heart-broken"></i>
+                    <h3>還沒有收藏的賽事</h3>
+                    <p>探索更多精彩賽事，將喜歡的加入收藏吧！</p>
+                    <a href="cups-list.html" class="btn btn-primary">
+                        <i class="fas fa-search"></i> 瀏覽賽事
+                    </a>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; 2026 競賽咖 BSaiLa. All rights reserved.</p>
+    </div>
+
+    <script src="../js/utils.js"></script>
+    <script src="../js/navigation.js"></script>
+    <script>
+        function removeFavorite(id) {
+            if (confirm('確定要取消收藏此賽事嗎？')) {
+                const cards = document.querySelectorAll('.favorite-card');
+                cards[id - 1].remove();
+                
+                // 更新收藏數量
+                const remainingCards = document.querySelectorAll('.favorite-card').length;
+                document.querySelector('.favorites-count').innerHTML = `<i class="fas fa-heart"></i> 共 ${remainingCards} 個收藏`;
+                
+                // 如果沒有收藏了，顯示空白狀態
+                if (remainingCards === 0) {
+                    document.getElementById('favoritesList').style.display = 'none';
+                    document.getElementById('emptyState').style.display = 'block';
+                }
+                
+                console.log(`已取消收藏賽事 ${id}`);
+            }
+        }
+    </script>
+</body>
+</html>
